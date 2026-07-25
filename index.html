@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
+
 <head>
 
 <meta charset="UTF-8">
@@ -17,169 +18,233 @@ margin:0;
 padding:0;
 box-sizing:border-box;
 font-family:'Vazirmatn',sans-serif;
+scroll-behavior:smooth;
 }
 
 body{
-background:#ffffff;
-color:#333;
+background:#fff;
+color:#222;
 }
 
 .topbar{
-
-background:#ffd5e7;
+background:#ffd7e8;
 padding:12px;
 text-align:center;
-font-weight:bold;
-
+font-weight:700;
 }
 
 header{
-
 display:flex;
 justify-content:space-between;
 align-items:center;
 padding:20px 8%;
-background:white;
-box-shadow:0 5px 15px rgba(0,0,0,.08);
-
+background:#fff;
+position:sticky;
+top:0;
+z-index:1000;
+box-shadow:0 5px 20px rgba(0,0,0,.06);
 }
 
 .logo{
-
 font-size:34px;
 font-weight:800;
-color:#ff6ca8;
+color:#ff6fa8;
+}
 
+nav{
+display:flex;
+gap:25px;
 }
 
 nav a{
-
 text-decoration:none;
-margin:0 10px;
 color:#444;
 font-weight:600;
+transition:.3s;
+}
 
+nav a:hover{
+color:#ff6fa8;
 }
 
 .hero{
-
 height:650px;
-background:linear-gradient(135deg,#ffffff,#fff8f0,#dff6ff,#ffeaf4);
-
 display:flex;
-
 justify-content:center;
-
 align-items:center;
-
 text-align:center;
-
 padding:40px;
-
+background:linear-gradient(135deg,#fff,#fff7ef,#dff5ff,#ffe8f3);
 }
 
 .hero h1{
-
-font-size:60px;
+font-size:58px;
 margin-bottom:20px;
-
 }
 
 .hero p{
-
 font-size:22px;
+color:#666;
 margin-bottom:35px;
-
 }
 
-button{
-
-background:#ff6ca8;
-
-color:white;
-
-padding:18px 40px;
-
+.hero button{
+background:#ff6fa8;
+color:#fff;
 border:none;
-
-border-radius:50px;
-
+padding:18px 45px;
 font-size:20px;
-
+border-radius:50px;
 cursor:pointer;
-
+transition:.3s;
 }
-.categories{
 
+.hero button:hover{
+background:#ff4d94;
+transform:scale(1.05);
+}
+
+section{
 padding:80px 8%;
-
-background:#fff;
-
 }
 
-.categories h2{
-
+.title{
 text-align:center;
-
-font-size:40px;
-
+font-size:42px;
 margin-bottom:50px;
-
-color:#444;
-
 }
 
 .cards{
-
 display:grid;
-
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
 gap:30px;
-
 }
 
 .card{
-
-background:white;
-
-border-radius:20px;
-
+background:#fff;
+border-radius:22px;
 overflow:hidden;
-
 box-shadow:0 10px 25px rgba(0,0,0,.08);
-
 transition:.3s;
-
-cursor:pointer;
-
+text-align:center;
 }
 
 .card:hover{
-
 transform:translateY(-8px);
-
 }
 
 .card img{
-
 width:100%;
-
 display:block;
-
 }
 
 .card h3{
-
-padding:20px;
-
-text-align:center;
-
+padding:18px;
 font-size:24px;
+}
 
-color:#444;
+.card p{
+font-size:22px;
+font-weight:bold;
+color:#ff6fa8;
+margin-bottom:20px;
+}
+
+.card button{
+background:#ff6fa8;
+color:#fff;
+border:none;
+padding:12px 28px;
+border-radius:30px;
+cursor:pointer;
+margin-bottom:25px;
+transition:.3s;
+}
+
+.card button:hover{
+background:#ff4d94;
+}
+.card button:hover{
+background:#ff4d94;
+}
+
+.offer{
+background:linear-gradient(135deg,#ffd7e8,#dff5ff);
+text-align:center;
+border-radius:30px;
+padding:70px 30px;
+margin:80px 8%;
+}
+
+.offer h2{
+font-size:44px;
+margin-bottom:20px;
+}
+
+.offer p{
+font-size:22px;
+color:#555;
+margin-bottom:30px;
+}
+
+.offer button{
+background:#ff6fa8;
+color:#fff;
+border:none;
+padding:18px 40px;
+font-size:18px;
+border-radius:50px;
+cursor:pointer;
+}
+
+footer{
+background:#222;
+color:#fff;
+padding:60px 8%;
+text-align:center;
+}
+
+footer h3{
+font-size:30px;
+margin-bottom:20px;
+}
+
+footer p{
+line-height:2;
+color:#ddd;
+}
+
+@media(max-width:768px){
+
+header{
+flex-direction:column;
+gap:20px;
+}
+
+nav{
+justify-content:center;
+flex-wrap:wrap;
+}
+
+.hero{
+height:auto;
+padding:80px 20px;
+}
+
+.hero h1{
+font-size:38px;
+}
+
+.hero p{
+font-size:18px;
+}
+
+.title{
+font-size:32px;
+}
 
 }
+
 </style>
 
 </head>
@@ -187,35 +252,23 @@ color:#444;
 <body>
 
 <div class="topbar">
-
 🚚 ارسال رایگان برای خریدهای بالای ۲ میلیون تومان
-
 </div>
 
 <header>
 
 <div class="logo">
-
 نی نی استایل
-
 </div>
 
 <nav>
-
 <a href="#">خانه</a>
-
-<a href="#">لباس دخترانه</a>
-
-<a href="#">لباس پسرانه</a>
-
-<a href="#">لباس نوزاد</a>
-
+<a href="#">دخترانه</a>
+<a href="#">پسرانه</a>
+<a href="#">نوزاد</a>
 <a href="#">اکسسوری</a>
-
 <a href="#">تخفیف‌ها</a>
-
 <a href="#">تماس با ما</a>
-
 </nav>
 
 </header>
@@ -224,86 +277,145 @@ color:#444;
 
 <div>
 
-<h1>
-
-لباس‌های خاص برای کوچولوهای خاص
-
-</h1>
+<h1>لباس‌های خاص برای کوچولوهای خاص</h1>
 
 <p>
-
-جدیدترین لباس‌های کودک با کیفیت عالی و طراحی مدرن
-
+جدیدترین کالکشن لباس کودک با طراحی لوکس و کیفیت فوق‌العاده
 </p>
 
 <button>
-
 مشاهده محصولات
-
 </button>
 
 </div>
 
 </section>
+
 <section class="categories">
 
-<h2>دسته‌بندی محصولات</h2>
+<h2 class="title">
+دسته‌بندی محصولات
+</h2>
 
 <div class="cards">
-
-<div class="card">
-<img src="https://placehold.co/300x300/f8bbd9/ffffff?text=دخترانه">
+  <div class="card">
+<img src="https://placehold.co/400x400/f8bbd9/ffffff?text=لباس+دخترانه">
 <h3>لباس دخترانه</h3>
 </div>
 
 <div class="card">
-<img src="https://placehold.co/300x300/b3e5fc/ffffff?text=پسرانه">
+<img src="https://placehold.co/400x400/b3e5fc/ffffff?text=لباس+پسرانه">
 <h3>لباس پسرانه</h3>
 </div>
 
 <div class="card">
-<img src="https://placehold.co/300x300/fff3cd/333333?text=نوزاد">
+<img src="https://placehold.co/400x400/fff3cd/333333?text=لباس+نوزاد">
 <h3>لباس نوزاد</h3>
 </div>
 
 <div class="card">
-<img src="https://placehold.co/300x300/f5f5f5/333333?text=اکسسوری">
+<img src="https://placehold.co/400x400/f5f5f5/333333?text=اکسسوری">
 <h3>اکسسوری</h3>
 </div>
 
 </div>
 
 </section>
+
 <section class="products">
 
-<h2>محصولات پرفروش</h2>
+<h2 class="title">
+محصولات پرفروش
+</h2>
 
 <div class="cards">
 
 <div class="card">
-<img src="https://placehold.co/300x300/ffe8f3/333333?text=ست+دخترانه">
-<h3>ست دخترانه</h3>
+<img src="https://placehold.co/400x400/ffe8f3/333333?text=ست+دخترانه">
+<h3>ست دخترانه مجلسی</h3>
 <p>۱٬۴۹۰٬۰۰۰ تومان</p>
-<button>مشاهده</button>
+<button>خرید محصول</button>
 </div>
 
 <div class="card">
-<img src="https://placehold.co/300x300/dff5ff/333333?text=ست+پسرانه">
-<h3>ست پسرانه</h3>
+<img src="https://placehold.co/400x400/dff5ff/333333?text=ست+پسرانه">
+<h3>ست پسرانه اسپرت</h3>
 <p>۱٬۳۹۰٬۰۰۰ تومان</p>
-<button>مشاهده</button>
+<button>خرید محصول</button>
 </div>
 
 <div class="card">
-<img src="https://placehold.co/300x300/fff8f2/333333?text=لباس+نوزاد">
-<h3>لباس نوزاد</h3>
+<img src="https://placehold.co/400x400/fff8f2/333333?text=لباس+نوزاد">
+<h3>لباس نوزادی</h3>
 <p>۹۹۰٬۰۰۰ تومان</p>
-<button>مشاهده</button>
+<button>خرید محصول</button>
+</div>
+
+<div class="card">
+<img src="https://placehold.co/400x400/e8f5e9/333333?text=کفش+کودک">
+<h3>کفش کودک</h3>
+<p>۱٬۱۹۰٬۰۰۰ تومان</p>
+<button>خرید محصول</button>
 </div>
 
 </div>
 
 </section>
+
+<section class="offer">
+
+<h2>
+🎉 تخفیف ویژه این هفته
+</h2>
+
+<p>
+تا ۳۰٪ تخفیف روی منتخب لباس‌های کودک
+</p>
+
+<button>
+مشاهده تخفیف‌ها
+</button>
+
+</section>
+<footer>
+
+<h3>نی نی استایل</h3>
+
+<p>
+
+فروشگاه تخصصی لباس کودک با طراحی‌های خاص، کیفیت عالی و ارسال سریع به سراسر ایران
+
+</p>
+
+<br>
+
+<p>
+
+📞 ۰۹۱۲۱۲۳۴۵۶۷
+
+</p>
+
+<p>
+
+✉️ info@ninistyle.ir
+
+</p>
+
+<p>
+
+📍 تهران
+
+</p>
+
+<br>
+
+<p>
+
+© 2026 Nini Style - تمامی حقوق محفوظ است.
+
+</p>
+
+</footer>
 
 </body>
 
