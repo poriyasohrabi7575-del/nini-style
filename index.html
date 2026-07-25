@@ -109,7 +109,77 @@ font-size:20px;
 cursor:pointer;
 
 }
+.categories{
 
+padding:80px 8%;
+
+background:#fff;
+
+}
+
+.categories h2{
+
+text-align:center;
+
+font-size:40px;
+
+margin-bottom:50px;
+
+color:#444;
+
+}
+
+.cards{
+
+display:grid;
+
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+
+gap:30px;
+
+}
+
+.card{
+
+background:white;
+
+border-radius:20px;
+
+overflow:hidden;
+
+box-shadow:0 10px 25px rgba(0,0,0,.08);
+
+transition:.3s;
+
+cursor:pointer;
+
+}
+
+.card:hover{
+
+transform:translateY(-8px);
+
+}
+
+.card img{
+
+width:100%;
+
+display:block;
+
+}
+
+.card h3{
+
+padding:20px;
+
+text-align:center;
+
+font-size:24px;
+
+color:#444;
+
+}
 </style>
 
 </head>
@@ -175,7 +245,35 @@ cursor:pointer;
 </div>
 
 </section>
+<section class="categories">
 
+<h2>دسته‌بندی محصولات</h2>
+
+<div class="cards">
+
+<div class="card">
+<img src="https://placehold.co/300x300/f8bbd9/ffffff?text=دخترانه">
+<h3>لباس دخترانه</h3>
+</div>
+
+<div class="card">
+<img src="https://placehold.co/300x300/b3e5fc/ffffff?text=پسرانه">
+<h3>لباس پسرانه</h3>
+</div>
+
+<div class="card">
+<img src="https://placehold.co/300x300/fff3cd/333333?text=نوزاد">
+<h3>لباس نوزاد</h3>
+</div>
+
+<div class="card">
+<img src="https://placehold.co/300x300/f5f5f5/333333?text=اکسسوری">
+<h3>اکسسوری</h3>
+</div>
+
+</div>
+
+</section>
 </body>
 
 </html>
