@@ -131,11 +131,66 @@ gap:30px;
 
 .card{
 background:#fff;
-border-radius:22px;
+border-radius:25px;
 overflow:hidden;
-box-shadow:0 10px 25px rgba(0,0,0,.08);
+box-shadow:0 15px 35px rgba(0,0,0,.10);
 transition:.3s;
 text-align:center;
+position:relative;
+}
+
+.card:hover{
+transform:translateY(-10px);
+}
+
+.card img{
+width:100%;
+height:330px;
+object-fit:cover;
+}
+
+.card h3{
+padding:18px 15px 5px;
+font-size:22px;
+}
+
+.old-price{
+color:#999;
+text-decoration:line-through;
+font-size:16px;
+}
+
+.price{
+font-size:24px;
+font-weight:800;
+color:#ff6fa8;
+margin:10px;
+}
+
+.discount{
+position:absolute;
+top:15px;
+right:15px;
+background:#ff6fa8;
+color:white;
+padding:8px 15px;
+border-radius:20px;
+font-size:14px;
+}
+
+.buy-btn{
+background:#222;
+color:#fff;
+border:none;
+padding:14px 35px;
+border-radius:30px;
+margin:20px;
+cursor:pointer;
+font-size:16px;
+}
+
+.buy-btn:hover{
+background:#ff6fa8;
 }
 
 .card:hover{
@@ -341,10 +396,23 @@ font-size:32px;
 
 <div class="card">
 <img src="https://placehold.co/400x400/ffe8f3/333333?text=ست+دخترانه">
-<h3>ست دخترانه مجلسی</h3>
-<p>۱٬۴۹۰٬۰۰۰ تومان</p>
-<button>خرید محصول</button>
+<div class="discount">
+۳۰٪ تخفیف
 </div>
+
+<h3>ست دخترانه مجلسی</h3>
+
+<div class="old-price">
+۲٬۰۰۰٬۰۰۰ تومان
+</div>
+
+<div class="price">
+۱٬۴۹۰٬۰۰۰ تومان
+</div>
+
+<button class="buy-btn">
+🛒 خرید محصول
+</button>
 
 <div class="card">
 <img src="https://placehold.co/400x400/dff5ff/333333?text=ست+پسرانه">
