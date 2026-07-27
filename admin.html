@@ -88,31 +88,49 @@ background:#ff4d94;
 </button>
 
 </div>
-<script>
 
-function addProduct(){
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-let name = document.querySelector('input[placeholder="نام محصول"]').value;
-let price = document.querySelector('input[placeholder="قیمت محصول"]').value;
-let oldPrice = document.querySelector('input[placeholder="قیمت قبل از تخفیف"]').value;
-let discount = document.querySelector('input[placeholder^="درصد تخفیف"]').value;
-let category = document.querySelector('select').value;
+  const firebaseConfig = {
+    apiKey: "AIzaSyClty2axVVJuvvmc27VLivTzp3cijZ-8oo",
+    authDomain: "nini-style.firebaseapp.com",
+    projectId: "nini-style",
+    storageBucket: "nini-style.firebasestorage.app",
+    messagingSenderId: "935164642738",
+    appId: "1:935164642738:web:33ecf6b01c00f9f08b10ab"
+  };
 
-let product = {
-name:name,
-price:price,
-oldPrice:oldPrice,
-discount:discount,
-category:category
-};
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
 
-localStorage.setItem("product", JSON.stringify(product));
+  async function addProduct() {
+    let name = document.querySelector('input[placeholder="نام محصول"]').value;
+    let price = document.querySelector('input[placeholder="قیمت محصول"]').value;
+    let oldPrice = document.querySelector('input[placeholder="قیمت قبل از تخفیف"]').value;
+    let discount = document.querySelector('input[placeholder^="درصد تخفیف"]').value;
+    let category = document.querySelector('select').value;
 
-alert("محصول ذخیره شد ✅");
+    try {
+      await addDoc(collection(db, "products"), {
+        name: name,
+        price: price,
+        oldPrice: oldPrice,
+        discount: discount,
+        category: category,
+        createdAt: new Date()
+      });
 
-}
+      alert("محصول داخل Firebase ذخیره شد ✅");
+    } catch (error) {
+      alert("خطا در ذخیره محصول ❌");
+      console.log(error);
+    }
+  }
 
+  window.addProduct = addProduct;
 </script>
-</body>
 
+</body>
 </html>
