@@ -83,12 +83,36 @@ background:#ff4d94;
 <option>اکسسوری</option>
 </select>
 
-<button>
+<button onclick="addProduct()">
 ➕ افزودن محصول
 </button>
 
 </div>
+<script>
 
+function addProduct(){
+
+let name = document.querySelector('input[placeholder="نام محصول"]').value;
+let price = document.querySelector('input[placeholder="قیمت محصول"]').value;
+let oldPrice = document.querySelector('input[placeholder="قیمت قبل از تخفیف"]').value;
+let discount = document.querySelector('input[placeholder^="درصد تخفیف"]').value;
+let category = document.querySelector('select').value;
+
+let product = {
+name:name,
+price:price,
+oldPrice:oldPrice,
+discount:discount,
+category:category
+};
+
+localStorage.setItem("product", JSON.stringify(product));
+
+alert("محصول ذخیره شد ✅");
+
+}
+
+</script>
 </body>
 
 </html>
