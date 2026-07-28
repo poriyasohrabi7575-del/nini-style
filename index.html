@@ -656,8 +656,8 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 
-const products = document.querySelector(".products");
-
+const products = document.querySelector(".products .cards");
+products.innerHTML = "";
 
 const querySnapshot = await getDocs(collection(db,"products"));
 
@@ -668,18 +668,30 @@ let p = doc.data();
 
 
 products.innerHTML += `
+<div class="card">
 
-<div class="product-card">
+<img src="${p.image}" alt="${p.name}">
+
+<div class="discount">
+${p.discount}٪ تخفیف
+</div>
 
 <h3>${p.name}</h3>
 
-<p>${p.category}</p>
+<div class="old-price">
+${p.oldPrice} تومان
+</div>
 
-<p>${p.price} تومان</p>
+<div class="price">
+${p.price} تومان
+</div>
 
-<span>تخفیف ${p.discount}%</span>
+<button class="buy-btn" onclick="addToCart()">
+🛒 خرید محصول
+</button>
 
 </div>
+`;
 
 `;
 
