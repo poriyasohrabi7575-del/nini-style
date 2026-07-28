@@ -74,7 +74,7 @@ background:#ff4d94;
 عکس محصول
 </label>
 
-<input type="file" accept="image/*">
+<input type="text" placeholder="لینک عکس محصول">
 <input type="number" placeholder="درصد تخفیف مثلا ۳۰">
 <select>
 <option>لباس دخترانه</option>
@@ -114,7 +114,7 @@ let price = document.querySelector('input[placeholder="قیمت محصول"]').v
 let oldPrice = document.querySelector('input[placeholder="قیمت قبل از تخفیف"]').value;
 let discount = document.querySelector('input[placeholder^="درصد تخفیف"]').value;
 let category = document.querySelector('select').value;
-
+let image = document.querySelector('input[placeholder="لینک عکس محصول"]').value;
 try{
 
 await addDoc(collection(db,"products"),{
@@ -124,6 +124,7 @@ price:price,
 oldPrice:oldPrice,
 discount:discount,
 category:category,
+image:image,
 createdAt:new Date()
 
 });
