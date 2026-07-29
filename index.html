@@ -685,35 +685,13 @@ alert("محصول به سبد خرید اضافه شد 🛒");
 </script>
 <script type="module">
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-
-const firebaseConfig = {
-  apiKey: "AIzaSyClty2axVVJuvvmc27VLivTzp3cijZ-8oo",
-  authDomain: "nini-style.firebaseapp.com",
-  projectId: "nini-style",
-  storageBucket: "nini-style.firebasestorage.app",
-  messagingSenderId: "935164642738",
-  appId: "1:935164642738:web:33ecf6b01c00f9f08b10ab"
-};
-
-
-const app = initializeApp(firebaseConfig);
-
-const db = getFirestore(app);
-
-
 const products = document.querySelector(".products .cards");
 products.innerHTML = "";
 
-const querySnapshot = await getDocs(collection(db,"products"));
+const response = await fetch("/api/products");
+const data = await response.json();
 
-
-querySnapshot.forEach((doc)=>{
-
-let p = doc.data();
-
+data.forEach((p)=>{
 
 products.innerHTML += `
 
@@ -744,7 +722,6 @@ ${p.price} تومان
 `;
 
 });
-
 
 </script>
 </body>
