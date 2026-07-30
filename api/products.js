@@ -1,5 +1,8 @@
-export default function handler(req, res) {
-  res.status(200).json({
-    message: "API Works"
-  });
+{
+  "name": "nini-style",
+  "version": "1.0.0",
+  "type": "module",
+  "dependencies": {
+    "firebase": "^10.12.2"
+  }
 }
