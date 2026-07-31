@@ -1,8 +1,10 @@
-{
-  "name": "nini-style",
-  "version": "1.0.0",
-  "type": "module",
-  "dependencies": {
-    "firebase": "^10.12.2"
-  }
+export default function handler(req, res) {
+  res.status(200).json([
+    {
+      id: 1,
+      name: "لباس دخترانه",
+      price: 450000,
+      image: "/images/test.jpg"
+    }
+  ]);
 }
