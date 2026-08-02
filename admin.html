@@ -1,150 +1,101 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
-
 <head>
-
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>مدیریت نی نی استایل</title>
+<title>پنل مدیریت نی نی استایل</title>
 
 <style>
-
 body{
-font-family:Tahoma,Arial;
-background:#fff7fb;
-padding:40px;
-}
-
-h1{
-text-align:center;
-color:#ff6fa8;
+    font-family:tahoma;
+    background:#fff5fa;
+    padding:30px;
 }
 
 .box{
-max-width:500px;
-margin:auto;
-background:white;
-padding:30px;
-border-radius:25px;
-box-shadow:0 10px 30px rgba(0,0,0,.1);
+    max-width:500px;
+    margin:auto;
+    background:white;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 5px 20px #ddd;
 }
 
-input,select{
-width:100%;
-padding:15px;
-margin:10px 0;
-border-radius:15px;
-border:1px solid #ddd;
-font-size:16px;
+input,button{
+    width:100%;
+    padding:12px;
+    margin:8px 0;
+    border-radius:8px;
+    border:1px solid #ddd;
 }
 
 button{
-width:100%;
-padding:15px;
-background:#ff6fa8;
-color:white;
-border:0;
-border-radius:30px;
-font-size:18px;
-cursor:pointer;
+    background:#ff8fc7;
+    color:white;
+    border:none;
+    cursor:pointer;
 }
-
-button:hover{
-background:#ff4d94;
-}
-
 </style>
 
 </head>
 
 <body>
 
-<h1>
-🧸 پنل مدیریت نی نی استایل
-</h1>
-
 <div class="box">
 
-<input type="text" placeholder="نام محصول">
+<h2>پنل مدیریت نی نی استایل</h2>
 
-<input type="number" placeholder="قیمت محصول">
-<input type="number" placeholder="قیمت قبل از تخفیف">
-<label>
-عکس محصول
-</label>
+<input id="name" placeholder="نام محصول">
 
-<input type="text" placeholder="لینک عکس محصول">
-<input type="number" placeholder="درصد تخفیف مثلا ۳۰">
-<select>
-<option>لباس دخترانه</option>
-<option>لباس پسرانه</option>
-<option>لباس نوزاد</option>
-<option>اکسسوری</option>
-</select>
+<input id="price" placeholder="قیمت">
 
-<button onclick="addProduct()">
-➕ افزودن محصول
-</button>
+<input id="oldPrice" placeholder="قیمت قبلی">
+
+<input id="image" placeholder="مسیر عکس مثال: /images/dokhtarane.png">
+
+<input id="category" placeholder="دسته بندی">
+
+<button onclick="saveProduct()">ذخیره محصول</button>
+
+<p id="result"></p>
 
 </div>
 
 
-<script type="module">
+<script>
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+async function saveProduct(){
 
-const firebaseConfig = {
-  apiKey: "AIzaSyClty2axVVJuvvmc27VLivTzp3cijZ-8oo",
-  authDomain: "nini-style.firebaseapp.com",
-  projectId: "nini-style",
-  storageBucket: "nini-style.firebasestorage.app",
-  messagingSenderId: "935164642738",
-  appId: "1:935164642738:web:33ecf6b01c00f9f08b10ab"
+const product={
+name:document.getElementById("name").value,
+price:document.getElementById("price").value,
+oldPrice:document.getElementById("oldPrice").value,
+image:document.getElementById("image").value,
+category:document.getElementById("category").value
 };
 
-const app = initializeApp(firebaseConfig);
 
-const db = getFirestore(app);
-async function addProduct(){
-
-let name = document.querySelector('input[placeholder="نام محصول"]').value;
-let price = document.querySelector('input[placeholder="قیمت محصول"]').value;
-let oldPrice = document.querySelector('input[placeholder="قیمت قبل از تخفیف"]').value;
-let discount = document.querySelector('input[placeholder^="درصد تخفیف"]').value;
-let category = document.querySelector('select').value;
-let image = document.querySelector('input[placeholder="لینک عکس محصول"]').value;
-try{
-
-await addDoc(collection(db,"products"),{
-
-name:name,
-price:price,
-oldPrice:oldPrice,
-discount:discount,
-category:category,
-image:image,
-createdAt:new Date()
-
+const res = await fetch("/api/products",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify(product)
 });
 
-alert("محصول ذخیره شد ✅");
 
-}catch(error){
+const data=await res.json();
 
-console.log(error);
-alert("خطا در ذخیره ❌");
 
+if(data.success){
+document.getElementById("result").innerHTML="✅ محصول ذخیره شد";
+}else{
+document.getElementById("result").innerHTML="❌ خطا در ذخیره";
 }
 
 }
-
-window.addProduct = function(){
-  addProduct();
-};
-console.log("Firebase وصل شد");
 
 </script>
+
+
 </body>
 </html>
