@@ -2,40 +2,40 @@
 <html lang="fa" dir="rtl">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>پنل مدیریت نی نی استایل</title>
 
 <style>
 body{
     font-family:tahoma;
-    background:#fff5fa;
+    background:#f8f8f8;
     padding:30px;
 }
-
 .box{
     max-width:500px;
     margin:auto;
-    background:white;
-    padding:25px;
-    border-radius:15px;
-    box-shadow:0 5px 20px #ddd;
+    background:#fff;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 0 10px rgba(0,0,0,.1);
 }
-
 input,button{
     width:100%;
     padding:12px;
-    margin:8px 0;
-    border-radius:8px;
-    border:1px solid #ddd;
+    margin-top:10px;
+    box-sizing:border-box;
 }
-
 button{
-    background:#ff8fc7;
-    color:white;
+    background:#ff5ca8;
+    color:#fff;
     border:none;
     cursor:pointer;
 }
+#result{
+    margin-top:15px;
+    font-weight:bold;
+}
 </style>
-
 </head>
 
 <body>
@@ -45,24 +45,18 @@ button{
 <h2>پنل مدیریت نی نی استایل</h2>
 
 <input id="name" placeholder="نام محصول">
-
 <input id="price" placeholder="قیمت">
-
 <input id="oldPrice" placeholder="قیمت قبلی">
-
-<input id="image" placeholder="مسیر عکس مثال: /images/dokhtarane.png">
-
+<input id="image" placeholder="/images/dokhtarane.png">
 <input id="category" placeholder="دسته بندی">
 
 <button onclick="saveProduct()">ذخیره محصول</button>
 
-<p id="result"></p>
+<div id="result"></div>
 
 </div>
 
-
 <script>
-
 async function saveProduct(){
 
 const product={
@@ -73,8 +67,9 @@ image:document.getElementById("image").value,
 category:document.getElementById("category").value
 };
 
+try{
 
-const res = await fetch("/api/products",{
+const res=await fetch("/api/products",{
 method:"POST",
 headers:{
 "Content-Type":"application/json"
@@ -82,20 +77,20 @@ headers:{
 body:JSON.stringify(product)
 });
 
-
 const data=await res.json();
 
+document.getElementById("result").innerHTML=data.success
+?"✅ محصول ذخیره شد"
+:"❌ "+(data.error||"خطا");
 
-if(data.success){
-document.getElementById("result").innerHTML="✅ محصول ذخیره شد";
-}else{
-document.getElementById("result").innerHTML="❌ خطا در ذخیره";
+}catch(err){
+
+document.getElementById("result").innerHTML="❌ "+err.message;
+
 }
 
 }
-
 </script>
-
 
 </body>
 </html>
