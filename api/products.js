@@ -1,4 +1,4 @@
-import db from "../lib/firebaseAdmin";
+const db = require("../lib/firebaseAdmin");
 
 export default async function handler(req, res) {
   try {
