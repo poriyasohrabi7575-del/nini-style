@@ -1484,9 +1484,12 @@ function checkoutCart(){
 
   }
 
-  alert(
-    'سبد خرید آماده ثبت سفارش است 🛍️'
-  );
+ if (!cart.length) {
+  alert('سبد خرید خالی است!');
+  return;
+}
+
+window.location.href = "checkout.html";
 
 }
 
