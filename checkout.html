@@ -1,1 +1,389 @@
+<!DOCTYPE html>
 
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ثبت سفارش | نی نی استایل</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Tahoma, Arial, sans-serif;
+      background: #fff8fb;
+      color: #444;
+    }
+
+    .header {
+      background: white;
+      padding: 20px;
+      text-align: center;
+      border-bottom: 1px solid #f3dce6;
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: bold;
+      color: #e88aaa;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 30px auto;
+      padding: 20px;
+    }
+
+    .box {
+      background: white;
+      border-radius: 18px;
+      padding: 25px;
+      margin-bottom: 20px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+    }
+
+    h2 {
+      margin-top: 0;
+      color: #e88aaa;
+      font-size: 21px;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+      color: #555;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #ead5df;
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 15px;
+      outline: none;
+    }
+
+    input:focus,
+    textarea:focus {
+      border-color: #e88aaa;
+    }
+
+    textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    .order-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 14px 0;
+      border-bottom: 1px solid #f1e3e8;
+    }
+
+    .order-item:last-child {
+      border-bottom: none;
+    }
+
+    .item-info {
+      flex: 1;
+    }
+
+    .item-name {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .item-price {
+      color: #888;
+      font-size: 14px;
+    }
+
+    .item-total {
+      font-weight: bold;
+      color: #e88aaa;
+      white-space: nowrap;
+    }
+
+    .total {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+      padding-top: 18px;
+      border-top: 2px solid #f1d8e2;
+      font-size: 19px;
+      font-weight: bold;
+    }
+
+    .submit-btn {
+      width: 100%;
+      border: none;
+      padding: 16px;
+      border-radius: 12px;
+      background: #e88aaa;
+      color: white;
+      font-size: 17px;
+      font-family: inherit;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .submit-btn:hover {
+      background: #df7599;
+      transform: translateY(-1px);
+    }
+
+    .back-btn {
+      display: block;
+      text-align: center;
+      margin-top: 15px;
+      color: #e88aaa;
+      text-decoration: none;
+    }
+
+    .empty {
+      text-align: center;
+      padding: 30px;
+      color: #888;
+    }
+
+    .success {
+      display: none;
+      background: #eefaf2;
+      color: #287a45;
+      border: 1px solid #c9ead4;
+      padding: 15px;
+      border-radius: 12px;
+      margin-top: 15px;
+      text-align: center;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 12px;
+        margin: 15px auto;
+      }
+
+      .box {
+        padding: 18px;
+      }
+
+      .order-item {
+        align-items: flex-start;
+      }
+
+      .item-total {
+        font-size: 14px;
+      }
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <header class="header">
+    <div class="logo">نی نی استایل 🎀</div>
+  </header>
+
+  <main class="container">
+
+```
+<div class="box">
+  <h2>🛍️ اطلاعات سفارش</h2>
+
+  <form id="checkout-form">
+
+    <div class="form-group">
+      <label for="name">نام و نام خانوادگی</label>
+      <input
+        type="text"
+        id="name"
+        required
+        placeholder="مثلاً: پوریا صادقی"
+      >
+    </div>
+
+    <div class="form-group">
+      <label for="phone">شماره موبایل</label>
+      <input
+        type="tel"
+        id="phone"
+        required
+        placeholder="مثلاً: 09123456789"
+        inputmode="tel"
+      >
+    </div>
+
+    <div class="form-group">
+      <label for="address">آدرس کامل</label>
+      <textarea
+        id="address"
+        required
+        placeholder="استان، شهر، خیابان، کوچه، پلاک و واحد"
+      ></textarea>
+    </div>
+
+    <button type="submit" class="submit-btn">
+      ثبت سفارش 🛒
+    </button>
+
+    <div id="success-message" class="success">
+      سفارش شما با موفقیت ثبت شد ❤️
+    </div>
+
+  </form>
+</div>
+
+<div class="box">
+  <h2>📦 خلاصه سفارش</h2>
+
+  <div id="order-items"></div>
+
+  <div class="total">
+    <span>مبلغ کل</span>
+    <span id="order-total">۰ تومان</span>
+  </div>
+</div>
+
+<a href="index.html" class="back-btn">
+  ← بازگشت به فروشگاه
+</a>
+```
+
+  </main>
+
+  <script>
+    const CART_KEY = "cart";
+
+    function getCart() {
+      try {
+        return JSON.parse(localStorage.getItem(CART_KEY)) || [];
+      } catch (error) {
+        return [];
+      }
+    }
+
+    function formatPrice(price) {
+      return Number(price || 0).toLocaleString("fa-IR") + " تومان";
+    }
+
+    function getItemPrice(item) {
+      return Number(
+        item.price ||
+        item.salePrice ||
+        item.discountPrice ||
+        0
+      );
+    }
+
+    function getItemQuantity(item) {
+      return Number(item.quantity || item.qty || 1);
+    }
+
+    function renderOrder() {
+      const cart = getCart();
+      const container = document.getElementById("order-items");
+      const totalElement = document.getElementById("order-total");
+
+      if (!cart.length) {
+        container.innerHTML = `
+          <div class="empty">
+            سبد خرید شما خالی است.
+          </div>
+        `;
+
+        totalElement.textContent = "۰ تومان";
+        return;
+      }
+
+      let total = 0;
+
+      container.innerHTML = cart.map(item => {
+        const price = getItemPrice(item);
+        const quantity = getItemQuantity(item);
+        const itemTotal = price * quantity;
+
+        total += itemTotal;
+
+        return `
+          <div class="order-item">
+            <div class="item-info">
+              <div class="item-name">
+                ${item.name || "محصول"}
+              </div>
+
+              <div class="item-price">
+                ${formatPrice(price)} × ${quantity.toLocaleString("fa-IR")}
+              </div>
+            </div>
+
+            <div class="item-total">
+              ${formatPrice(itemTotal)}
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      totalElement.textContent = formatPrice(total);
+    }
+
+    document
+      .getElementById("checkout-form")
+      .addEventListener("submit", function(event) {
+
+        event.preventDefault();
+
+        const cart = getCart();
+
+        if (!cart.length) {
+          alert("سبد خرید شما خالی است.");
+          return;
+        }
+
+        const name = document.getElementById("name").value.trim();
+        const phone = document.getElementById("phone").value.trim();
+        const address = document.getElementById("address").value.trim();
+
+        if (!name || !phone || !address) {
+          alert("لطفاً همه اطلاعات را کامل وارد کنید.");
+          return;
+        }
+
+        const order = {
+          id: "ORDER-" + Date.now(),
+          customer: {
+            name: name,
+            phone: phone,
+            address: address
+          },
+          items: cart,
+          createdAt: new Date().toISOString()
+        };
+
+        localStorage.setItem(
+          "pendingOrder",
+          JSON.stringify(order)
+        );
+
+        document.getElementById("success-message").style.display = "block";
+
+        console.log("Order:", order);
+      });
+
+    renderOrder();
+  </script>
+
+</body>
+</html>
