@@ -2,116 +2,898 @@
 <html lang="fa" dir="rtl">
 
 <head>
+
 <meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>لباس دخترانه | نی نی استایل</title>
 
 <style>
-body{
-font-family:Tahoma,Arial;
-background:#fff;
-text-align:center;
+
+*{
+  box-sizing:border-box;
 }
 
-h1{
-color:#ff6fa8;
+body{
+  margin:0;
+  font-family:Tahoma,Arial,sans-serif;
+  background:#fff;
+  color:#333;
+}
+
+header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:18px 5%;
+  background:#fff;
+  box-shadow:0 3px 15px rgba(0,0,0,.06);
+  position:sticky;
+  top:0;
+  z-index:100;
+}
+
+.logo{
+  font-size:22px;
+  font-weight:900;
+  color:#e77b9f;
+}
+
+.home-btn{
+  text-decoration:none;
+  color:#555;
+  background:#fff0f5;
+  padding:10px 18px;
+  border-radius:12px;
+  font-weight:bold;
+}
+
+.cart-btn{
+  position:relative;
+  border:0;
+  background:#fff0f5;
+  width:45px;
+  height:45px;
+  border-radius:14px;
+  cursor:pointer;
+  font-size:21px;
+}
+
+.cart-count{
+  position:absolute;
+  top:-5px;
+  right:-5px;
+  background:#ef77a2;
+  color:white;
+  border-radius:50%;
+  min-width:19px;
+  height:19px;
+  font-size:11px;
+  display:grid;
+  place-items:center;
+}
+
+.page-title{
+  text-align:center;
+  color:#ff6fa8;
+  margin:35px 0 10px;
+}
+
+.page-subtitle{
+  text-align:center;
+  color:#888;
+  margin-bottom:30px;
 }
 
 .products{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-gap:25px;
-padding:40px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:25px;
+  padding:20px 5% 50px;
+  max-width:1200px;
+  margin:auto;
 }
 
 .card{
-background:white;
-border-radius:25px;
-box-shadow:0 10px 25px #ddd;
-padding:20px;
+  background:white;
+  border-radius:20px;
+  box-shadow:0 10px 25px #ddd;
+  padding:18px;
+  overflow:hidden;
+  transition:.2s;
+}
+
+.card:hover{
+  transform:translateY(-5px);
 }
 
 .card img{
-width:100%;
-border-radius:20px;
+  width:100%;
+  height:300px;
+  object-fit:cover;
+  border-radius:17px;
+  background:#f8f3ef;
+}
+
+.discount{
+  display:inline-block;
+  margin-top:12px;
+  background:#ffe1eb;
+  color:#e76591;
+  padding:5px 10px;
+  border-radius:8px;
+  font-size:12px;
+  font-weight:bold;
+}
+
+.card h2{
+  font-size:18px;
+  margin:12px 0;
+}
+
+.old{
+  color:#999;
+  text-decoration:line-through;
+  margin:5px 0;
 }
 
 .price{
-color:#ff6fa8;
-font-size:22px;
-font-weight:bold;
+  color:#ff6fa8;
+  font-size:20px;
+  font-weight:bold;
+  margin:8px 0 14px;
 }
+
+.buy-btn{
+  width:100%;
+  border:0;
+  background:#f27ba4;
+  color:#fff;
+  padding:12px;
+  border-radius:12px;
+  cursor:pointer;
+  font-family:inherit;
+  font-weight:bold;
+  font-size:14px;
+}
+
+.buy-btn:hover{
+  background:#e96d98;
+}
+
+/* CART */
+
+#cart-panel{
+  position:fixed;
+  inset:0;
+  z-index:9999;
+}
+
+.cart-overlay{
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,.35);
+  backdrop-filter:blur(2px);
+}
+
+.cart-box{
+  position:absolute;
+  top:0;
+  right:0;
+  width:min(430px,92vw);
+  height:100%;
+  background:#fff;
+  box-shadow:-8px 0 30px rgba(0,0,0,.15);
+  display:flex;
+  flex-direction:column;
+  animation:cartOpen .25s ease;
+}
+
+@keyframes cartOpen{
+
+  from{
+    transform:translateX(100%);
+  }
+
+  to{
+    transform:translateX(0);
+  }
+
+}
+
+.cart-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:20px;
+  border-bottom:1px solid #f0e8ec;
+}
+
+.cart-header h2{
+  margin:0;
+  font-size:21px;
+}
+
+.cart-close{
+  border:0;
+  background:#fff0f5;
+  color:#e76f9b;
+  width:36px;
+  height:36px;
+  border-radius:50%;
+  font-size:25px;
+  cursor:pointer;
+}
+
+.cart-items{
+  flex:1;
+  overflow-y:auto;
+  padding:15px;
+}
+
+.cart-item{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:12px 0;
+  border-bottom:1px solid #f1eaed;
+}
+
+.cart-item img{
+  width:75px;
+  height:75px;
+  border-radius:12px;
+  object-fit:cover;
+  background:#f8f3ef;
+}
+
+.cart-item-info{
+  flex:1;
+  min-width:0;
+}
+
+.cart-item-info h3{
+  font-size:14px;
+  margin:0 0 5px;
+}
+
+.cart-item-price{
+  color:#e76898;
+  font-size:13px;
+  font-weight:800;
+}
+
+.cart-controls{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-top:8px;
+}
+
+.cart-controls button{
+  width:27px;
+  height:27px;
+  border:0;
+  border-radius:8px;
+  background:#fff0f5;
+  color:#e76f9b;
+  font-size:18px;
+  cursor:pointer;
+}
+
+.cart-controls span{
+  min-width:20px;
+  text-align:center;
+  font-weight:bold;
+}
+
+.cart-remove{
+  border:0;
+  background:transparent;
+  cursor:pointer;
+  font-size:17px;
+}
+
+.cart-footer{
+  padding:18px;
+  border-top:1px solid #eee;
+}
+
+.cart-total{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:14px;
+}
+
+.cart-total strong{
+  color:#e76898;
+}
+
+.checkout-btn{
+  width:100%;
+  border:0;
+  background:#f27ba4;
+  color:white;
+  padding:13px;
+  border-radius:13px;
+  font-family:inherit;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.empty-cart{
+  text-align:center;
+  padding:70px 20px;
+  color:#888;
+}
+
+@media(max-width:600px){
+
+  header{
+    padding:15px 4%;
+  }
+
+  .logo{
+    font-size:18px;
+  }
+
+  .products{
+    grid-template-columns:1fr;
+    padding:20px;
+  }
+
+}
+
 </style>
 
 </head>
 
 <body>
 
-<h1>
-👧 لباس دخترانه
+<header>
+
+  <div class="logo">
+    🧸 نی نی استایل
+  </div>
+
+  <a
+    href="index.html"
+    class="home-btn"
+  >
+    🏠 خانه
+  </a>
+
+  <button
+    class="cart-btn"
+    onclick="openCart()"
+    aria-label="سبد خرید"
+  >
+
+    🛒
+
+    <span
+      class="cart-count"
+      id="cart-count"
+    >
+      0
+    </span>
+
+  </button>
+
+</header>
+
+<h1 class="page-title">
+  👧 لباس دخترانه
 </h1>
-</div>
+
+<p class="page-subtitle">
+  جدیدترین لباس‌های دخترانه نی نی استایل
+</p>
+
 <div class="products">
 
-<div class="card">
-
-<img src="https://placehold.co/500x600/f8bbd9/ffffff?text=لباس+دخترانه">
-
-<div class="discount">
-۳۰٪ تخفیف
-</div>
-
-<h2>
-ست دخترانه مجلسی
-</h2>
-
-<p class="old">
-۲٬۰۰۰٬۰۰۰ تومان
-</p>
-
-<p class="price">
-۱٬۴۹۰٬۰۰۰ تومان
-</p>
-
-<button>
-🛒 افزودن به سبد خرید
-</button>
-</div>
   <div class="card">
 
-<img src="https://placehold.co/500x600/ffe8f3/ffffff?text=پیراهن+دخترانه">
+    <img
+      src="https://placehold.co/500x600/f8bbd9/ffffff?text=لباس+دخترانه"
+      alt="ست دخترانه مجلسی"
+    >
 
-<div class="discount">
-۲۰٪ تخفیف
+    <div class="discount">
+      ۳۰٪ تخفیف
+    </div>
+
+    <h2>
+      ست دخترانه مجلسی
+    </h2>
+
+    <p class="old">
+      ۲٬۰۰۰٬۰۰۰ تومان
+    </p>
+
+    <p class="price">
+      ۱٬۴۹۰٬۰۰۰ تومان
+    </p>
+
+    <button
+      class="buy-btn"
+      onclick="addTocart({
+        id:'girl-1',
+        name:'ست دخترانه مجلسی',
+        price:1490000,
+        image:'https://placehold.co/500x600/f8bbd9/ffffff?text=لباس+دخترانه'
+      })"
+    >
+      🛒 افزودن به سبد خرید
+    </button>
+
+  </div>
+
+
+  <div class="card">
+
+    <img
+      src="https://placehold.co/500x600/ffe8f3/ffffff?text=پیراهن+دخترانه"
+      alt="پیراهن دخترانه شیک"
+    >
+
+    <div class="discount">
+      ۲۰٪ تخفیف
+    </div>
+
+    <h2>
+      پیراهن دخترانه شیک
+    </h2>
+
+    <p class="old">
+      ۱٬۵۰۰٬۰۰۰ تومان
+    </p>
+
+    <p class="price">
+      ۱٬۲۰۰٬۰۰۰ تومان
+    </p>
+
+    <button
+      class="buy-btn"
+      onclick="addTocart({
+        id:'girl-2',
+        name:'پیراهن دخترانه شیک',
+        price:1200000,
+        image:'https://placehold.co/500x600/ffe8f3/ffffff?text=پیراهن+دخترانه'
+      })"
+    >
+      🛒 افزودن به سبد خرید
+    </button>
+
+  </div>
+
+
+  <div class="card">
+
+    <img
+      src="https://placehold.co/400x400/ffe8f3/ffffff?text=پیراهن+کودک"
+      alt="پیراهن کودک"
+    >
+
+    <h2>
+      پیراهن کودک
+    </h2>
+
+    <div class="price">
+      ۹۹۰٬۰۰۰ تومان
+    </div>
+
+    <button
+      class="buy-btn"
+      onclick="addTocart({
+        id:'girl-3',
+        name:'پیراهن کودک',
+        price:990000,
+        image:'https://placehold.co/400x400/ffe8f3/ffffff?text=پیراهن+کودک'
+      })"
+    >
+      🛒 افزودن به سبد خرید
+    </button>
+
+  </div>
+
 </div>
 
-<h2>
-پیراهن دخترانه شیک
-</h2>
 
-<p class="old">
-۱٬۵۰۰٬۰۰۰ تومان
-</p>
+<script>
 
-<p class="price">
-۱٬۲۰۰٬۰۰۰ تومان
-</p>
+let cartItems = JSON.parse(
+  localStorage.getItem('niniCart') || '[]'
+);
 
-<button>
-🛒 افزودن به سبد خرید
-</button>
 
-</div>
-</div>
+function updateCartCount(){
 
-<div class="card">
-<img src="https://placehold.co/400x400/ffe8f3/ffffff">
-<h2>پیراهن کودک</h2>
-<div class="price">
-۹۹۰٬۰۰۰ تومان
-</div>
-</div>
+  const count =
+    cartItems.reduce(
+      (total,item) =>
+        total + item.quantity,
+      0
+    );
 
-</div>
+  document.getElementById(
+    'cart-count'
+  ).textContent = count;
+
+}
+
+
+function saveCart(){
+
+  localStorage.setItem(
+    'niniCart',
+    JSON.stringify(cartItems)
+  );
+
+  updateCartCount();
+
+}
+
+
+function addTocart(product){
+
+  const existing =
+    cartItems.find(
+      item =>
+        String(item.id) ===
+        String(product.id)
+    );
+
+  if(existing){
+
+    existing.quantity++;
+
+  }else{
+
+    cartItems.push({
+
+      id:product.id,
+
+      name:product.name,
+
+      price:Number(product.price) || 0,
+
+      image:product.image,
+
+      quantity:1
+
+    });
+
+  }
+
+  saveCart();
+
+  alert(
+    'محصول به سبد خرید اضافه شد 🛒'
+  );
+
+}
+
+
+function formatPrice(value){
+
+  return Number(value)
+    .toLocaleString('fa-IR');
+
+}
+
+
+function openCart(){
+
+  const old =
+    document.getElementById(
+      'cart-panel'
+    );
+
+  if(old){
+    old.remove();
+  }
+
+  const panel =
+    document.createElement('div');
+
+  panel.id =
+    'cart-panel';
+
+  panel.innerHTML = `
+
+    <div
+      class="cart-overlay"
+      onclick="closeCart()"
+    ></div>
+
+    <div class="cart-box">
+
+      <div class="cart-header">
+
+        <h2>
+          🛒 سبد خرید
+        </h2>
+
+        <button
+          class="cart-close"
+          onclick="closeCart()"
+        >
+          ×
+        </button>
+
+      </div>
+
+      <div
+        id="cart-items"
+        class="cart-items"
+      ></div>
+
+      <div class="cart-footer">
+
+        <div class="cart-total">
+
+          <span>
+            مبلغ کل:
+          </span>
+
+          <strong
+            id="cart-total-price"
+          >
+            ۰ تومان
+          </strong>
+
+        </div>
+
+        <button
+          class="checkout-btn"
+          onclick="checkoutCart()"
+        >
+          ادامه ثبت سفارش
+        </button>
+
+      </div>
+
+    </div>
+
+  `;
+
+  document.body.appendChild(panel);
+
+  renderCart();
+
+}
+
+
+function closeCart(){
+
+  const panel =
+    document.getElementById(
+      'cart-panel'
+    );
+
+  if(panel){
+    panel.remove();
+  }
+
+}
+
+
+function renderCart(){
+
+  const container =
+    document.getElementById(
+      'cart-items'
+    );
+
+  if(!container){
+    return;
+  }
+
+  if(cartItems.length === 0){
+
+    container.innerHTML = `
+
+      <div class="empty-cart">
+
+        <div style="font-size:42px">
+          🛒
+        </div>
+
+        <h3>
+          سبد خرید خالی است
+        </h3>
+
+        <p>
+          هنوز محصولی به سبد اضافه نکرده‌اید.
+        </p>
+
+      </div>
+
+    `;
+
+    document.getElementById(
+      'cart-total-price'
+    ).textContent =
+      '۰ تومان';
+
+    return;
+
+  }
+
+
+  container.innerHTML =
+    cartItems.map(item => `
+
+      <div class="cart-item">
+
+        <img
+          src="${item.image}"
+          alt="${item.name}"
+        >
+
+        <div class="cart-item-info">
+
+          <h3>
+            ${item.name}
+          </h3>
+
+          <div class="cart-item-price">
+
+            ${formatPrice(item.price)}
+            تومان
+
+          </div>
+
+          <div class="cart-controls">
+
+            <button
+              onclick="increaseCartItem('${item.id}')"
+            >
+              +
+            </button>
+
+            <span>
+              ${item.quantity}
+            </span>
+
+            <button
+              onclick="decreaseCartItem('${item.id}')"
+            >
+              −
+            </button>
+
+          </div>
+
+        </div>
+
+        <button
+          class="cart-remove"
+          onclick="removeCartItem('${item.id}')"
+        >
+          🗑️
+        </button>
+
+      </div>
+
+    `).join('');
+
+
+  const total =
+    cartItems.reduce(
+      (sum,item) =>
+        sum +
+        item.price *
+        item.quantity,
+      0
+    );
+
+  document.getElementById(
+    'cart-total-price'
+  ).textContent =
+    formatPrice(total) +
+    ' تومان';
+
+}
+
+
+function increaseCartItem(id){
+
+  const item =
+    cartItems.find(
+      item =>
+        String(item.id) ===
+        String(id)
+    );
+
+  if(item){
+
+    item.quantity++;
+
+    saveCart();
+
+    renderCart();
+
+  }
+
+}
+
+
+function decreaseCartItem(id){
+
+  const item =
+    cartItems.find(
+      item =>
+        String(item.id) ===
+        String(id)
+    );
+
+  if(!item){
+    return;
+  }
+
+  if(item.quantity > 1){
+
+    item.quantity--;
+
+  }else{
+
+    cartItems =
+      cartItems.filter(
+        item =>
+          String(item.id) !==
+          String(id)
+      );
+
+  }
+
+  saveCart();
+
+  renderCart();
+
+}
+
+
+function removeCartItem(id){
+
+  cartItems =
+    cartItems.filter(
+      item =>
+        String(item.id) !==
+        String(id)
+    );
+
+  saveCart();
+
+  renderCart();
+
+}
+
+
+function checkoutCart(){
+
+  if(cartItems.length === 0){
+
+    alert(
+      'سبد خرید شما خالی است.'
+    );
+
+    return;
+
+  }
+
+  alert(
+    'سبد خرید آماده ثبت سفارش است 🛍️'
+  );
+
+}
+
+
+updateCartCount();
+
+</script>
 
 </body>
+
 </html>
