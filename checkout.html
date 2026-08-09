@@ -1,9 +1,11 @@
+```html
 <!DOCTYPE html>
-
 <html lang="fa" dir="rtl">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>ثبت سفارش | نی نی استایل</title>
 
   <style>
@@ -19,7 +21,7 @@
     }
 
     .header {
-      background: white;
+      background: #fff;
       padding: 20px;
       text-align: center;
       border-bottom: 1px solid #f3dce6;
@@ -38,11 +40,11 @@
     }
 
     .box {
-      background: white;
+      background: #fff;
       border-radius: 18px;
       padding: 25px;
       margin-bottom: 20px;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.06);
     }
 
     h2 {
@@ -102,7 +104,8 @@
 
     .item-name {
       font-weight: bold;
-      margin-bottom: 5px;
+      margin-bottom: 6px;
+      color: #444;
     }
 
     .item-price {
@@ -169,6 +172,16 @@
       text-align: center;
     }
 
+    .error {
+      background: #fff1f1;
+      color: #b33a3a;
+      border: 1px solid #f0caca;
+      padding: 15px;
+      border-radius: 12px;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+
     @media (max-width: 600px) {
       .container {
         padding: 12px;
@@ -188,7 +201,6 @@
       }
     }
   </style>
-
 </head>
 
 <body>
@@ -199,105 +211,245 @@
 
   <main class="container">
 
-```
-<div class="box">
-  <h2>🛍️ اطلاعات سفارش</h2>
+    <!-- اطلاعات مشتری -->
+    <div class="box">
 
-  <form id="checkout-form">
+      <h2>🛍️ اطلاعات سفارش</h2>
 
-    <div class="form-group">
-      <label for="name">نام و نام خانوادگی</label>
-      <input
-        type="text"
-        id="name"
-        required
-        placeholder="مثلاً: پوریا صادقی"
-      >
+      <form id="checkout-form">
+
+        <div class="form-group">
+          <label for="name">نام و نام خانوادگی</label>
+
+          <input
+            type="text"
+            id="name"
+            required
+            placeholder="مثلاً: پوریا صادقی"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="phone">شماره موبایل</label>
+
+          <input
+            type="tel"
+            id="phone"
+            required
+            placeholder="مثلاً: 09123456789"
+            inputmode="tel"
+            maxlength="11"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="postalCode">کد پستی</label>
+
+          <input
+            type="text"
+            id="postalCode"
+            required
+            placeholder="کد پستی ۱۰ رقمی"
+            inputmode="numeric"
+            maxlength="10"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="address">آدرس کامل</label>
+
+          <textarea
+            id="address"
+            required
+            placeholder="استان، شهر، خیابان، کوچه، پلاک و واحد"
+          ></textarea>
+        </div>
+
+        <button
+          type="submit"
+          class="submit-btn"
+        >
+          ثبت سفارش 🛒
+        </button>
+
+        <div
+          id="success-message"
+          class="success"
+        >
+          سفارش شما با موفقیت ثبت شد ❤️
+        </div>
+
+      </form>
+
     </div>
 
-    <div class="form-group">
-      <label for="phone">شماره موبایل</label>
-      <input
-        type="tel"
-        id="phone"
-        required
-        placeholder="مثلاً: 09123456789"
-        inputmode="tel"
-      >
+
+    <!-- خلاصه سفارش -->
+    <div class="box">
+
+      <h2>📦 خلاصه سفارش</h2>
+
+      <div id="order-items"></div>
+
+      <div class="total">
+        <span>مبلغ کل</span>
+
+        <span id="order-total">
+          ۰ تومان
+        </span>
+      </div>
+
     </div>
 
-    <div class="form-group">
-      <label for="address">آدرس کامل</label>
-      <textarea
-        id="address"
-        required
-        placeholder="استان، شهر، خیابان، کوچه، پلاک و واحد"
-      ></textarea>
-    </div>
 
-    <button type="submit" class="submit-btn">
-      ثبت سفارش 🛒
-    </button>
-
-    <div id="success-message" class="success">
-      سفارش شما با موفقیت ثبت شد ❤️
-    </div>
-
-  </form>
-</div>
-
-<div class="box">
-  <h2>📦 خلاصه سفارش</h2>
-
-  <div id="order-items"></div>
-
-  <div class="total">
-    <span>مبلغ کل</span>
-    <span id="order-total">۰ تومان</span>
-  </div>
-</div>
-
-<a href="index.html" class="back-btn">
-  ← بازگشت به فروشگاه
-</a>
-```
+    <a
+      href="index.html"
+      class="back-btn"
+    >
+      ← بازگشت به فروشگاه
+    </a>
 
   </main>
 
+
   <script>
+
+    /*
+      کلید اصلی سبد خرید
+    */
     const CART_KEY = "cart";
 
+
+    /*
+      خواندن سبد خرید
+    */
     function getCart() {
+
       try {
-        return JSON.parse(localStorage.getItem(CART_KEY)) || [];
+
+        const data = localStorage.getItem(CART_KEY);
+
+        if (!data) {
+          return [];
+        }
+
+        const cart = JSON.parse(data);
+
+        if (Array.isArray(cart)) {
+          return cart;
+        }
+
+        return [];
+
       } catch (error) {
+
+        console.error("خطا در خواندن سبد خرید:", error);
+
         return [];
       }
     }
 
-    function formatPrice(price) {
-      return Number(price || 0).toLocaleString("fa-IR") + " تومان";
+
+    /*
+      تبدیل قیمت به عدد
+    */
+    function getItemPrice(item) {
+
+      const possiblePrices = [
+        item.price,
+        item.salePrice,
+        item.discountPrice,
+        item.finalPrice,
+        item.amount
+      ];
+
+      for (const value of possiblePrices) {
+
+        if (
+          value !== undefined &&
+          value !== null &&
+          value !== ""
+        ) {
+
+          const number = Number(
+            String(value)
+              .replace(/,/g, "")
+              .replace(/٬/g, "")
+              .replace(/[^\d.]/g, "")
+          );
+
+          if (!isNaN(number)) {
+            return number;
+          }
+        }
+      }
+
+      return 0;
     }
 
-    function getItemPrice(item) {
-      return Number(
-        item.price ||
-        item.salePrice ||
-        item.discountPrice ||
-        0
+
+    /*
+      تعداد محصول
+    */
+    function getItemQuantity(item) {
+
+      const quantity =
+        item.quantity ??
+        item.qty ??
+        item.count ??
+        1;
+
+      const number = Number(quantity);
+
+      return number > 0 ? number : 1;
+    }
+
+
+    /*
+      نام محصول
+    */
+    function getItemName(item) {
+
+      return (
+        item.name ||
+        item.title ||
+        item.productName ||
+        "محصول"
       );
     }
 
-    function getItemQuantity(item) {
-      return Number(item.quantity || item.qty || 1);
+
+    /*
+      فرمت قیمت
+    */
+    function formatPrice(price) {
+
+      return (
+        Number(price || 0).toLocaleString("fa-IR")
+        + " تومان"
+      );
     }
 
-    function renderOrder() {
-      const cart = getCart();
-      const container = document.getElementById("order-items");
-      const totalElement = document.getElementById("order-total");
 
+    /*
+      نمایش خلاصه سفارش
+    */
+    function renderOrder() {
+
+      const cart = getCart();
+
+      const container =
+        document.getElementById("order-items");
+
+      const totalElement =
+        document.getElementById("order-total");
+
+
+      /*
+        اگر سبد خالی باشد
+      */
       if (!cart.length) {
+
         container.innerHTML = `
           <div class="empty">
             سبد خرید شما خالی است.
@@ -305,85 +457,241 @@
         `;
 
         totalElement.textContent = "۰ تومان";
+
         return;
       }
 
+
       let total = 0;
 
+
+      /*
+        ساخت لیست محصولات
+      */
       container.innerHTML = cart.map(item => {
+
+        const name = getItemName(item);
+
         const price = getItemPrice(item);
+
         const quantity = getItemQuantity(item);
-        const itemTotal = price * quantity;
+
+        const itemTotal =
+          price * quantity;
 
         total += itemTotal;
 
+
         return `
           <div class="order-item">
+
             <div class="item-info">
+
               <div class="item-name">
-                ${item.name || "محصول"}
+                ${name}
               </div>
 
               <div class="item-price">
-                ${formatPrice(price)} × ${quantity.toLocaleString("fa-IR")}
+                ${formatPrice(price)}
+                ×
+                ${quantity.toLocaleString("fa-IR")}
               </div>
+
             </div>
 
             <div class="item-total">
               ${formatPrice(itemTotal)}
             </div>
+
           </div>
         `;
+
       }).join("");
 
-      totalElement.textContent = formatPrice(total);
+
+      /*
+        نمایش مبلغ کل
+      */
+      totalElement.textContent =
+        formatPrice(total);
     }
 
+
+    /*
+      ثبت سفارش
+    */
     document
       .getElementById("checkout-form")
       .addEventListener("submit", function(event) {
 
         event.preventDefault();
 
+
+        /*
+          دریافت سبد
+        */
         const cart = getCart();
 
+
+        /*
+          جلوگیری از سفارش بدون محصول
+        */
         if (!cart.length) {
-          alert("سبد خرید شما خالی است.");
+
+          alert(
+            "سبد خرید شما خالی است."
+          );
+
           return;
         }
 
-        const name = document.getElementById("name").value.trim();
-        const phone = document.getElementById("phone").value.trim();
-        const address = document.getElementById("address").value.trim();
 
-        if (!name || !phone || !address) {
-          alert("لطفاً همه اطلاعات را کامل وارد کنید.");
+        /*
+          اطلاعات مشتری
+        */
+        const name =
+          document
+            .getElementById("name")
+            .value
+            .trim();
+
+
+        const phone =
+          document
+            .getElementById("phone")
+            .value
+            .trim();
+
+
+        const postalCode =
+          document
+            .getElementById("postalCode")
+            .value
+            .trim();
+
+
+        const address =
+          document
+            .getElementById("address")
+            .value
+            .trim();
+
+
+        /*
+          بررسی اطلاعات
+        */
+        if (
+          !name ||
+          !phone ||
+          !postalCode ||
+          !address
+        ) {
+
+          alert(
+            "لطفاً همه اطلاعات را کامل وارد کنید."
+          );
+
           return;
         }
 
+
+        /*
+          بررسی کد پستی
+        */
+        if (
+          !/^\d{10}$/.test(postalCode)
+        ) {
+
+          alert(
+            "کد پستی باید دقیقاً ۱۰ رقم باشد."
+          );
+
+          return;
+        }
+
+
+        /*
+          محاسبه مبلغ کل
+        */
+        let total = 0;
+
+        cart.forEach(item => {
+
+          const price =
+            getItemPrice(item);
+
+          const quantity =
+            getItemQuantity(item);
+
+          total +=
+            price * quantity;
+
+        });
+
+
+        /*
+          ساخت سفارش
+        */
         const order = {
-          id: "ORDER-" + Date.now(),
+
+          id:
+            "ORDER-" +
+            Date.now(),
+
           customer: {
+
             name: name,
+
             phone: phone,
+
+            postalCode: postalCode,
+
             address: address
+
           },
+
           items: cart,
-          createdAt: new Date().toISOString()
+
+          total: total,
+
+          createdAt:
+            new Date().toISOString()
+
         };
 
+
+        /*
+          ذخیره موقت سفارش
+        */
         localStorage.setItem(
           "pendingOrder",
           JSON.stringify(order)
         );
 
-        document.getElementById("success-message").style.display = "block";
 
-        console.log("Order:", order);
+        /*
+          نمایش پیام موفقیت
+        */
+        document
+          .getElementById("success-message")
+          .style.display = "block";
+
+
+        console.log(
+          "Order:",
+          order
+        );
+
       });
 
+
+    /*
+      اجرای اولیه
+    */
     renderOrder();
+
   </script>
 
 </body>
 </html>
+```
