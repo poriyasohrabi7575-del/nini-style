@@ -68,6 +68,10 @@ button{
     background:#6c8cff;
 }
 
+.tracking-button{
+    background:#35a853;
+}
+
 .stats{
     display:grid;
     grid-template-columns:repeat(3,1fr);
@@ -176,8 +180,38 @@ button{
     margin-top:6px;
 }
 
+
 /* ==========================================
-   اطلاع‌رسانی دریافت مشتری
+   کد رهگیری
+   ========================================== */
+
+.tracking-box{
+    margin-top:12px;
+    padding:14px;
+    border-radius:10px;
+    background:#f5faff;
+    border:1px solid #d6e8f5;
+}
+
+.tracking-title{
+    font-weight:bold;
+    color:#4385a8;
+    margin-bottom:5px;
+}
+
+.tracking-box input{
+    background:#fff;
+}
+
+.tracking-result{
+    margin-top:8px;
+    font-size:13px;
+    color:#287a43;
+}
+
+
+/* ==========================================
+   دریافت مشتری
    ========================================== */
 
 .customer-received{
@@ -245,33 +279,44 @@ button{
 <div class="stats">
 
     <div class="stat">
+
         📦 سفارش‌ها
+
         <div
             class="stat-number"
             id="ordersCount"
         >
             ۰
         </div>
+
     </div>
 
+
     <div class="stat">
+
         🛍️ محصولات
+
         <div
             class="stat-number"
             id="productsCount"
         >
             ۰
         </div>
+
     </div>
 
+
     <div class="stat">
+
         💰 فروش
+
         <div
             class="stat-number"
             id="salesTotal"
         >
             ۰ تومان
         </div>
+
     </div>
 
 </div>
@@ -287,25 +332,33 @@ button{
 
 <h2>🎀 مدیریت محصولات</h2>
 
-<input type="hidden" id="productId">
+<input
+    type="hidden"
+    id="productId"
+>
 
-<input id="name" placeholder="نام محصول">
+<input
+    id="name"
+    placeholder="نام محصول"
+>
 
 <input
     id="price"
     type="number"
     placeholder="قیمت"
-/>
+>
 
 <input
     id="oldPrice"
     type="number"
     placeholder="قیمت قبلی"
-/>
+>
 
 <select id="category">
 
-    <option value="">انتخاب دسته‌بندی</option>
+    <option value="">
+        انتخاب دسته‌بندی
+    </option>
 
     <option value="لباس دخترانه">
         لباس دخترانه
@@ -333,12 +386,12 @@ button{
     id="imageFile"
     type="file"
     accept="image/*"
-/>
+>
 
 <input
     id="image"
     placeholder="یا آدرس عکس"
-/>
+>
 
 <button onclick="saveProduct()">
     💾 ذخیره محصول
@@ -448,7 +501,9 @@ async function loadProducts(){
                     >
 
                     <strong>
-                        ${escapeHtml(product.name || "-")}
+                        ${escapeHtml(
+                            product.name || "-"
+                        )}
                     </strong>
 
                     <p>
@@ -460,7 +515,8 @@ async function loadProducts(){
                     </p>
 
                     <small>
-                        📂 ${escapeHtml(
+                        📂
+                        ${escapeHtml(
                             product.category || "-"
                         )}
                     </small>
@@ -491,7 +547,8 @@ async function loadProducts(){
 
         box.innerHTML =
             `<div class="empty">
-                ❌ ${escapeHtml(error.message)}
+                ❌
+                ${escapeHtml(error.message)}
             </div>`;
     }
 }
@@ -505,10 +562,14 @@ async function loadProducts(){
 async function saveProduct(){
 
     const file =
-        document.getElementById("imageFile").files[0];
+        document.getElementById(
+            "imageFile"
+        ).files[0];
 
     let image =
-        document.getElementById("image").value.trim();
+        document.getElementById(
+            "image"
+        ).value.trim();
 
     if(file){
 
@@ -529,28 +590,38 @@ async function saveProduct(){
     const product = {
 
         name:
-            document.getElementById("name").value,
+            document.getElementById(
+                "name"
+            ).value,
 
         price:
             Number(
-                document.getElementById("price").value || 0
+                document.getElementById(
+                    "price"
+                ).value || 0
             ),
 
         oldPrice:
             Number(
-                document.getElementById("oldPrice").value || 0
+                document.getElementById(
+                    "oldPrice"
+                ).value || 0
             ),
 
         image:
             image,
 
         category:
-            document.getElementById("category").value
+            document.getElementById(
+                "category"
+            ).value
 
     };
 
     const id =
-        document.getElementById("productId").value;
+        document.getElementById(
+            "productId"
+        ).value;
 
     if(id){
 
@@ -609,7 +680,7 @@ async function saveProduct(){
 
 
 // ==========================================
-// ویرایش
+// ویرایش محصول
 // ==========================================
 
 function editProduct(product){
@@ -653,7 +724,7 @@ function editProduct(product){
 
 
 // ==========================================
-// حذف
+// حذف محصول
 // ==========================================
 
 async function deleteProduct(id){
@@ -697,7 +768,8 @@ async function deleteProduct(id){
     }catch(error){
 
         alert(
-            "❌ " + error.message
+            "❌ " +
+            error.message
         );
     }
 }
@@ -711,7 +783,9 @@ async function deleteProduct(id){
 async function loadOrders(){
 
     const box =
-        document.getElementById("orders");
+        document.getElementById(
+            "orders"
+        );
 
     box.innerHTML =
         `<div class="loading">
@@ -721,7 +795,9 @@ async function loadOrders(){
     try{
 
         const res =
-            await fetch("/api/orders");
+            await fetch(
+                "/api/orders"
+            );
 
         const data =
             await res.json();
@@ -739,10 +815,15 @@ async function loadOrders(){
         document.getElementById(
             "ordersCount"
         ).textContent =
-            orders.length.toLocaleString("fa-IR");
+            orders.length.toLocaleString(
+                "fa-IR"
+            );
 
 
-        // محاسبه فروش کل
+        // ==============================
+        // فروش کل
+        // ==============================
+
         const totalSales =
             orders.reduce(
                 (sum, order) =>
@@ -756,7 +837,9 @@ async function loadOrders(){
         document.getElementById(
             "salesTotal"
         ).textContent =
-            totalSales.toLocaleString("fa-IR")
+            totalSales.toLocaleString(
+                "fa-IR"
+            )
             + " تومان";
 
 
@@ -777,20 +860,30 @@ async function loadOrders(){
 
                 <div class="order">
 
+
+                    <!-- ==================
+                         سر سفارش
+                         ================== -->
+
                     <div class="order-header">
 
                         <div class="order-title">
 
                             📦 سفارش شماره
+
                             ${(
                                 index + 1
-                            ).toLocaleString("fa-IR")}
+                            ).toLocaleString(
+                                "fa-IR"
+                            )}
 
                         </div>
+
 
                         <div class="order-date">
 
                             🕐
+
                             ${formatDate(
                                 order.createdAt
                             )}
@@ -800,10 +893,17 @@ async function loadOrders(){
                     </div>
 
 
+                    <!-- ==================
+                         اطلاعات مشتری
+                         ================== -->
+
                     <div class="order-info">
 
                         👤
-                        <strong>نام:</strong>
+                        <strong>
+                            نام:
+                        </strong>
+
                         ${escapeHtml(
                             order.name || "-"
                         )}
@@ -811,7 +911,10 @@ async function loadOrders(){
                         <br>
 
                         📱
-                        <strong>موبایل:</strong>
+                        <strong>
+                            موبایل:
+                        </strong>
+
                         ${escapeHtml(
                             order.mobile || "-"
                         )}
@@ -819,7 +922,10 @@ async function loadOrders(){
                         <br>
 
                         📮
-                        <strong>کد پستی:</strong>
+                        <strong>
+                            کد پستی:
+                        </strong>
+
                         ${escapeHtml(
                             order.postalCode || "-"
                         )}
@@ -827,7 +933,10 @@ async function loadOrders(){
                         <br>
 
                         🏠
-                        <strong>آدرس:</strong>
+                        <strong>
+                            آدرس:
+                        </strong>
+
                         ${escapeHtml(
                             order.address || "-"
                         )}
@@ -835,9 +944,16 @@ async function loadOrders(){
                     </div>
 
 
+                    <!-- ==================
+                         محصولات سفارش
+                         ================== -->
+
                     <div class="order-products">
 
-                        🛍️ <strong>محصولات</strong>
+                        🛍️
+                        <strong>
+                            محصولات
+                        </strong>
 
                         <br><br>
 
@@ -848,36 +964,96 @@ async function loadOrders(){
                     </div>
 
 
+                    <!-- ==================
+                         مبلغ
+                         ================== -->
+
                     <div class="order-total">
 
-                        💰 مبلغ کل:
+                        💰
+                        مبلغ کل:
+
                         ${Number(
                             order.totalAmount || 0
-                        ).toLocaleString("fa-IR")}
+                        ).toLocaleString(
+                            "fa-IR"
+                        )}
+
                         تومان
 
                         <br>
 
-                        🔢 تعداد:
+                        🔢
+                        تعداد:
+
                         ${Number(
                             order.quantity || 0
-                        ).toLocaleString("fa-IR")}
+                        ).toLocaleString(
+                            "fa-IR"
+                        )}
 
                     </div>
 
 
-                    <!-- ==================================
-                         اطلاع‌رسانی دریافت مشتری
-                         ================================== -->
+                    <!-- ==================
+                         کد رهگیری
+                         ================== -->
 
-                    ${renderCustomerReceived(order)}
+                    <div class="tracking-box">
 
+                        <div class="tracking-title">
+
+                            📮
+                            کد رهگیری مرسوله
+
+                        </div>
+
+
+                        <input
+                            id="tracking-${order.id}"
+                            type="text"
+                            value="${escapeHtml(
+                                order.trackingCode || ""
+                            )}"
+                            placeholder="کد رهگیری مرسوله را وارد کنید"
+                        >
+
+
+                        <button
+                            class="tracking-button"
+                            onclick="saveTrackingCode('${order.id}')"
+                        >
+                            💾 ثبت کد رهگیری
+                        </button>
+
+
+                        <div
+                            id="tracking-result-${order.id}"
+                            class="tracking-result"
+                        ></div>
+
+                    </div>
+
+
+                    <!-- ==================
+                         وضعیت دریافت مشتری
+                         ================== -->
+
+                    ${renderCustomerReceived(
+                        order
+                    )}
+
+
+                    <!-- ==================
+                         وضعیت سفارش
+                         ================== -->
 
                     <div class="status">
 
                         <strong>
                             وضعیت سفارش:
                         </strong>
+
 
                         <select
                             onchange="changeStatus(
@@ -888,28 +1064,47 @@ async function loadOrders(){
 
                             <option
                                 value="new"
-                                ${order.status === "new" ? "selected" : ""}
+                                ${
+                                    order.status === "new"
+                                    ? "selected"
+                                    : ""
+                                }
                             >
                                 🟡 جدید
                             </option>
 
+
                             <option
                                 value="preparing"
-                                ${order.status === "preparing" ? "selected" : ""}
+                                ${
+                                    order.status === "preparing"
+                                    ? "selected"
+                                    : ""
+                                }
                             >
                                 🔵 آماده‌سازی
                             </option>
 
+
                             <option
                                 value="shipped"
-                                ${order.status === "shipped" ? "selected" : ""}
+                                ${
+                                    order.status === "shipped"
+                                    ? "selected"
+                                    : ""
+                                }
                             >
                                 🚚 ارسال شد
                             </option>
 
+
                             <option
                                 value="delivered"
-                                ${order.status === "delivered" ? "selected" : ""}
+                                ${
+                                    order.status === "delivered"
+                                    ? "selected"
+                                    : ""
+                                }
                             >
                                 🟢 تحویل شد
                             </option>
@@ -928,7 +1123,12 @@ async function loadOrders(){
 
         box.innerHTML =
             `<div class="empty">
-                ❌ ${escapeHtml(error.message)}
+
+                ❌
+                ${escapeHtml(
+                    error.message
+                )}
+
             </div>`;
     }
 }
@@ -936,37 +1136,108 @@ async function loadOrders(){
 
 
 // ==========================================
-// نمایش وضعیت دریافت مشتری
+// ثبت کد رهگیری
+// ==========================================
+
+async function saveTrackingCode(id){
+
+    const input =
+        document.getElementById(
+            "tracking-" + id
+        );
+
+    const result =
+        document.getElementById(
+            "tracking-result-" + id
+        );
+
+    if(!input){
+
+        return;
+    }
+
+
+    const trackingCode =
+        input.value.trim();
+
+
+    if(!trackingCode){
+
+        result.textContent =
+            "⚠️ لطفاً کد رهگیری را وارد کنید.";
+
+        return;
+    }
+
+
+    result.textContent =
+        "⏳ در حال ثبت کد رهگیری...";
+
+
+    try{
+
+        const res =
+            await fetch(
+                "/api/orders",
+                {
+                    method:"PATCH",
+
+                    headers:{
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify({
+                            id,
+                            trackingCode
+                        })
+                }
+            );
+
+
+        const data =
+            await res.json();
+
+
+        if(!res.ok){
+
+            throw new Error(
+                data.error ||
+                "خطا در ثبت کد رهگیری"
+            );
+        }
+
+
+        result.textContent =
+            "✅ کد رهگیری با موفقیت ثبت شد";
+
+
+    }catch(error){
+
+        result.textContent =
+            "❌ " +
+            error.message;
+
+    }
+
+}
+
+
+
+// ==========================================
+// نمایش دریافت مشتری
 // ==========================================
 
 function renderCustomerReceived(order){
 
-    /*
-       فیلد اصلی دریافت مشتری:
-       receivedAt
-
-       برای سازگاری بیشتر، اگر receivedAt
-       وجود نداشته باشد، چند نام رایج دیگر
-       هم بررسی می‌شود.
-    */
-
-    const receivedAt =
-        order.receivedAt ||
-        order.customerReceivedAt ||
-        order.deliveryConfirmedAt ||
-        null;
+    const received =
+        order.customerReceived === true;
 
 
-    const trackingCode =
-        order.trackingCode ||
-        order.trackingNumber ||
-        order.postTrackingCode ||
-        "";
+    if(received){
 
-
-    if(receivedAt){
-
-        let html = `
+        return `
 
             <div class="customer-received">
 
@@ -976,34 +1247,17 @@ function renderCustomerReceived(order){
 
                 <br>
 
-                🕐 زمان دریافت:
-                ${formatDate(receivedAt)}
+                🕐
+                زمان دریافت:
 
-        `;
-
-
-        if(trackingCode){
-
-            html += `
-
-                <div class="tracking-code">
-
-                    📮 کد رهگیری مرسوله:
-                    ${escapeHtml(trackingCode)}
-
-                </div>
-
-            `;
-        }
-
-
-        html += `
+                ${formatDate(
+                    order.customerReceivedAt
+                )}
 
             </div>
 
         `;
 
-        return html;
     }
 
 
@@ -1018,15 +1272,19 @@ function renderCustomerReceived(order){
         </div>
 
     `;
+
 }
 
 
 
 // ==========================================
-// تغییر وضعیت
+// تغییر وضعیت سفارش
 // ==========================================
 
-async function changeStatus(id,status){
+async function changeStatus(
+    id,
+    status
+){
 
     try{
 
@@ -1049,8 +1307,10 @@ async function changeStatus(id,status){
                 }
             );
 
+
         const data =
             await res.json();
+
 
         if(!res.ok){
 
@@ -1059,16 +1319,22 @@ async function changeStatus(id,status){
             );
         }
 
+
         loadOrders();
+
 
     }catch(error){
 
         alert(
-            "❌ " + error.message
+            "❌ " +
+            error.message
         );
 
+
         loadOrders();
+
     }
+
 }
 
 
@@ -1077,11 +1343,16 @@ async function changeStatus(id,status){
 // محصولات سفارش
 // ==========================================
 
-function renderProducts(products){
+function renderProducts(
+    products
+){
 
     if(!Array.isArray(products)){
+
         return "محصولی ثبت نشده";
+
     }
+
 
     return products.map(
         product => `
@@ -1092,29 +1363,40 @@ function renderProducts(products){
         ">
 
             🛍️
+
             ${escapeHtml(
-                product.name || "محصول"
+                product.name ||
+                "محصول"
             )}
 
             <br>
 
-            🔢 تعداد:
+            🔢
+            تعداد:
+
             ${Number(
                 product.quantity || 1
-            ).toLocaleString("fa-IR")}
+            ).toLocaleString(
+                "fa-IR"
+            )}
 
             <br>
 
             💰
+
             ${Number(
                 product.price || 0
-            ).toLocaleString("fa-IR")}
+            ).toLocaleString(
+                "fa-IR"
+            )}
+
             تومان
 
         </div>
 
         `
     ).join("");
+
 }
 
 
@@ -1123,16 +1405,16 @@ function renderProducts(products){
 // تاریخ
 // ==========================================
 
-function formatDate(value){
+function formatDate(
+    value
+){
 
     if(!value){
+
         return "-";
+
     }
 
-    /*
-       پشتیبانی از تاریخ‌های Firebase Timestamp
-       در صورت برگشت به شکل seconds / nanoseconds
-    */
 
     if(
         typeof value === "object" &&
@@ -1140,15 +1422,27 @@ function formatDate(value){
     ){
 
         value =
-            Number(value.seconds) * 1000;
+            Number(
+                value.seconds
+            ) * 1000;
+
     }
+
 
     const date =
         new Date(value);
 
-    if(isNaN(date.getTime())){
+
+    if(
+        isNaN(
+            date.getTime()
+        )
+    ){
+
         return "-";
+
     }
+
 
     return date.toLocaleString(
         "fa-IR",
@@ -1160,12 +1454,13 @@ function formatDate(value){
             minute:"2-digit"
         }
     );
+
 }
 
 
 
 // ==========================================
-// پاک کردن فرم
+// پاک کردن فرم محصول
 // ==========================================
 
 function clearForm(){
@@ -1174,29 +1469,36 @@ function clearForm(){
         "productId"
     ).value = "";
 
+
     document.getElementById(
         "name"
     ).value = "";
+
 
     document.getElementById(
         "price"
     ).value = "";
 
+
     document.getElementById(
         "oldPrice"
     ).value = "";
+
 
     document.getElementById(
         "category"
     ).value = "";
 
+
     document.getElementById(
         "image"
     ).value = "";
 
+
     document.getElementById(
         "imageFile"
     ).value = "";
+
 }
 
 
@@ -1205,14 +1507,37 @@ function clearForm(){
 // امنیت نمایش متن
 // ==========================================
 
-function escapeHtml(value){
+function escapeHtml(
+    value
+){
 
     return String(value)
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#039;");
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
 }
 
 
@@ -1222,10 +1547,12 @@ function escapeHtml(value){
 // ==========================================
 
 loadProducts();
+
 loadOrders();
 
 </script>
 
 </body>
+
 </html>
 ```
