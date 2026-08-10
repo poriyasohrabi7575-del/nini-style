@@ -1,5 +1,4 @@
-```javascript
-import crypto from "crypto";
+const crypto = require("crypto");
 
 function createToken(username) {
   const timestamp = Date.now().toString();
@@ -19,90 +18,69 @@ function createToken(username) {
 
 function verifyToken(token) {
   try {
-
     if (!token) {
       return false;
     }
 
-    const decoded =
-      Buffer.from(
-        token,
-        "base64url"
-      ).toString("utf8");
+    if (!process.env.ADMIN_USERNAME || !process.env.ADMIN_PASSWORD) {
+      return false;
+    }
 
-    const parts =
-      decoded.split(".");
+    const decoded = Buffer.from(
+      token,
+      "base64url"
+    ).toString("utf8");
+
+    const parts = decoded.split(".");
 
     if (parts.length !== 3) {
       return false;
     }
 
-    const [
-      username,
-      timestamp,
-      signature
-    ] = parts;
+    const [username, timestamp, signature] = parts;
 
-    if (
-      username !==
-      process.env.ADMIN_USERNAME
-    ) {
+    if (username !== process.env.ADMIN_USERNAME) {
       return false;
     }
 
-    const age =
-      Date.now() -
-      Number(timestamp);
+    const time = Number(timestamp);
 
-    if (
-      age >
-      24 * 60 * 60 * 1000
-    ) {
+    if (!Number.isFinite(time)) {
       return false;
     }
 
-    const data =
-      `${username}.${timestamp}`;
+    const age = Date.now() - time;
 
-    const expectedSignature =
-      crypto
-        .createHmac(
-          "sha256",
-          process.env.ADMIN_PASSWORD
-        )
-        .update(data)
-        .digest("hex");
-
-    const signatureBuffer =
-      Buffer.from(signature);
-
-    const expectedBuffer =
-      Buffer.from(expectedSignature);
-
-    if (
-      signatureBuffer.length !==
-      expectedBuffer.length
-    ) {
+    if (age < 0 || age > 24 * 60 * 60 * 1000) {
       return false;
     }
 
-    return crypto.timingSafeEqual(
-      signatureBuffer,
-      expectedBuffer
-    );
+    const data = `${username}.${timestamp}`;
 
-  } catch {
+    const expectedSignature = crypto
+      .createHmac(
+        "sha256",
+        process.env.ADMIN_PASSWORD
+      )
+      .update(data)
+      .digest("hex");
 
+    const a = Buffer.from(signature);
+    const b = Buffer.from(expectedSignature);
+
+    if (a.length !== b.length) {
+      return false;
+    }
+
+    return crypto.timingSafeEqual(a, b);
+
+  } catch (error) {
     return false;
-
   }
 }
 
 
-export default function handler(
-  req,
-  res
-) {
+module.exports = async function handler(req, res) {
 
   // =========================
   // بررسی وضعیت ورود
@@ -110,23 +88,19 @@ export default function handler(
 
   if (req.method === "GET") {
 
-    const cookies =
-      req.headers.cookie || "";
+    const cookies = req.headers.cookie || "";
 
-    const match =
-      cookies.match(
-        /admin_token=([^;]+)/
-      );
+    const match = cookies.match(
+      /admin_token=([^;]+)/
+    );
 
-    const authenticated =
-      match
-        ? verifyToken(match[1])
-        : false;
+    const authenticated = match
+      ? verifyToken(match[1])
+      : false;
 
     return res.status(200).json({
-      authenticated
+      authenticated: authenticated
     });
-
   }
 
 
@@ -136,28 +110,31 @@ export default function handler(
 
   if (req.method === "POST") {
 
-    const {
-      username,
-      password
-    } = req.body || {};
+    const body = req.body || {};
+
+    const username = body.username || "";
+    const password = body.password || "";
 
     if (
-      username !==
-        process.env.ADMIN_USERNAME ||
-      password !==
-        process.env.ADMIN_PASSWORD
+      !process.env.ADMIN_USERNAME ||
+      !process.env.ADMIN_PASSWORD
     ) {
-
-      return res.status(401).json({
-        authenticated: false,
-        error:
-          "نام کاربری یا رمز عبور اشتباه است."
+      return res.status(500).json({
+        error: "تنظیمات ورود در سرور کامل نیست."
       });
-
     }
 
-    const token =
-      createToken(username);
+    if (
+      username !== process.env.ADMIN_USERNAME ||
+      password !== process.env.ADMIN_PASSWORD
+    ) {
+      return res.status(401).json({
+        authenticated: false,
+        error: "نام کاربری یا رمز عبور اشتباه است."
+      });
+    }
+
+    const token = createToken(username);
 
     res.setHeader(
       "Set-Cookie",
@@ -167,7 +144,6 @@ export default function handler(
     return res.status(200).json({
       authenticated: true
     });
-
   }
 
 
@@ -185,13 +161,10 @@ export default function handler(
     return res.status(200).json({
       authenticated: false
     });
-
   }
 
 
   return res.status(405).json({
     error: "Method not allowed"
   });
-
-}
-```
+};
