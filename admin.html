@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 
@@ -173,6 +174,38 @@ button{
 
 .status select{
     margin-top:6px;
+}
+
+/* ==========================================
+   اطلاع‌رسانی دریافت مشتری
+   ========================================== */
+
+.customer-received{
+    margin-top:12px;
+    padding:14px;
+    border-radius:10px;
+    background:#eafff0;
+    border:1px solid #b8e8c8;
+    color:#176b35;
+    line-height:1.9;
+}
+
+.customer-not-received{
+    margin-top:12px;
+    padding:14px;
+    border-radius:10px;
+    background:#fff8e8;
+    border:1px solid #f1d99b;
+    color:#8a6415;
+    line-height:1.9;
+}
+
+.tracking-code{
+    margin-top:8px;
+    padding:9px;
+    background:#fff;
+    border-radius:7px;
+    font-weight:bold;
 }
 
 .loading,
@@ -509,7 +542,6 @@ async function saveProduct(){
             ),
 
         image:
-
             image,
 
         category:
@@ -834,6 +866,13 @@ async function loadOrders(){
                     </div>
 
 
+                    <!-- ==================================
+                         اطلاع‌رسانی دریافت مشتری
+                         ================================== -->
+
+                    ${renderCustomerReceived(order)}
+
+
                     <div class="status">
 
                         <strong>
@@ -892,6 +931,93 @@ async function loadOrders(){
                 ❌ ${escapeHtml(error.message)}
             </div>`;
     }
+}
+
+
+
+// ==========================================
+// نمایش وضعیت دریافت مشتری
+// ==========================================
+
+function renderCustomerReceived(order){
+
+    /*
+       فیلد اصلی دریافت مشتری:
+       receivedAt
+
+       برای سازگاری بیشتر، اگر receivedAt
+       وجود نداشته باشد، چند نام رایج دیگر
+       هم بررسی می‌شود.
+    */
+
+    const receivedAt =
+        order.receivedAt ||
+        order.customerReceivedAt ||
+        order.deliveryConfirmedAt ||
+        null;
+
+
+    const trackingCode =
+        order.trackingCode ||
+        order.trackingNumber ||
+        order.postTrackingCode ||
+        "";
+
+
+    if(receivedAt){
+
+        let html = `
+
+            <div class="customer-received">
+
+                <strong>
+                    🔔 مشتری دریافت سفارش را تأیید کرد
+                </strong>
+
+                <br>
+
+                🕐 زمان دریافت:
+                ${formatDate(receivedAt)}
+
+        `;
+
+
+        if(trackingCode){
+
+            html += `
+
+                <div class="tracking-code">
+
+                    📮 کد رهگیری مرسوله:
+                    ${escapeHtml(trackingCode)}
+
+                </div>
+
+            `;
+        }
+
+
+        html += `
+
+            </div>
+
+        `;
+
+        return html;
+    }
+
+
+    return `
+
+        <div class="customer-not-received">
+
+            <strong>
+                ⏳ مشتری هنوز دریافت سفارش را تأیید نکرده است
+            </strong>
+
+        </div>
+
+    `;
 }
 
 
@@ -1003,6 +1129,20 @@ function formatDate(value){
         return "-";
     }
 
+    /*
+       پشتیبانی از تاریخ‌های Firebase Timestamp
+       در صورت برگشت به شکل seconds / nanoseconds
+    */
+
+    if(
+        typeof value === "object" &&
+        value.seconds
+    ){
+
+        value =
+            Number(value.seconds) * 1000;
+    }
+
     const date =
         new Date(value);
 
@@ -1088,3 +1228,4 @@ loadOrders();
 
 </body>
 </html>
+```
