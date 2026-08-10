@@ -1,3 +1,4 @@
+```javascript
 import crypto from "crypto";
 
 function createToken(username) {
@@ -10,49 +11,98 @@ function createToken(username) {
     .update(data)
     .digest("hex");
 
-  return Buffer.from(`${data}.${signature}`).toString("base64url");
+  return Buffer.from(
+    `${data}.${signature}`
+  ).toString("base64url");
 }
+
 
 function verifyToken(token) {
   try {
-    if (!token) return false;
 
-    const decoded = Buffer.from(token, "base64url").toString("utf8");
-
-    const parts = decoded.split(".");
-
-    if (parts.length !== 3) return false;
-
-    const [username, timestamp, signature] = parts;
-
-    if (username !== process.env.ADMIN_USERNAME) {
+    if (!token) {
       return false;
     }
 
-    const age = Date.now() - Number(timestamp);
+    const decoded =
+      Buffer.from(
+        token,
+        "base64url"
+      ).toString("utf8");
 
-    if (age > 24 * 60 * 60 * 1000) {
+    const parts =
+      decoded.split(".");
+
+    if (parts.length !== 3) {
       return false;
     }
 
-    const data = `${username}.${timestamp}`;
+    const [
+      username,
+      timestamp,
+      signature
+    ] = parts;
 
-    const expectedSignature = crypto
-      .createHmac("sha256", process.env.ADMIN_PASSWORD)
-      .update(data)
-      .digest("hex");
+    if (
+      username !==
+      process.env.ADMIN_USERNAME
+    ) {
+      return false;
+    }
+
+    const age =
+      Date.now() -
+      Number(timestamp);
+
+    if (
+      age >
+      24 * 60 * 60 * 1000
+    ) {
+      return false;
+    }
+
+    const data =
+      `${username}.${timestamp}`;
+
+    const expectedSignature =
+      crypto
+        .createHmac(
+          "sha256",
+          process.env.ADMIN_PASSWORD
+        )
+        .update(data)
+        .digest("hex");
+
+    const signatureBuffer =
+      Buffer.from(signature);
+
+    const expectedBuffer =
+      Buffer.from(expectedSignature);
+
+    if (
+      signatureBuffer.length !==
+      expectedBuffer.length
+    ) {
+      return false;
+    }
 
     return crypto.timingSafeEqual(
-      Buffer.from(signature),
-      Buffer.from(expectedSignature)
+      signatureBuffer,
+      expectedBuffer
     );
 
   } catch {
+
     return false;
+
   }
 }
 
-export default function handler(req, res) {
+
+export default function handler(
+  req,
+  res
+) {
 
   // =========================
   // بررسی وضعیت ورود
@@ -60,19 +110,23 @@ export default function handler(req, res) {
 
   if (req.method === "GET") {
 
-    const cookies = req.headers.cookie || "";
+    const cookies =
+      req.headers.cookie || "";
 
-    const match = cookies.match(
-      /admin_token=([^;]+)/
-    );
+    const match =
+      cookies.match(
+        /admin_token=([^;]+)/
+      );
 
-    const authenticated = match
-      ? verifyToken(match[1])
-      : false;
+    const authenticated =
+      match
+        ? verifyToken(match[1])
+        : false;
 
     return res.status(200).json({
       authenticated
     });
+
   }
 
 
@@ -88,12 +142,16 @@ export default function handler(req, res) {
     } = req.body || {};
 
     if (
-      username !== process.env.ADMIN_USERNAME ||
-      password !== process.env.ADMIN_PASSWORD
+      username !==
+        process.env.ADMIN_USERNAME ||
+      password !==
+        process.env.ADMIN_PASSWORD
     ) {
 
       return res.status(401).json({
-        error: "نام کاربری یا رمز عبور اشتباه است."
+        authenticated: false,
+        error:
+          "نام کاربری یا رمز عبور اشتباه است."
       });
 
     }
@@ -101,16 +159,15 @@ export default function handler(req, res) {
     const token =
       createToken(username);
 
-
     res.setHeader(
       "Set-Cookie",
       `admin_token=${token}; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=86400`
     );
 
-
     return res.status(200).json({
-      success: true
+      authenticated: true
     });
+
   }
 
 
@@ -126,8 +183,9 @@ export default function handler(req, res) {
     );
 
     return res.status(200).json({
-      success: true
+      authenticated: false
     });
+
   }
 
 
@@ -136,3 +194,4 @@ export default function handler(req, res) {
   });
 
 }
+```
