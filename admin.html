@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 
@@ -180,9 +181,23 @@ button{
 }
 
 
-/* ==========================================
+/* =========================
+   حذف سفارش
+   ========================= */
+
+.delete-order-button{
+    background:#e74c3c;
+    margin-top:12px;
+}
+
+.delete-order-button:hover{
+    background:#c0392b;
+}
+
+
+/* =========================
    کد رهگیری
-   ========================================== */
+   ========================= */
 
 .tracking-box{
     margin-top:12px;
@@ -209,9 +224,9 @@ button{
 }
 
 
-/* ==========================================
+/* =========================
    دریافت مشتری
-   ========================================== */
+   ========================= */
 
 .customer-received{
     margin-top:12px;
@@ -234,9 +249,9 @@ button{
 }
 
 
-/* ==========================================
-   جستجو و فیلتر سفارش‌ها
-   ========================================== */
+/* =========================
+   جستجو و فیلتر
+   ========================= */
 
 .orders-tools{
     margin-top:15px;
@@ -300,9 +315,9 @@ button{
 }
 
 
-/* ==========================================
+/* =========================
    صفحه‌بندی
-   ========================================== */
+   ========================= */
 
 .pagination{
     display:flex;
@@ -337,11 +352,6 @@ button{
     font-size:13px;
 }
 
-
-/* ==========================================
-   نمایش وضعیت جستجو
-   ========================================== */
-
 .search-result-info{
     text-align:center;
     margin-top:12px;
@@ -349,14 +359,12 @@ button{
     font-size:13px;
 }
 
-
 .loading,
 .empty{
     text-align:center;
     padding:25px;
     color:#888;
 }
-
 
 @media(max-width:700px){
 
@@ -385,9 +393,9 @@ button{
 <body>
 
 
-<!-- ========================= -->
-<!-- آمار -->
-<!-- ========================= -->
+<!-- =========================
+     آمار
+     ========================= -->
 
 <div class="box">
 
@@ -395,123 +403,97 @@ button{
 
 <div class="stats">
 
-    <div class="stat">
+<div class="stat">
+📦 سفارش‌ها
+<div class="stat-number" id="ordersCount">
+۰
+</div>
+</div>
 
-        📦 سفارش‌ها
+<div class="stat">
+🛍️ محصولات
+<div class="stat-number" id="productsCount">
+۰
+</div>
+</div>
 
-        <div
-            class="stat-number"
-            id="ordersCount"
-        >
-            ۰
-        </div>
-
-    </div>
-
-
-    <div class="stat">
-
-        🛍️ محصولات
-
-        <div
-            class="stat-number"
-            id="productsCount"
-        >
-            ۰
-        </div>
-
-    </div>
-
-
-    <div class="stat">
-
-        💰 فروش
-
-        <div
-            class="stat-number"
-            id="salesTotal"
-        >
-            ۰ تومان
-        </div>
-
-    </div>
+<div class="stat">
+💰 فروش
+<div class="stat-number" id="salesTotal">
+۰ تومان
+</div>
+</div>
 
 </div>
 
 </div>
 
 
-<!-- ========================= -->
-<!-- مدیریت محصولات -->
-<!-- ========================= -->
+<!-- =========================
+     مدیریت محصولات
+     ========================= -->
 
 <div class="box">
 
 <h2>🎀 مدیریت محصولات</h2>
 
+<input type="hidden" id="productId">
+
+<input id="name" placeholder="نام محصول">
+
 <input
-    type="hidden"
-    id="productId"
+id="price"
+type="number"
+placeholder="قیمت"
 >
 
 <input
-    id="name"
-    placeholder="نام محصول"
->
-
-<input
-    id="price"
-    type="number"
-    placeholder="قیمت"
->
-
-<input
-    id="oldPrice"
-    type="number"
-    placeholder="قیمت قبلی"
+id="oldPrice"
+type="number"
+placeholder="قیمت قبلی"
 >
 
 <select id="category">
 
-    <option value="">
-        انتخاب دسته‌بندی
-    </option>
+<option value="">
+انتخاب دسته‌بندی
+</option>
 
-    <option value="لباس دخترانه">
-        لباس دخترانه
-    </option>
+<option value="لباس دخترانه">
+لباس دخترانه
+</option>
 
-    <option value="لباس پسرانه">
-        لباس پسرانه
-    </option>
+<option value="لباس پسرانه">
+لباس پسرانه
+</option>
 
-    <option value="لباس نوزاد">
-        لباس نوزاد
-    </option>
+<option value="لباس نوزاد">
+لباس نوزاد
+</option>
 
-    <option value="اکسسوری">
-        اکسسوری
-    </option>
+<option value="اکسسوری">
+اکسسوری
+</option>
 
-    <option value="تخفیف خورده">
-        تخفیف خورده
-    </option>
+<option value="تخفیف خورده">
+تخفیف خورده
+</option>
 
 </select>
 
 <input
-    id="imageFile"
-    type="file"
-    accept="image/*"
+id="imageFile"
+type="file"
+accept="image/*"
 >
 
 <input
-    id="image"
-    placeholder="یا آدرس عکس"
+id="image"
+placeholder="یا آدرس عکس"
 >
 
 <button onclick="saveProduct()">
-    💾 ذخیره محصول
+💾 ذخیره محصول
 </button>
 
 <div id="result"></div>
@@ -519,174 +501,140 @@ button{
 </div>
 
 
-<!-- ========================= -->
-<!-- محصولات -->
-<!-- ========================= -->
+<!-- =========================
+     محصولات
+     ========================= -->
 
 <div class="box">
 
 <h2>🛍️ محصولات فروشگاه</h2>
 
 <button
-    class="secondary"
-    onclick="loadProducts()"
+class="secondary"
+onclick="loadProducts()"
 >
-    🔄 بروزرسانی محصولات
+🔄 بروزرسانی محصولات
 </button>
 
 <div
-    id="products"
-    class="products-grid"
+id="products"
+class="products-grid"
 ></div>
 
 </div>
 
 
-<!-- ========================= -->
-<!-- سفارش‌ها -->
-<!-- ========================= -->
+<!-- =========================
+     سفارش‌ها
+     ========================= -->
 
 <div class="box">
 
 <h2>📦 مدیریت سفارش‌ها</h2>
 
 <button
-    class="secondary"
-    onclick="loadOrders()"
+class="secondary"
+onclick="loadOrders()"
 >
-    🔄 بروزرسانی سفارش‌ها
+🔄 بروزرسانی سفارش‌ها
 </button>
 
 
-<!-- ========================= -->
-<!-- ابزار سفارش‌ها -->
-<!-- ========================= -->
-
 <div class="orders-tools">
 
-    <input
-        id="orderSearch"
-        class="order-search"
-        type="text"
-        placeholder="🔎 جستجو با نام، موبایل، کد سفارش یا کد رهگیری..."
-        oninput="filterOrders()"
-    >
+<input
+id="orderSearch"
+class="order-search"
+type="text"
+placeholder="🔎 جستجو با نام، موبایل، کد سفارش یا کد رهگیری..."
+oninput="filterOrders()"
+>
 
 
-    <div class="order-filters">
+<div class="order-filters">
 
-        <button
-            id="filter-all"
-            class="order-filter active"
-            onclick="setOrderFilter('all')"
-        >
-            همه
-        </button>
+<button
+id="filter-all"
+class="order-filter active"
+onclick="setOrderFilter('all')"
+>
+همه
+</button>
 
-        <button
-            id="filter-new"
-            class="order-filter"
-            onclick="setOrderFilter('new')"
-        >
-            🟡 جدید
-        </button>
+<button
+id="filter-new"
+class="order-filter"
+onclick="setOrderFilter('new')"
+>
+🟡 جدید
+</button>
 
-        <button
-            id="filter-preparing"
-            class="order-filter"
-            onclick="setOrderFilter('preparing')"
-        >
-            🔵 آماده‌سازی
-        </button>
+<button
+id="filter-preparing"
+class="order-filter"
+onclick="setOrderFilter('preparing')"
+>
+🔵 آماده‌سازی
+</button>
 
-        <button
-            id="filter-shipped"
-            class="order-filter"
-            onclick="setOrderFilter('shipped')"
-        >
-            🚚 ارسال شد
-        </button>
+<button
+id="filter-shipped"
+class="order-filter"
+onclick="setOrderFilter('shipped')"
+>
+🚚 ارسال شد
+</button>
 
-        <button
-            id="filter-delivered"
-            class="order-filter"
-            onclick="setOrderFilter('delivered')"
-        >
-            🟢 تحویل شد
-        </button>
+<button
+id="filter-delivered"
+class="order-filter"
+onclick="setOrderFilter('delivered')"
+>
+🟢 تحویل شد
+</button>
 
-    </div>
-
-
-    <div class="order-stats">
-
-        <div class="order-stat">
-
-            همه
-
-            <strong id="allOrdersCount">
-                ۰
-            </strong>
-
-        </div>
+</div>
 
 
-        <div class="order-stat">
+<div class="order-stats">
 
-            جدید
+<div class="order-stat">
+همه
+<strong id="allOrdersCount">۰</strong>
+</div>
 
-            <strong id="newOrdersCount">
-                ۰
-            </strong>
+<div class="order-stat">
+جدید
+<strong id="newOrdersCount">۰</strong>
+</div>
 
-        </div>
+<div class="order-stat">
+آماده‌سازی
+<strong id="preparingOrdersCount">۰</strong>
+</div>
 
+<div class="order-stat">
+ارسال
+<strong id="shippedOrdersCount">۰</strong>
+</div>
 
-        <div class="order-stat">
+<div class="order-stat">
+تحویل
+<strong id="deliveredOrdersCount">۰</strong>
+</div>
 
-            آماده‌سازی
-
-            <strong id="preparingOrdersCount">
-                ۰
-            </strong>
-
-        </div>
-
-
-        <div class="order-stat">
-
-            ارسال
-
-            <strong id="shippedOrdersCount">
-                ۰
-            </strong>
-
-        </div>
-
-
-        <div class="order-stat">
-
-            تحویل
-
-            <strong id="deliveredOrdersCount">
-                ۰
-            </strong>
-
-        </div>
-
-    </div>
+</div>
 
 </div>
 
 
 <div
-    id="searchResultInfo"
-    class="search-result-info"
+id="searchResultInfo"
+class="search-result-info"
 ></div>
 
 
 <div id="orders"></div>
-
 
 <div id="pagination"></div>
 
@@ -697,7 +645,7 @@ button{
 
 
 // ==========================================
-// متغیرهای مدیریت سفارش‌ها
+// متغیرهای سفارش
 // ==========================================
 
 let allOrders = [];
@@ -711,112 +659,116 @@ const ordersPerPage = 10;
 let currentOrderFilter = "all";
 
 
-
 // ==========================================
 // محصولات
 // ==========================================
 
 async function loadProducts(){
 
-    const box =
-        document.getElementById("products");
+const box =
+document.getElementById("products");
 
-    box.innerHTML =
-        `<div class="loading">
-            در حال دریافت محصولات...
-        </div>`;
+box.innerHTML =
+`<div class="loading">
+در حال دریافت محصولات...
+</div>`;
 
-    try{
+try{
 
-        const res =
-            await fetch("/api/products");
+const res =
+await fetch("/api/products");
 
-        const data =
-            await res.json();
+const data =
+await res.json();
 
-        const products =
-            Array.isArray(data)
-            ? data
-            : data.products || [];
+const products =
+Array.isArray(data)
+? data
+: data.products || [];
 
-        document.getElementById(
-            "productsCount"
-        ).textContent =
-            products.length.toLocaleString("fa-IR");
+document.getElementById(
+"productsCount"
+).textContent =
+products.length.toLocaleString("fa-IR");
 
-        if(!products.length){
 
-            box.innerHTML =
-                `<div class="empty">
-                    محصولی وجود ندارد.
-                </div>`;
+if(!products.length){
 
-            return;
-        }
+box.innerHTML =
+`<div class="empty">
+محصولی وجود ندارد.
+</div>`;
 
-        box.innerHTML =
-            products.map(product => `
+return;
 
-                <div class="product-card">
-
-                    <img
-                        src="${product.image || ""}"
-                        onerror="this.style.display='none'"
-                    >
-
-                    <strong>
-                        ${escapeHtml(
-                            product.name || "-"
-                        )}
-                    </strong>
-
-                    <p>
-                        💰
-                        ${Number(
-                            product.price || 0
-                        ).toLocaleString("fa-IR")}
-                        تومان
-                    </p>
-
-                    <small>
-                        📂
-                        ${escapeHtml(
-                            product.category || "-"
-                        )}
-                    </small>
-
-                    <div class="product-actions">
-
-                        <button
-                            class="edit"
-                            onclick='editProduct(${JSON.stringify(product)})'
-                        >
-                            ✏️ ویرایش
-                        </button>
-
-                        <button
-                            class="danger"
-                            onclick="deleteProduct('${product.id}')"
-                        >
-                            🗑️ حذف
-                        </button>
-
-                    </div>
-
-                </div>
-
-            `).join("");
-
-    }catch(error){
-
-        box.innerHTML =
-            `<div class="empty">
-                ❌
-                ${escapeHtml(error.message)}
-            </div>`;
-    }
 }
 
+
+box.innerHTML =
+products.map(product => `
+
+<div class="product-card">
+
+<img
+src="${product.image || ""}"
+onerror="this.style.display='none'"
+>
+
+<strong>
+${escapeHtml(
+product.name || "-"
+)}
+</strong>
+
+<p>
+💰
+${Number(
+product.price || 0
+).toLocaleString("fa-IR")}
+تومان
+</p>
+
+<small>
+📂
+${escapeHtml(
+product.category || "-"
+)}
+</small>
+
+<div class="product-actions">
+
+<button
+class="edit"
+onclick='editProduct(${JSON.stringify(product)})'
+>
+✏️ ویرایش
+</button>
+
+<button
+class="danger"
+onclick="deleteProduct('${product.id}')"
+>
+🗑️ حذف
+</button>
+
+</div>
+
+</div>
+
+`).join("");
+
+
+}catch(error){
+
+box.innerHTML =
+`<div class="empty">
+❌
+${escapeHtml(error.message)}
+</div>`;
+
+}
+
+}
 
 
 // ==========================================
@@ -825,122 +777,137 @@ async function loadProducts(){
 
 async function saveProduct(){
 
-    const file =
-        document.getElementById(
-            "imageFile"
-        ).files[0];
+const file =
+document.getElementById(
+"imageFile"
+).files[0];
 
-    let image =
-        document.getElementById(
-            "image"
-        ).value.trim();
+let image =
+document.getElementById(
+"image"
+).value.trim();
 
-    if(file){
 
-        const reader =
-            new FileReader();
+if(file){
 
-        image =
-            await new Promise(resolve => {
+const reader =
+new FileReader();
 
-                reader.onload =
-                    () => resolve(reader.result);
+image =
+await new Promise(resolve => {
 
-                reader.readAsDataURL(file);
+reader.onload =
+() => resolve(reader.result);
 
-            });
-    }
+reader.readAsDataURL(file);
 
-    const product = {
+});
 
-        name:
-            document.getElementById(
-                "name"
-            ).value,
-
-        price:
-            Number(
-                document.getElementById(
-                    "price"
-                ).value || 0
-            ),
-
-        oldPrice:
-            Number(
-                document.getElementById(
-                    "oldPrice"
-                ).value || 0
-            ),
-
-        image:
-            image,
-
-        category:
-            document.getElementById(
-                "category"
-            ).value
-
-    };
-
-    const id =
-        document.getElementById(
-            "productId"
-        ).value;
-
-    if(id){
-
-        product.id = id;
-    }
-
-    try{
-
-        const res =
-            await fetch(
-                "/api/products",
-                {
-                    method:
-                        id ? "PUT" : "POST",
-
-                    headers:{
-                        "Content-Type":
-                            "application/json"
-                    },
-
-                    body:
-                        JSON.stringify(product)
-                }
-            );
-
-        const data =
-            await res.json();
-
-        if(!res.ok){
-
-            throw new Error(
-                data.error || "خطا"
-            );
-        }
-
-        document.getElementById(
-            "result"
-        ).textContent =
-            id
-            ? "✅ محصول ویرایش شد"
-            : "✅ محصول ذخیره شد";
-
-        clearForm();
-
-        loadProducts();
-
-    }catch(error){
-
-        document.getElementById(
-            "result"
-        ).textContent =
-            "❌ " + error.message;
-    }
 }
 
+
+const product = {
+
+name:
+document.getElementById(
+"name"
+).value,
+
+price:
+Number(
+document.getElementById(
+"price"
+).value || 0
+),
+
+oldPrice:
+Number(
+document.getElementById(
+"oldPrice"
+).value || 0
+),
+
+image:image,
+
+category:
+document.getElementById(
+"category"
+).value
+
+};
+
+
+const id =
+document.getElementById(
+"productId"
+).value;
+
+
+if(id){
+
+product.id = id;
+
+}
+
+
+try{
+
+const res =
+await fetch(
+"/api/products",
+{
+method:
+id ? "PUT" : "POST",
+
+headers:{
+"Content-Type":
+"application/json"
+},
+
+body:
+JSON.stringify(product)
+
+}
+);
+
+
+const data =
+await res.json();
+
+
+if(!res.ok){
+
+throw new Error(
+data.error || "خطا"
+);
+
+}
+
+
+document.getElementById(
+"result"
+).textContent =
+id
+? "✅ محصول ویرایش شد"
+: "✅ محصول ذخیره شد";
+
+
+clearForm();
+
+loadProducts();
+
+
+}catch(error){
+
+document.getElementById(
+"result"
+).textContent =
+"❌ " +
+error.message;
+
+}
+
+}
 
 
 // ==========================================
@@ -949,42 +916,42 @@ async function saveProduct(){
 
 function editProduct(product){
 
-    document.getElementById(
-        "productId"
-    ).value =
-        product.id;
+document.getElementById(
+"productId"
+).value =
+product.id;
 
-    document.getElementById(
-        "name"
-    ).value =
-        product.name || "";
+document.getElementById(
+"name"
+).value =
+product.name || "";
 
-    document.getElementById(
-        "price"
-    ).value =
-        product.price || "";
+document.getElementById(
+"price"
+).value =
+product.price || "";
 
-    document.getElementById(
-        "oldPrice"
-    ).value =
-        product.oldPrice || "";
+document.getElementById(
+"oldPrice"
+).value =
+product.oldPrice || "";
 
-    document.getElementById(
-        "category"
-    ).value =
-        product.category || "";
+document.getElementById(
+"category"
+).value =
+product.category || "";
 
-    document.getElementById(
-        "image"
-    ).value =
-        product.image || "";
+document.getElementById(
+"image"
+).value =
+product.image || "";
 
-    window.scrollTo({
-        top:0,
-        behavior:"smooth"
-    });
+window.scrollTo({
+top:0,
+behavior:"smooth"
+});
+
 }
-
 
 
 // ==========================================
@@ -993,51 +960,61 @@ function editProduct(product){
 
 async function deleteProduct(id){
 
-    if(!confirm(
-        "مطمئنی می‌خواهی این محصول حذف شود؟"
-    )){
-        return;
-    }
+if(!confirm(
+"مطمئنی می‌خواهی این محصول حذف شود؟"
+)){
 
-    try{
+return;
 
-        const res =
-            await fetch(
-                "/api/products",
-                {
-                    method:"DELETE",
-
-                    headers:{
-                        "Content-Type":
-                            "application/json"
-                    },
-
-                    body:
-                        JSON.stringify({id})
-                }
-            );
-
-        const data =
-            await res.json();
-
-        if(!res.ok){
-
-            throw new Error(
-                data.error || "خطا"
-            );
-        }
-
-        loadProducts();
-
-    }catch(error){
-
-        alert(
-            "❌ " +
-            error.message
-        );
-    }
 }
 
+
+try{
+
+const res =
+await fetch(
+"/api/products",
+{
+method:"DELETE",
+
+headers:{
+"Content-Type":
+"application/json"
+},
+
+body:
+JSON.stringify({id})
+
+}
+);
+
+
+const data =
+await res.json();
+
+
+if(!res.ok){
+
+throw new Error(
+data.error || "خطا"
+);
+
+}
+
+
+loadProducts();
+
+
+}catch(error){
+
+alert(
+"❌ " +
+error.message
+);
+
+}
+
+}
 
 
 // ==========================================
@@ -1046,312 +1023,293 @@ async function deleteProduct(id){
 
 async function loadOrders(){
 
-    const box =
-        document.getElementById(
-            "orders"
-        );
+const box =
+document.getElementById(
+"orders"
+);
 
-    box.innerHTML =
-        `<div class="loading">
-            در حال دریافت سفارش‌ها...
-        </div>`;
+box.innerHTML =
+`<div class="loading">
+در حال دریافت سفارش‌ها...
+</div>`;
 
-    document.getElementById(
-        "pagination"
-    ).innerHTML = "";
-
-    try{
-
-        const res =
-            await fetch(
-                "/api/orders"
-            );
-
-        const data =
-            await res.json();
-
-        if(!res.ok){
-
-            throw new Error(
-                data.error || "خطا"
-            );
-        }
-
-        allOrders =
-            Array.isArray(data.orders)
-            ? data.orders
-            : [];
+document.getElementById(
+"pagination"
+).innerHTML = "";
 
 
-        // ==============================
-        // آمار کلی
-        // ==============================
+try{
 
-        document.getElementById(
-            "ordersCount"
-        ).textContent =
-            allOrders.length.toLocaleString(
-                "fa-IR"
-            );
+const res =
+await fetch(
+"/api/orders"
+);
 
 
-        const totalSales =
-            allOrders.reduce(
-                (sum, order) =>
-                    sum +
-                    Number(
-                        order.totalAmount || 0
-                    ),
-                0
-            );
+const data =
+await res.json();
 
 
-        document.getElementById(
-            "salesTotal"
-        ).textContent =
-            totalSales.toLocaleString(
-                "fa-IR"
-            )
-            + " تومان";
+if(!res.ok){
 
-
-        updateOrderStats();
-
-
-        // ==============================
-        // اعمال فیلتر
-        // ==============================
-
-        currentOrderPage = 1;
-
-        filterOrders();
-
-    }catch(error){
-
-        box.innerHTML =
-            `<div class="empty">
-
-                ❌
-                ${escapeHtml(
-                    error.message
-                )}
-
-            </div>`;
-
-    }
+throw new Error(
+data.error || "خطا"
+);
 
 }
 
 
+allOrders =
+Array.isArray(data.orders)
+? data.orders
+: [];
+
+
+document.getElementById(
+"ordersCount"
+).textContent =
+allOrders.length.toLocaleString(
+"fa-IR"
+);
+
+
+const totalSales =
+allOrders.reduce(
+(sum,order) =>
+sum +
+Number(
+order.totalAmount || 0
+),
+0
+);
+
+
+document.getElementById(
+"salesTotal"
+).textContent =
+totalSales.toLocaleString(
+"fa-IR"
+)
++
+" تومان";
+
+
+updateOrderStats();
+
+currentOrderPage = 1;
+
+filterOrders();
+
+
+}catch(error){
+
+box.innerHTML =
+`<div class="empty">
+❌
+${escapeHtml(
+error.message
+)}
+</div>`;
+
+}
+
+}
+
 
 // ==========================================
-// آمار وضعیت سفارش‌ها
+// آمار وضعیت
 // ==========================================
 
 function updateOrderStats(){
 
-    const countStatus =
-        status => {
+const countStatus =
+status => {
 
-            return allOrders.filter(
-                order =>
-                    (order.status || "new")
-                    === status
-            ).length;
+return allOrders.filter(
+order =>
+(order.status || "new")
+===
+status
+).length;
 
-        };
-
-
-    document.getElementById(
-        "allOrdersCount"
-    ).textContent =
-        allOrders.length.toLocaleString(
-            "fa-IR"
-        );
+};
 
 
-    document.getElementById(
-        "newOrdersCount"
-    ).textContent =
-        countStatus("new")
-        .toLocaleString("fa-IR");
+document.getElementById(
+"allOrdersCount"
+).textContent =
+allOrders.length.toLocaleString(
+"fa-IR"
+);
 
 
-    document.getElementById(
-        "preparingOrdersCount"
-    ).textContent =
-        countStatus("preparing")
-        .toLocaleString("fa-IR");
+document.getElementById(
+"newOrdersCount"
+).textContent =
+countStatus("new")
+.toLocaleString("fa-IR");
 
 
-    document.getElementById(
-        "shippedOrdersCount"
-    ).textContent =
-        countStatus("shipped")
-        .toLocaleString("fa-IR");
+document.getElementById(
+"preparingOrdersCount"
+).textContent =
+countStatus("preparing")
+.toLocaleString("fa-IR");
 
 
-    document.getElementById(
-        "deliveredOrdersCount"
-    ).textContent =
-        countStatus("delivered")
-        .toLocaleString("fa-IR");
+document.getElementById(
+"shippedOrdersCount"
+).textContent =
+countStatus("shipped")
+.toLocaleString("fa-IR");
+
+
+document.getElementById(
+"deliveredOrdersCount"
+).textContent =
+countStatus("delivered")
+.toLocaleString("fa-IR");
 
 }
 
 
-
 // ==========================================
-// انتخاب فیلتر
+// فیلتر وضعیت
 // ==========================================
 
 function setOrderFilter(status){
 
-    currentOrderFilter =
-        status;
+currentOrderFilter =
+status;
 
-    currentOrderPage = 1;
-
-
-    document
-        .querySelectorAll(
-            ".order-filter"
-        )
-        .forEach(
-            button =>
-                button.classList.remove(
-                    "active"
-                )
-        );
+currentOrderPage = 1;
 
 
-    const activeButton =
-        document.getElementById(
-            "filter-" + status
-        );
+document
+.querySelectorAll(
+".order-filter"
+)
+.forEach(
+button =>
+button.classList.remove(
+"active"
+)
+);
 
 
-    if(activeButton){
-
-        activeButton.classList.add(
-            "active"
-        );
-
-    }
+const activeButton =
+document.getElementById(
+"filter-" + status
+);
 
 
-    filterOrders();
+if(activeButton){
+
+activeButton.classList.add(
+"active"
+);
 
 }
 
 
+filterOrders();
+
+}
+
 
 // ==========================================
-// جستجو و فیلتر
+// جستجو
 // ==========================================
 
 function filterOrders(){
 
-    const searchInput =
-        document.getElementById(
-            "orderSearch"
-        );
+const searchInput =
+document.getElementById(
+"orderSearch"
+);
 
 
-    const search =
-        (
-            searchInput
-            ? searchInput.value
-            : ""
-        )
-        .trim()
-        .toLowerCase();
+const search =
+(
+searchInput
+? searchInput.value
+: ""
+)
+.trim()
+.toLowerCase();
 
 
-    filteredOrders =
-        allOrders.filter(
-            order => {
+filteredOrders =
+allOrders.filter(
+order => {
+
+const status =
+order.status || "new";
 
 
-                // ==========================
-                // فیلتر وضعیت
-                // ==========================
+if(
+currentOrderFilter !==
+"all"
+&&
+status !==
+currentOrderFilter
+){
 
-                const status =
-                    order.status || "new";
-
-
-                if(
-                    currentOrderFilter !==
-                    "all"
-                    &&
-                    status !==
-                    currentOrderFilter
-                ){
-
-                    return false;
-
-                }
-
-
-                // ==========================
-                // جستجو
-                // ==========================
-
-                if(!search){
-
-                    return true;
-
-                }
-
-
-                const name =
-                    String(
-                        order.name || ""
-                    ).toLowerCase();
-
-
-                const mobile =
-                    String(
-                        order.mobile || ""
-                    ).toLowerCase();
-
-
-                const trackingCode =
-                    String(
-                        order.trackingCode || ""
-                    ).toLowerCase();
-
-
-                const orderId =
-                    String(
-                        order.id || ""
-                    ).toLowerCase();
-
-
-                return (
-
-                    name.includes(search)
-                    ||
-
-                    mobile.includes(search)
-                    ||
-
-                    trackingCode.includes(search)
-                    ||
-
-                    orderId.includes(search)
-
-                );
-
-            }
-        );
-
-
-    renderOrders();
+return false;
 
 }
 
+
+if(!search){
+
+return true;
+
+}
+
+
+const name =
+String(
+order.name || ""
+).toLowerCase();
+
+
+const mobile =
+String(
+order.mobile || ""
+).toLowerCase();
+
+
+const trackingCode =
+String(
+order.trackingCode || ""
+).toLowerCase();
+
+
+const orderId =
+String(
+order.id || ""
+).toLowerCase();
+
+
+return (
+
+name.includes(search)
+||
+mobile.includes(search)
+||
+trackingCode.includes(search)
+||
+orderId.includes(search)
+
+);
+
+}
+);
+
+
+renderOrders();
+
+}
 
 
 // ==========================================
@@ -1360,387 +1318,458 @@ function filterOrders(){
 
 function renderOrders(){
 
-    const box =
-        document.getElementById(
-            "orders"
-        );
+const box =
+document.getElementById(
+"orders"
+);
 
+const pagination =
+document.getElementById(
+"pagination"
+);
 
-    const pagination =
-        document.getElementById(
-            "pagination"
-        );
+const info =
+document.getElementById(
+"searchResultInfo"
+);
 
 
-    const info =
-        document.getElementById(
-            "searchResultInfo"
-        );
+if(!filteredOrders.length){
 
+box.innerHTML =
+`<div class="empty">
+🔍
+سفارشی با این مشخصات پیدا نشد.
+</div>`;
 
-    if(!filteredOrders.length){
+pagination.innerHTML = "";
 
-        box.innerHTML =
-            `<div class="empty">
+info.textContent = "";
 
-                🔍
-                سفارشی با این مشخصات پیدا نشد.
-
-            </div>`;
-
-
-        pagination.innerHTML = "";
-
-        info.textContent = "";
-
-        return;
-
-    }
-
-
-    // ==============================
-    // محاسبه صفحات
-    // ==============================
-
-    const totalPages =
-        Math.ceil(
-            filteredOrders.length /
-            ordersPerPage
-        );
-
-
-    if(
-        currentOrderPage >
-        totalPages
-    ){
-
-        currentOrderPage =
-            totalPages;
-
-    }
-
-
-    const start =
-        (
-            currentOrderPage - 1
-        ) *
-        ordersPerPage;
-
-
-    const end =
-        start +
-        ordersPerPage;
-
-
-    const pageOrders =
-        filteredOrders.slice(
-            start,
-            end
-        );
-
-
-    info.textContent =
-        `نمایش ${
-            (start + 1)
-            .toLocaleString("fa-IR")
-        } تا ${
-            Math.min(
-                end,
-                filteredOrders.length
-            ).toLocaleString("fa-IR")
-        } از ${
-            filteredOrders.length
-            .toLocaleString("fa-IR")
-        } سفارش`;
-
-
-    // ==============================
-    // نمایش کارت‌ها
-    // ==============================
-
-    box.innerHTML =
-        pageOrders.map(
-            (order,index) => {
-
-
-                const realIndex =
-                    start + index;
-
-
-                return `
-
-                <div class="order">
-
-
-                    <div class="order-header">
-
-                        <div class="order-title">
-
-                            📦 سفارش شماره
-
-                            ${(
-                                realIndex + 1
-                            ).toLocaleString(
-                                "fa-IR"
-                            )}
-
-                            <br>
-
-                            <small
-                                style="
-                                    color:#888;
-                                    font-weight:normal;
-                                "
-                            >
-                                کد سفارش:
-                                ${escapeHtml(
-                                    order.id || "-"
-                                )}
-                            </small>
-
-                        </div>
-
-
-                        <div class="order-date">
-
-                            🕐
-
-                            ${formatDate(
-                                order.createdAt
-                            )}
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- اطلاعات مشتری -->
-
-                    <div class="order-info">
-
-                        👤
-                        <strong>
-                            نام:
-                        </strong>
-
-                        ${escapeHtml(
-                            order.name || "-"
-                        )}
-
-                        <br>
-
-                        📱
-                        <strong>
-                            موبایل:
-                        </strong>
-
-                        ${escapeHtml(
-                            order.mobile || "-"
-                        )}
-
-                        <br>
-
-                        📮
-                        <strong>
-                            کد پستی:
-                        </strong>
-
-                        ${escapeHtml(
-                            order.postalCode || "-"
-                        )}
-
-                        <br>
-
-                        🏠
-                        <strong>
-                            آدرس:
-                        </strong>
-
-                        ${escapeHtml(
-                            order.address || "-"
-                        )}
-
-                    </div>
-
-
-                    <!-- محصولات -->
-
-                    <div class="order-products">
-
-                        🛍️
-
-                        <strong>
-                            محصولات
-                        </strong>
-
-                        <br><br>
-
-                        ${renderProducts(
-                            order.products
-                        )}
-
-                    </div>
-
-
-                    <!-- مبلغ -->
-
-                    <div class="order-total">
-
-                        💰
-                        مبلغ کل:
-
-                        ${Number(
-                            order.totalAmount || 0
-                        ).toLocaleString(
-                            "fa-IR"
-                        )}
-
-                        تومان
-
-                        <br>
-
-                        🔢
-                        تعداد:
-
-                        ${Number(
-                            order.quantity || 0
-                        ).toLocaleString(
-                            "fa-IR"
-                        )}
-
-                    </div>
-
-
-                    <!-- کد رهگیری -->
-
-                    <div class="tracking-box">
-
-                        <div class="tracking-title">
-
-                            📮
-                            کد رهگیری مرسوله
-
-                        </div>
-
-
-                        <input
-                            id="tracking-${escapeHtml(order.id)}"
-                            type="text"
-                            value="${escapeHtml(
-                                order.trackingCode || ""
-                            )}"
-                            placeholder="کد رهگیری مرسوله را وارد کنید"
-                        >
-
-
-                        <button
-                            class="tracking-button"
-                            onclick="saveTrackingCode('${escapeHtml(order.id)}')"
-                        >
-                            💾 ثبت کد رهگیری
-                        </button>
-
-
-                        <div
-                            id="tracking-result-${escapeHtml(order.id)}"
-                            class="tracking-result"
-                        ></div>
-
-                    </div>
-
-
-                    <!-- وضعیت دریافت مشتری -->
-
-                    ${renderCustomerReceived(
-                        order
-                    )}
-
-
-                    <!-- وضعیت سفارش -->
-
-                    <div class="status">
-
-                        <strong>
-                            وضعیت سفارش:
-                        </strong>
-
-
-                        <select
-                            onchange="changeStatus(
-                                '${escapeHtml(order.id)}',
-                                this.value
-                            )"
-                        >
-
-                            <option
-                                value="new"
-                                ${
-                                    (
-                                        order.status ||
-                                        "new"
-                                    ) === "new"
-                                    ? "selected"
-                                    : ""
-                                }
-                            >
-                                🟡 جدید
-                            </option>
-
-
-                            <option
-                                value="preparing"
-                                ${
-                                    order.status === "preparing"
-                                    ? "selected"
-                                    : ""
-                                }
-                            >
-                                🔵 آماده‌سازی
-                            </option>
-
-
-                            <option
-                                value="shipped"
-                                ${
-                                    order.status === "shipped"
-                                    ? "selected"
-                                    : ""
-                                }
-                            >
-                                🚚 ارسال شد
-                            </option>
-
-
-                            <option
-                                value="delivered"
-                                ${
-                                    order.status === "delivered"
-                                    ? "selected"
-                                    : ""
-                                }
-                            >
-                                🟢 تحویل شد
-                            </option>
-
-                        </select>
-
-                    </div>
-
-
-                </div>
-
-                `;
-
-            }
-        ).join("");
-
-
-    renderPagination(
-        totalPages
-    );
+return;
 
 }
 
+
+const totalPages =
+Math.ceil(
+filteredOrders.length /
+ordersPerPage
+);
+
+
+if(
+currentOrderPage >
+totalPages
+){
+
+currentOrderPage =
+totalPages;
+
+}
+
+
+const start =
+(
+currentOrderPage - 1
+)
+*
+ordersPerPage;
+
+
+const end =
+start +
+ordersPerPage;
+
+
+const pageOrders =
+filteredOrders.slice(
+start,
+end
+);
+
+
+info.textContent =
+`نمایش ${
+(start + 1).toLocaleString("fa-IR")
+} تا ${
+Math.min(
+end,
+filteredOrders.length
+).toLocaleString("fa-IR")
+} از ${
+filteredOrders.length.toLocaleString("fa-IR")
+} سفارش`;
+
+
+box.innerHTML =
+pageOrders.map(
+(order,index) => {
+
+const realIndex =
+start + index;
+
+
+return `
+
+<div class="order">
+
+<div class="order-header">
+
+<div class="order-title">
+
+📦 سفارش شماره
+${(
+realIndex + 1
+).toLocaleString("fa-IR")}
+
+<br>
+
+<small
+style="
+color:#888;
+font-weight:normal;
+"
+>
+کد سفارش:
+${escapeHtml(
+order.id || "-"
+)}
+</small>
+
+</div>
+
+
+<div class="order-date">
+
+🕐
+${formatDate(
+order.createdAt
+)}
+
+</div>
+
+</div>
+
+
+<div class="order-info">
+
+👤
+<strong>نام:</strong>
+${escapeHtml(
+order.name || "-"
+)}
+
+<br>
+
+📱
+<strong>موبایل:</strong>
+${escapeHtml(
+order.mobile || "-"
+)}
+
+<br>
+
+📮
+<strong>کد پستی:</strong>
+${escapeHtml(
+order.postalCode || "-"
+)}
+
+<br>
+
+🏠
+<strong>آدرس:</strong>
+${escapeHtml(
+order.address || "-"
+)}
+
+</div>
+
+
+<div class="order-products">
+
+🛍️
+<strong>
+محصولات
+</strong>
+
+<br><br>
+
+${renderProducts(
+order.products
+)}
+
+</div>
+
+
+<div class="order-total">
+
+💰
+مبلغ کل:
+
+${Number(
+order.totalAmount || 0
+).toLocaleString(
+"fa-IR"
+)}
+
+تومان
+
+<br>
+
+🔢
+تعداد:
+
+${Number(
+order.quantity || 0
+).toLocaleString(
+"fa-IR"
+)}
+
+</div>
+
+
+<!-- کد رهگیری -->
+
+<div class="tracking-box">
+
+<div class="tracking-title">
+
+📮
+کد رهگیری مرسوله
+
+</div>
+
+
+<input
+id="tracking-${escapeHtml(order.id)}"
+type="text"
+value="${escapeHtml(
+order.trackingCode || ""
+)}"
+placeholder="کد رهگیری مرسوله را وارد کنید"
+>
+
+
+<button
+class="tracking-button"
+onclick="saveTrackingCode('${escapeHtml(order.id)}')"
+>
+💾 ثبت کد رهگیری
+</button>
+
+
+<div
+id="tracking-result-${escapeHtml(order.id)}"
+class="tracking-result"
+></div>
+
+</div>
+
+
+<!-- دریافت مشتری -->
+
+${renderCustomerReceived(
+order
+)}
+
+
+<!-- وضعیت -->
+
+<div class="status">
+
+<strong>
+وضعیت سفارش:
+</strong>
+
+
+<select
+onchange="changeStatus(
+'${escapeHtml(order.id)}',
+this.value
+)"
+>
+
+<option
+value="new"
+${
+(order.status || "new")
+===
+"new"
+? "selected"
+: ""
+}
+>
+🟡 جدید
+</option>
+
+
+<option
+value="preparing"
+${
+order.status ===
+"preparing"
+? "selected"
+: ""
+}
+>
+🔵 آماده‌سازی
+</option>
+
+
+<option
+value="shipped"
+${
+order.status ===
+"shipped"
+? "selected"
+: ""
+}
+>
+🚚 ارسال شد
+</option>
+
+
+<option
+value="delivered"
+${
+order.status ===
+"delivered"
+? "selected"
+: ""
+}
+>
+🟢 تحویل شد
+</option>
+
+</select>
+
+</div>
+
+
+<!-- حذف سفارش -->
+
+<button
+class="delete-order-button"
+onclick="deleteOrder('${escapeHtml(order.id)}')"
+>
+❌ حذف این سفارش
+</button>
+
+
+</div>
+
+`;
+
+}
+).join("");
+
+
+renderPagination(
+totalPages
+);
+
+}
+
+
+// ==========================================
+// حذف سفارش
+// ==========================================
+
+async function deleteOrder(id){
+
+const order =
+allOrders.find(
+item =>
+item.id === id
+);
+
+
+const customerName =
+order &&
+order.name
+? order.name
+: "این سفارش";
+
+
+const confirmed =
+confirm(
+`⚠️ مطمئنی می‌خواهی سفارش «${customerName}» را حذف کنی؟
+
+این کار سفارش را برای همیشه از دیتابیس حذف می‌کند و قابل برگشت نیست.`
+);
+
+
+if(!confirmed){
+
+return;
+
+}
+
+
+try{
+
+const res =
+await fetch(
+"/api/orders",
+{
+method:"DELETE",
+
+headers:{
+"Content-Type":
+"application/json"
+},
+
+body:
+JSON.stringify({
+id
+})
+}
+);
+
+
+const data =
+await res.json();
+
+
+if(!res.ok){
+
+throw new Error(
+data.error ||
+"خطا در حذف سفارش"
+);
+
+}
+
+
+allOrders =
+allOrders.filter(
+order =>
+order.id !== id
+);
+
+
+updateOrderStats();
+
+filterOrders();
+
+
+alert(
+"✅ سفارش با موفقیت حذف شد."
+);
+
+
+}catch(error){
+
+alert(
+"❌ خطا در حذف سفارش:\n" +
+error.message
+);
+
+}
+
+}
 
 
 // ==========================================
@@ -1748,129 +1777,142 @@ function renderOrders(){
 // ==========================================
 
 function renderPagination(
-    totalPages
+totalPages
 ){
 
-    const box =
-        document.getElementById(
-            "pagination"
-        );
+const box =
+document.getElementById(
+"pagination"
+);
 
 
-    if(totalPages <= 1){
+if(totalPages <= 1){
 
-        box.innerHTML = "";
+box.innerHTML = "";
 
-        return;
-
-    }
-
-
-    let html = `
-
-        <div class="pagination">
-
-            <button
-                onclick="changeOrderPage(${currentOrderPage - 1})"
-                ${currentOrderPage === 1 ? "disabled" : ""}
-            >
-                ◀️ قبلی
-            </button>
-
-    `;
-
-
-    // ==============================
-    // شماره صفحات
-    // ==============================
-
-    const maxButtons = 7;
-
-
-    let startPage =
-        Math.max(
-            1,
-            currentOrderPage - 3
-        );
-
-
-    let endPage =
-        Math.min(
-            totalPages,
-            startPage + maxButtons - 1
-        );
-
-
-    if(
-        endPage - startPage + 1
-        <
-        maxButtons
-    ){
-
-        startPage =
-            Math.max(
-                1,
-                endPage - maxButtons + 1
-            );
-
-    }
-
-
-    for(
-        let page = startPage;
-        page <= endPage;
-        page++
-    ){
-
-        html += `
-
-            <button
-                class="${
-                    page === currentOrderPage
-                    ? "active"
-                    : ""
-                }"
-                onclick="changeOrderPage(${page})"
-            >
-                ${page.toLocaleString("fa-IR")}
-            </button>
-
-        `;
-
-    }
-
-
-    html += `
-
-            <button
-                onclick="changeOrderPage(${currentOrderPage + 1})"
-                ${
-                    currentOrderPage === totalPages
-                    ? "disabled"
-                    : ""
-                }
-            >
-                بعدی ▶️
-            </button>
-
-            <div class="page-info">
-
-                صفحه
-                ${currentOrderPage.toLocaleString("fa-IR")}
-                از
-                ${totalPages.toLocaleString("fa-IR")}
-
-            </div>
-
-        </div>
-
-    `;
-
-
-    box.innerHTML = html;
+return;
 
 }
 
+
+let html = `
+
+<div class="pagination">
+
+<button
+onclick="changeOrderPage(
+${currentOrderPage - 1}
+)"
+${currentOrderPage === 1
+? "disabled"
+: ""}
+>
+◀️ قبلی
+</button>
+
+`;
+
+
+const maxButtons = 7;
+
+
+let startPage =
+Math.max(
+1,
+currentOrderPage - 3
+);
+
+
+let endPage =
+Math.min(
+totalPages,
+startPage + maxButtons - 1
+);
+
+
+if(
+endPage -
+startPage +
+1
+<
+maxButtons
+){
+
+startPage =
+Math.max(
+1,
+endPage -
+maxButtons +
+1
+);
+
+}
+
+
+for(
+let page =
+startPage;
+page <=
+endPage;
+page++
+){
+
+html += `
+
+<button
+class="${
+page ===
+currentOrderPage
+? "active"
+: ""
+}"
+onclick="changeOrderPage(
+${page}
+)"
+>
+${page.toLocaleString("fa-IR")}
+</button>
+
+`;
+
+}
+
+
+html += `
+
+<button
+onclick="changeOrderPage(
+${currentOrderPage + 1}
+)"
+${
+currentOrderPage ===
+totalPages
+? "disabled"
+: ""
+}
+>
+بعدی ▶️
+</button>
+
+
+<div class="page-info">
+
+صفحه
+${currentOrderPage.toLocaleString("fa-IR")}
+از
+${totalPages.toLocaleString("fa-IR")}
+
+</div>
+
+</div>
+
+`;
+
+
+box.innerHTML =
+html;
+
+}
 
 
 // ==========================================
@@ -1878,42 +1920,41 @@ function renderPagination(
 // ==========================================
 
 function changeOrderPage(
-    page
+page
 ){
 
-    const totalPages =
-        Math.ceil(
-            filteredOrders.length /
-            ordersPerPage
-        );
+const totalPages =
+Math.ceil(
+filteredOrders.length /
+ordersPerPage
+);
 
 
-    if(
-        page < 1 ||
-        page > totalPages
-    ){
+if(
+page < 1 ||
+page > totalPages
+){
 
-        return;
-
-    }
-
-
-    currentOrderPage =
-        page;
-
-
-    renderOrders();
-
-
-    document.getElementById(
-        "orders"
-    ).scrollIntoView({
-        behavior:"smooth",
-        block:"start"
-    });
+return;
 
 }
 
+
+currentOrderPage =
+page;
+
+
+renderOrders();
+
+
+document.getElementById(
+"orders"
+).scrollIntoView({
+behavior:"smooth",
+block:"start"
+});
+
+}
 
 
 // ==========================================
@@ -1921,171 +1962,161 @@ function changeOrderPage(
 // ==========================================
 
 async function saveTrackingCode(
-    id
+id
 ){
 
-    const input =
-        document.getElementById(
-            "tracking-" + id
-        );
+const input =
+document.getElementById(
+"tracking-" + id
+);
 
 
-    const result =
-        document.getElementById(
-            "tracking-result-" + id
-        );
+const result =
+document.getElementById(
+"tracking-result-" + id
+);
 
 
-    if(!input){
+if(!input){
 
-        return;
-
-    }
-
-
-    const trackingCode =
-        input.value.trim();
-
-
-    if(!trackingCode){
-
-        result.textContent =
-            "⚠️ لطفاً کد رهگیری را وارد کنید.";
-
-        return;
-
-    }
-
-
-    result.textContent =
-        "⏳ در حال ثبت کد رهگیری...";
-
-
-    try{
-
-        const res =
-            await fetch(
-                "/api/orders",
-                {
-                    method:"PATCH",
-
-                    headers:{
-                        "Content-Type":
-                            "application/json"
-                    },
-
-                    body:
-                        JSON.stringify({
-                            id,
-                            trackingCode
-                        })
-                }
-            );
-
-
-        const data =
-            await res.json();
-
-
-        if(!res.ok){
-
-            throw new Error(
-                data.error ||
-                "خطا در ثبت کد رهگیری"
-            );
-
-        }
-
-
-        // بروزرسانی داخل حافظه
-        const order =
-            allOrders.find(
-                item =>
-                    item.id === id
-            );
-
-
-        if(order){
-
-            order.trackingCode =
-                trackingCode;
-
-        }
-
-
-        result.textContent =
-            "✅ کد رهگیری با موفقیت ثبت شد";
-
-
-    }catch(error){
-
-        result.textContent =
-            "❌ " +
-            error.message;
-
-    }
+return;
 
 }
 
 
+const trackingCode =
+input.value.trim();
+
+
+if(!trackingCode){
+
+result.textContent =
+"⚠️ لطفاً کد رهگیری را وارد کنید.";
+
+return;
+
+}
+
+
+result.textContent =
+"⏳ در حال ثبت کد رهگیری...";
+
+
+try{
+
+const res =
+await fetch(
+"/api/orders",
+{
+method:"PATCH",
+
+headers:{
+"Content-Type":
+"application/json"
+},
+
+body:
+JSON.stringify({
+id,
+trackingCode
+})
+}
+);
+
+
+const data =
+await res.json();
+
+
+if(!res.ok){
+
+throw new Error(
+data.error ||
+"خطا در ثبت کد رهگیری"
+);
+
+}
+
+
+const order =
+allOrders.find(
+item =>
+item.id === id
+);
+
+
+if(order){
+
+order.trackingCode =
+trackingCode;
+
+}
+
+
+result.textContent =
+"✅ کد رهگیری با موفقیت ثبت شد";
+
+
+}catch(error){
+
+result.textContent =
+"❌ " +
+error.message;
+
+}
+
+}
+
 
 // ==========================================
-// نمایش وضعیت دریافت مشتری
+// وضعیت دریافت مشتری
 // ==========================================
 
 function renderCustomerReceived(
-    order
+order
 ){
 
-    const received =
-        order.customerReceived === true;
+if(
+order.customerReceived === true
+){
 
+return `
 
-    if(received){
+<div class="customer-received">
 
-        return `
+<strong>
+🔔 مشتری دریافت سفارش را تأیید کرد
+</strong>
 
-            <div class="customer-received">
+<br>
 
-                <strong>
+🕐
+زمان دریافت:
 
-                    🔔 مشتری دریافت سفارش را تأیید کرد
+${formatDate(
+order.customerReceivedAt
+)}
 
-                </strong>
+</div>
 
-                <br>
-
-                🕐
-                زمان دریافت:
-
-                ${formatDate(
-                    order.customerReceivedAt
-                )}
-
-            </div>
-
-        `;
-
-    }
-
-
-    return `
-
-        <div class="customer-not-received">
-
-            <strong>
-
-                ⏳
-                مشتری هنوز دریافت سفارش را تأیید نکرده است
-
-            </strong>
-
-        </div>
-
-    `;
+`;
 
 }
 
+
+return `
+
+<div class="customer-not-received">
+
+<strong>
+⏳ مشتری هنوز دریافت سفارش را تأیید نکرده است
+</strong>
+
+</div>
+
+`;
+
+}
 
 
 // ==========================================
@@ -2093,81 +2124,77 @@ function renderCustomerReceived(
 // ==========================================
 
 async function changeStatus(
-    id,
-    status
+id,
+status
 ){
 
-    try{
+try{
 
-        const res =
-            await fetch(
-                "/api/orders",
-                {
-                    method:"PATCH",
+const res =
+await fetch(
+"/api/orders",
+{
+method:"PATCH",
 
-                    headers:{
-                        "Content-Type":
-                            "application/json"
-                    },
+headers:{
+"Content-Type":
+"application/json"
+},
 
-                    body:
-                        JSON.stringify({
-                            id,
-                            status
-                        })
-                }
-            );
-
-
-        const data =
-            await res.json();
+body:
+JSON.stringify({
+id,
+status
+})
+}
+);
 
 
-        if(!res.ok){
-
-            throw new Error(
-                data.error || "خطا"
-            );
-
-        }
+const data =
+await res.json();
 
 
-        // بروزرسانی وضعیت در حافظه
+if(!res.ok){
 
-        const order =
-            allOrders.find(
-                item =>
-                    item.id === id
-            );
-
-
-        if(order){
-
-            order.status =
-                status;
-
-        }
-
-
-        updateOrderStats();
-
-        filterOrders();
-
-
-    }catch(error){
-
-        alert(
-            "❌ " +
-            error.message
-        );
-
-
-        loadOrders();
-
-    }
+throw new Error(
+data.error || "خطا"
+);
 
 }
 
+
+const order =
+allOrders.find(
+item =>
+item.id === id
+);
+
+
+if(order){
+
+order.status =
+status;
+
+}
+
+
+updateOrderStats();
+
+filterOrders();
+
+
+}catch(error){
+
+alert(
+"❌ " +
+error.message
+);
+
+loadOrders();
+
+}
+
+}
 
 
 // ==========================================
@@ -2175,65 +2202,64 @@ async function changeStatus(
 // ==========================================
 
 function renderProducts(
-    products
+products
 ){
 
-    if(
-        !Array.isArray(products)
-        ||
-        !products.length
-    ){
+if(
+!Array.isArray(products)
+||
+!products.length
+){
 
-        return "محصولی ثبت نشده";
-
-    }
-
-
-    return products.map(
-        product => `
-
-        <div style="
-            padding:7px 0;
-            border-bottom:1px solid #eee;
-        ">
-
-            🛍️
-
-            ${escapeHtml(
-                product.name ||
-                "محصول"
-            )}
-
-            <br>
-
-            🔢
-            تعداد:
-
-            ${Number(
-                product.quantity || 1
-            ).toLocaleString(
-                "fa-IR"
-            )}
-
-            <br>
-
-            💰
-
-            ${Number(
-                product.price || 0
-            ).toLocaleString(
-                "fa-IR"
-            )}
-
-            تومان
-
-        </div>
-
-        `
-    ).join("");
+return "محصولی ثبت نشده";
 
 }
 
+
+return products.map(
+product => `
+
+<div style="
+padding:7px 0;
+border-bottom:1px solid #eee;
+">
+
+🛍️
+
+${escapeHtml(
+product.name ||
+"محصول"
+)}
+
+<br>
+
+🔢
+تعداد:
+
+${Number(
+product.quantity || 1
+).toLocaleString(
+"fa-IR"
+)}
+
+<br>
+
+💰
+
+${Number(
+product.price || 0
+).toLocaleString(
+"fa-IR"
+)}
+
+تومان
+
+</div>
+
+`
+).join("");
+
+}
 
 
 // ==========================================
@@ -2241,102 +2267,80 @@ function renderProducts(
 // ==========================================
 
 function formatDate(
-    value
+value
 ){
 
-    if(!value){
+if(!value){
 
-        return "-";
-
-    }
-
-
-    if(
-        typeof value === "object"
-        &&
-        value.seconds
-    ){
-
-        value =
-            Number(
-                value.seconds
-            ) * 1000;
-
-    }
-
-
-    const date =
-        new Date(value);
-
-
-    if(
-        isNaN(
-            date.getTime()
-        )
-    ){
-
-        return "-";
-
-    }
-
-
-    return date.toLocaleString(
-        "fa-IR",
-        {
-            year:"numeric",
-            month:"2-digit",
-            day:"2-digit",
-            hour:"2-digit",
-            minute:"2-digit"
-        }
-    );
+return "-";
 
 }
 
 
+const date =
+new Date(value);
+
+
+if(
+isNaN(
+date.getTime()
+)
+){
+
+return "-";
+
+}
+
+
+return date.toLocaleString(
+"fa-IR",
+{
+year:"numeric",
+month:"2-digit",
+day:"2-digit",
+hour:"2-digit",
+minute:"2-digit"
+}
+);
+
+}
+
 
 // ==========================================
-// پاک کردن فرم محصول
+// پاک کردن فرم
 // ==========================================
 
 function clearForm(){
 
-    document.getElementById(
-        "productId"
-    ).value = "";
+document.getElementById(
+"productId"
+).value = "";
 
+document.getElementById(
+"name"
+).value = "";
 
-    document.getElementById(
-        "name"
-    ).value = "";
+document.getElementById(
+"price"
+).value = "";
 
+document.getElementById(
+"oldPrice"
+).value = "";
 
-    document.getElementById(
-        "price"
-    ).value = "";
+document.getElementById(
+"category"
+).value = "";
 
+document.getElementById(
+"image"
+).value = "";
 
-    document.getElementById(
-        "oldPrice"
-    ).value = "";
-
-
-    document.getElementById(
-        "category"
-    ).value = "";
-
-
-    document.getElementById(
-        "image"
-    ).value = "";
-
-
-    document.getElementById(
-        "imageFile"
-    ).value = "";
+document.getElementById(
+"imageFile"
+).value = "";
 
 }
-
 
 
 // ==========================================
@@ -2344,42 +2348,41 @@ function clearForm(){
 // ==========================================
 
 function escapeHtml(
-    value
+value
 ){
 
-    return String(value)
+return String(value)
 
-        .replace(
-            /&/g,
-            "&amp;"
-        )
+.replace(
+/&/g,
+"&amp;"
+)
 
-        .replace(
-            /</g,
-            "&lt;"
-        )
+.replace(
+/</g,
+"&lt;"
+)
 
-        .replace(
-            />/g,
-            "&gt;"
-        )
+.replace(
+/>/g,
+"&gt;"
+)
 
-        .replace(
-            /"/g,
-            "&quot;"
-        )
+.replace(
+/"/g,
+"&quot;"
+)
 
-        .replace(
-            /'/g,
-            "&#039;"
-        );
+.replace(
+/'/g,
+"&#039;"
+);
 
 }
 
 
-
 // ==========================================
-// شروع پنل
+// شروع
 // ==========================================
 
 loadProducts();
@@ -2391,3 +2394,4 @@ loadOrders();
 </body>
 
 </html>
+```
