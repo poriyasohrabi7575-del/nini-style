@@ -1,13 +1,57 @@
-const db = require("../lib/firebaseAdmin");
+import admin from "firebase-admin";
+
+if (!admin.apps.length) {
+  admin.initializeApp({
+    credential: admin.credential.cert({
+      projectId: process.env.FIREBASE_PROJECT_ID,
+      clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+      privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n")
+    })
+  });
+}
+
+const db = admin.firestore();
 
 export default async function handler(req, res) {
 
   // =========================
-  // دریافت سفارش‌ها
+  // GET سفارش
   // =========================
   if (req.method === "GET") {
     try {
 
+      const id = req.query?.id;
+
+      // دریافت یک سفارش برای مشتری
+      if (id) {
+
+        const doc = await db
+          .collection("orders")
+          .doc(id)
+          .get();
+
+        if (!doc.exists) {
+          return res.status(404).json({
+            success: false,
+            error: "سفارش پیدا نشد"
+          });
+        }
+
+        const data = doc.data();
+
+        return res.status(200).json({
+          success: true,
+          order: {
+            id: doc.id,
+            ...data,
+            createdAt: data.createdAt
+              ? data.createdAt.toDate().toISOString()
+              : null
+          }
+        });
+      }
+
+      // دریافت همه سفارش‌ها برای پنل
       const snapshot = await db
         .collection("orders")
         .orderBy("createdAt", "desc")
@@ -20,9 +64,7 @@ export default async function handler(req, res) {
         return {
           id: doc.id,
           ...data,
-
           status: data.status || "new",
-
           createdAt: data.createdAt
             ? data.createdAt.toDate().toISOString()
             : null
@@ -48,7 +90,7 @@ export default async function handler(req, res) {
 
 
   // =========================
-  // ثبت سفارش
+  // POST ثبت سفارش
   // =========================
   if (req.method === "POST") {
     try {
@@ -73,6 +115,7 @@ export default async function handler(req, res) {
         totalAmount === undefined
       ) {
         return res.status(400).json({
+          success: false,
           error: "اطلاعات سفارش کامل نیست"
         });
       }
@@ -91,7 +134,8 @@ export default async function handler(req, res) {
 
           status: "new",
 
-          createdAt: new Date()
+          createdAt: admin.firestore.FieldValue.serverTimestamp()
+
         });
 
       return res.status(200).json({
@@ -104,6 +148,7 @@ export default async function handler(req, res) {
       console.error("ORDER ERROR:", error);
 
       return res.status(500).json({
+        success: false,
         error: "خطا در ثبت سفارش",
         details: error.message
       });
@@ -131,12 +176,14 @@ export default async function handler(req, res) {
 
       if (!id) {
         return res.status(400).json({
+          success: false,
           error: "شناسه سفارش ارسال نشده است"
         });
       }
 
       if (!allowedStatuses.includes(status)) {
         return res.status(400).json({
+          success: false,
           error: "وضعیت سفارش نامعتبر است"
         });
       }
@@ -146,7 +193,7 @@ export default async function handler(req, res) {
         .doc(id)
         .update({
           status,
-          updatedAt: new Date()
+          updatedAt: admin.firestore.FieldValue.serverTimestamp()
         });
 
       return res.status(200).json({
@@ -158,6 +205,7 @@ export default async function handler(req, res) {
       console.error("UPDATE ORDER ERROR:", error);
 
       return res.status(500).json({
+        success: false,
         error: error.message
       });
     }
@@ -165,6 +213,7 @@ export default async function handler(req, res) {
 
 
   return res.status(405).json({
+    success: false,
     error: "Method not allowed"
   });
 }
