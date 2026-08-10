@@ -2,8 +2,10 @@
 <html lang="fa" dir="rtl">
 
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>پنل مدیریت نی نی استایل</title>
 
 <style>
@@ -44,7 +46,6 @@ button{
 input,
 select{
     border:1px solid #ddd;
-    background:#fff;
 }
 
 button{
@@ -52,10 +53,6 @@ button{
     cursor:pointer;
     color:#fff;
     background:#ff5ca8;
-}
-
-button:hover{
-    opacity:.9;
 }
 
 .secondary{
@@ -70,19 +67,26 @@ button:hover{
     background:#6c8cff;
 }
 
-#result{
-    margin-top:15px;
-    font-weight:bold;
+.stats{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+    margin-bottom:20px;
 }
 
-.preview{
-    width:120px;
-    height:120px;
-    object-fit:cover;
-    border-radius:10px;
-    margin-top:12px;
-    border:1px solid #eee;
-    display:none;
+.stat{
+    padding:18px 10px;
+    border-radius:12px;
+    background:#fff5fa;
+    text-align:center;
+    border:1px solid #f3dce7;
+}
+
+.stat-number{
+    font-size:22px;
+    font-weight:bold;
+    color:#e88aaa;
+    margin-top:7px;
 }
 
 .products-grid{
@@ -104,45 +108,15 @@ button:hover{
     height:180px;
     object-fit:cover;
     border-radius:9px;
-    background:#eee;
-}
-
-.product-name{
-    font-weight:bold;
-    margin-top:10px;
-}
-
-.product-price{
-    color:#e88aaa;
-    font-weight:bold;
-    margin-top:7px;
-}
-
-.product-category{
-    color:#888;
-    font-size:13px;
-    margin-top:5px;
 }
 
 .product-actions{
     display:flex;
     gap:8px;
-    margin-top:10px;
 }
 
 .product-actions button{
     flex:1;
-}
-
-.loading,
-.empty{
-    text-align:center;
-    padding:30px;
-    color:#888;
-}
-
-.orders-box{
-    margin-top:30px;
 }
 
 .order{
@@ -190,9 +164,22 @@ button:hover{
     margin-top:10px;
 }
 
-.cancel-edit{
-    display:none;
-    background:#999;
+.status{
+    margin-top:12px;
+    padding:10px;
+    border-radius:8px;
+    background:#fff;
+}
+
+.status select{
+    margin-top:6px;
+}
+
+.loading,
+.empty{
+    text-align:center;
+    padding:25px;
+    color:#888;
 }
 
 @media(max-width:600px){
@@ -201,58 +188,91 @@ button:hover{
         padding:10px;
     }
 
-    .box{
-        padding:15px;
-    }
-
-    .products-grid{
+    .stats{
         grid-template-columns:1fr;
     }
 
 }
 
 </style>
-</head>
 
+</head>
 
 <body>
 
 
-<!-- ============================= -->
-<!-- مدیریت محصولات -->
-<!-- ============================= -->
+<!-- ========================= -->
+<!-- آمار -->
+<!-- ========================= -->
 
 <div class="box">
 
-<h2>🎀 مدیریت محصولات نی نی استایل</h2>
+<h2>📊 آمار فروشگاه</h2>
 
-<input
-    type="hidden"
-    id="productId"
->
+<div class="stats">
 
-<input
-    id="name"
-    placeholder="نام محصول"
->
+    <div class="stat">
+        📦 سفارش‌ها
+        <div
+            class="stat-number"
+            id="ordersCount"
+        >
+            ۰
+        </div>
+    </div>
+
+    <div class="stat">
+        🛍️ محصولات
+        <div
+            class="stat-number"
+            id="productsCount"
+        >
+            ۰
+        </div>
+    </div>
+
+    <div class="stat">
+        💰 فروش
+        <div
+            class="stat-number"
+            id="salesTotal"
+        >
+            ۰ تومان
+        </div>
+    </div>
+
+</div>
+
+</div>
+
+
+<!-- ========================= -->
+<!-- مدیریت محصولات -->
+<!-- ========================= -->
+
+<div class="box">
+
+<h2>🎀 مدیریت محصولات</h2>
+
+<input type="hidden" id="productId">
+
+<input id="name" placeholder="نام محصول">
 
 <input
     id="price"
     type="number"
     placeholder="قیمت"
->
+/>
 
 <input
     id="oldPrice"
     type="number"
     placeholder="قیمت قبلی"
->
+/>
 
 <select id="category">
 
-    <option value="">
-        انتخاب دسته‌بندی
-    </option>
+    <option value="">انتخاب دسته‌بندی</option>
 
     <option value="لباس دخترانه">
         لباس دخترانه
@@ -276,40 +296,19 @@ button:hover{
 
 </select>
 
-
-<label style="display:block;margin-top:15px;">
-    📸 انتخاب عکس محصول
-</label>
-
 <input
     id="imageFile"
     type="file"
     accept="image/*"
-    onchange="previewImage()"
->
-
-<img
-    id="preview"
-    class="preview"
->
-
+/>
 
 <input
     id="image"
-    placeholder="یا آدرس عکس را وارد کنید"
->
-
+    placeholder="یا آدرس عکس"
+/>
 
 <button onclick="saveProduct()">
     💾 ذخیره محصول
-</button>
-
-<button
-    id="cancelEdit"
-    class="cancel-edit"
-    onclick="cancelEdit()"
->
-    لغو ویرایش
 </button>
 
 <div id="result"></div>
@@ -317,9 +316,9 @@ button:hover{
 </div>
 
 
-<!-- ============================= -->
-<!-- لیست محصولات -->
-<!-- ============================= -->
+<!-- ========================= -->
+<!-- محصولات -->
+<!-- ========================= -->
 
 <div class="box">
 
@@ -335,22 +334,16 @@ button:hover{
 <div
     id="products"
     class="products-grid"
->
-
-    <div class="loading">
-        در حال دریافت محصولات...
-    </div>
-
-</div>
+></div>
 
 </div>
 
 
-<!-- ============================= -->
+<!-- ========================= -->
 <!-- سفارش‌ها -->
-<!-- ============================= -->
+<!-- ========================= -->
 
-<div class="box orders-box">
+<div class="box">
 
 <h2>📦 مدیریت سفارش‌ها</h2>
 
@@ -361,13 +354,7 @@ button:hover{
     🔄 بروزرسانی سفارش‌ها
 </button>
 
-<div id="orders">
-
-    <div class="loading">
-        در حال دریافت سفارش‌ها...
-    </div>
-
-</div>
+<div id="orders"></div>
 
 </div>
 
@@ -376,412 +363,49 @@ button:hover{
 
 
 // ==========================================
-// فشرده‌سازی عکس
-// ==========================================
-
-function compressImage(file){
-
-    return new Promise((resolve,reject)=>{
-
-        const reader =
-            new FileReader();
-
-        reader.onload = function(event){
-
-            const img =
-                new Image();
-
-            img.onload = function(){
-
-                const canvas =
-                    document.createElement("canvas");
-
-                const maxSize = 800;
-
-                let width = img.width;
-                let height = img.height;
-
-
-                if(width > height){
-
-                    if(width > maxSize){
-
-                        height =
-                            height *
-                            maxSize /
-                            width;
-
-                        width =
-                            maxSize;
-                    }
-
-                }else{
-
-                    if(height > maxSize){
-
-                        width =
-                            width *
-                            maxSize /
-                            height;
-
-                        height =
-                            maxSize;
-                    }
-
-                }
-
-
-                canvas.width =
-                    width;
-
-                canvas.height =
-                    height;
-
-
-                const ctx =
-                    canvas.getContext("2d");
-
-
-                ctx.drawImage(
-                    img,
-                    0,
-                    0,
-                    width,
-                    height
-                );
-
-
-                const result =
-                    canvas.toDataURL(
-                        "image/jpeg",
-                        0.75
-                    );
-
-
-                resolve(result);
-
-            };
-
-
-            img.onerror =
-                reject;
-
-            img.src =
-                event.target.result;
-
-        };
-
-
-        reader.onerror =
-            reject;
-
-        reader.readAsDataURL(file);
-
-    });
-
-}
-
-
-
-// ==========================================
-// پیش‌نمایش عکس
-// ==========================================
-
-async function previewImage(){
-
-    const file =
-        document.getElementById(
-            "imageFile"
-        ).files[0];
-
-    const preview =
-        document.getElementById(
-            "preview"
-        );
-
-
-    if(!file){
-
-        preview.style.display =
-            "none";
-
-        return;
-    }
-
-
-    try{
-
-        const image =
-            await compressImage(file);
-
-        preview.src =
-            image;
-
-        preview.style.display =
-            "block";
-
-    }catch(error){
-
-        alert(
-            "خطا در خواندن عکس"
-        );
-
-    }
-
-}
-
-
-
-// ==========================================
-// ذخیره محصول
-// ==========================================
-
-async function saveProduct(){
-
-    const result =
-        document.getElementById(
-            "result"
-        );
-
-    result.innerHTML =
-        "⏳ در حال ذخیره...";
-
-
-    try{
-
-        const id =
-            document.getElementById(
-                "productId"
-            ).value;
-
-
-        const name =
-            document.getElementById(
-                "name"
-            ).value.trim();
-
-
-        const price =
-            document.getElementById(
-                "price"
-            ).value;
-
-
-        const oldPrice =
-            document.getElementById(
-                "oldPrice"
-            ).value;
-
-
-        const category =
-            document.getElementById(
-                "category"
-            ).value;
-
-
-        let image =
-            document.getElementById(
-                "image"
-            ).value.trim();
-
-
-        const file =
-            document.getElementById(
-                "imageFile"
-            ).files[0];
-
-
-        if(!name){
-
-            result.innerHTML =
-                "❌ نام محصول را وارد کنید.";
-
-            return;
-        }
-
-
-        if(!price){
-
-            result.innerHTML =
-                "❌ قیمت محصول را وارد کنید.";
-
-            return;
-        }
-
-
-        // اگر عکس جدید انتخاب شده
-        if(file){
-
-            image =
-                await compressImage(file);
-
-        }
-
-
-        if(!image){
-
-            result.innerHTML =
-                "❌ عکس محصول را انتخاب کنید یا آدرس عکس بدهید.";
-
-            return;
-        }
-
-
-        const product = {
-
-            name: name,
-
-            price:
-                Number(price),
-
-            oldPrice:
-                Number(oldPrice || 0),
-
-            image: image,
-
-            category:
-                category || "عمومی"
-
-        };
-
-
-        let method =
-            "POST";
-
-
-        if(id){
-
-            method =
-                "PUT";
-
-            product.id =
-                id;
-
-        }
-
-
-        const response =
-            await fetch(
-                "/api/products",
-                {
-                    method: method,
-
-                    headers:{
-                        "Content-Type":
-                            "application/json"
-                    },
-
-                    body:
-                        JSON.stringify(
-                            product
-                        )
-                }
-            );
-
-
-        const data =
-            await response.json();
-
-
-        if(!response.ok){
-
-            throw new Error(
-                data.error ||
-                "خطا در ذخیره محصول"
-            );
-
-        }
-
-
-        result.innerHTML =
-            id
-            ? "✅ محصول ویرایش شد"
-            : "✅ محصول ذخیره شد";
-
-
-        clearForm();
-
-        await loadProducts();
-
-
-    }catch(error){
-
-        console.error(error);
-
-        result.innerHTML =
-            "❌ " +
-            error.message;
-
-    }
-
-}
-
-
-
-// ==========================================
-// دریافت محصولات
+// محصولات
 // ==========================================
 
 async function loadProducts(){
 
-    const container =
-        document.getElementById(
-            "products"
-        );
+    const box =
+        document.getElementById("products");
 
-
-    container.innerHTML =
+    box.innerHTML =
         `<div class="loading">
             در حال دریافت محصولات...
         </div>`;
 
-
     try{
 
-        const response =
-            await fetch(
-                "/api/products"
-            );
-
+        const res =
+            await fetch("/api/products");
 
         const data =
-            await response.json();
-
-
-        if(!response.ok){
-
-            throw new Error(
-                data.error ||
-                "خطا در دریافت محصولات"
-            );
-
-        }
-
+            await res.json();
 
         const products =
             Array.isArray(data)
             ? data
-            : (
-                Array.isArray(data.products)
-                ? data.products
-                : []
-            );
+            : data.products || [];
 
+        document.getElementById(
+            "productsCount"
+        ).textContent =
+            products.length.toLocaleString("fa-IR");
 
         if(!products.length){
 
-            container.innerHTML =
+            box.innerHTML =
                 `<div class="empty">
-                    هنوز محصولی ثبت نشده است.
+                    محصولی وجود ندارد.
                 </div>`;
 
             return;
         }
 
-
-        container.innerHTML =
-            products.map(
-                product => `
+        box.innerHTML =
+            products.map(product => `
 
                 <div class="product-card">
 
@@ -790,43 +414,23 @@ async function loadProducts(){
                         onerror="this.style.display='none'"
                     >
 
-                    <div class="product-name">
-                        ${escapeHtml(
-                            product.name || "-"
-                        )}
-                    </div>
+                    <strong>
+                        ${escapeHtml(product.name || "-")}
+                    </strong>
 
-                    <div class="product-price">
+                    <p>
                         💰
                         ${Number(
                             product.price || 0
                         ).toLocaleString("fa-IR")}
                         تومان
-                    </div>
+                    </p>
 
-                    ${
-                        product.oldPrice
-                        ? `
-                        <div style="
-                            text-decoration:line-through;
-                            color:#999;
-                            margin-top:4px;
-                        ">
-                            ${Number(
-                                product.oldPrice
-                            ).toLocaleString("fa-IR")}
-                            تومان
-                        </div>
-                        `
-                        : ""
-                    }
-
-                    <div class="product-category">
-                        📂
-                        ${escapeHtml(
+                    <small>
+                        📂 ${escapeHtml(
                             product.category || "-"
                         )}
-                    </div>
+                    </small>
 
                     <div class="product-actions">
 
@@ -848,27 +452,132 @@ async function loadProducts(){
 
                 </div>
 
-            `
-            ).join("");
-
+            `).join("");
 
     }catch(error){
 
-        container.innerHTML =
+        box.innerHTML =
             `<div class="empty">
-                ❌ ${escapeHtml(
-                    error.message
-                )}
+                ❌ ${escapeHtml(error.message)}
             </div>`;
-
     }
-
 }
 
 
 
 // ==========================================
-// ویرایش محصول
+// ذخیره محصول
+// ==========================================
+
+async function saveProduct(){
+
+    const file =
+        document.getElementById("imageFile").files[0];
+
+    let image =
+        document.getElementById("image").value.trim();
+
+    if(file){
+
+        const reader =
+            new FileReader();
+
+        image =
+            await new Promise(resolve => {
+
+                reader.onload =
+                    () => resolve(reader.result);
+
+                reader.readAsDataURL(file);
+
+            });
+    }
+
+    const product = {
+
+        name:
+            document.getElementById("name").value,
+
+        price:
+            Number(
+                document.getElementById("price").value || 0
+            ),
+
+        oldPrice:
+            Number(
+                document.getElementById("oldPrice").value || 0
+            ),
+
+        image:
+
+            image,
+
+        category:
+            document.getElementById("category").value
+
+    };
+
+    const id =
+        document.getElementById("productId").value;
+
+    if(id){
+
+        product.id = id;
+    }
+
+    try{
+
+        const res =
+            await fetch(
+                "/api/products",
+                {
+                    method:
+                        id ? "PUT" : "POST",
+
+                    headers:{
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify(product)
+                }
+            );
+
+        const data =
+            await res.json();
+
+        if(!res.ok){
+
+            throw new Error(
+                data.error || "خطا"
+            );
+        }
+
+        document.getElementById(
+            "result"
+        ).textContent =
+            id
+            ? "✅ محصول ویرایش شد"
+            : "✅ محصول ذخیره شد";
+
+        clearForm();
+
+        loadProducts();
+
+    }catch(error){
+
+        document.getElementById(
+            "result"
+        ).textContent =
+            "❌ " + error.message;
+    }
+}
+
+
+
+// ==========================================
+// ویرایش
 // ==========================================
 
 function editProduct(product){
@@ -876,159 +585,56 @@ function editProduct(product){
     document.getElementById(
         "productId"
     ).value =
-        product.id || "";
-
+        product.id;
 
     document.getElementById(
         "name"
     ).value =
         product.name || "";
 
-
     document.getElementById(
         "price"
     ).value =
         product.price || "";
-
 
     document.getElementById(
         "oldPrice"
     ).value =
         product.oldPrice || "";
 
-
     document.getElementById(
         "category"
     ).value =
         product.category || "";
-
 
     document.getElementById(
         "image"
     ).value =
         product.image || "";
 
-
-    const preview =
-        document.getElementById(
-            "preview"
-        );
-
-
-    if(product.image){
-
-        preview.src =
-            product.image;
-
-        preview.style.display =
-            "block";
-
-    }
-
-
-    document.getElementById(
-        "cancelEdit"
-    ).style.display =
-        "block";
-
-
     window.scrollTo({
         top:0,
         behavior:"smooth"
     });
-
 }
 
 
 
 // ==========================================
-// لغو ویرایش
-// ==========================================
-
-function cancelEdit(){
-
-    clearForm();
-
-}
-
-
-
-// ==========================================
-// پاک کردن فرم
-// ==========================================
-
-function clearForm(){
-
-    document.getElementById(
-        "productId"
-    ).value = "";
-
-
-    document.getElementById(
-        "name"
-    ).value = "";
-
-
-    document.getElementById(
-        "price"
-    ).value = "";
-
-
-    document.getElementById(
-        "oldPrice"
-    ).value = "";
-
-
-    document.getElementById(
-        "category"
-    ).value = "";
-
-
-    document.getElementById(
-        "image"
-    ).value = "";
-
-
-    document.getElementById(
-        "imageFile"
-    ).value = "";
-
-
-    document.getElementById(
-        "preview"
-    ).style.display =
-        "none";
-
-
-    document.getElementById(
-        "cancelEdit"
-    ).style.display =
-        "none";
-
-}
-
-
-
-// ==========================================
-// حذف محصول
+// حذف
 // ==========================================
 
 async function deleteProduct(id){
 
-    if(
-        !confirm(
-            "مطمئنی می‌خواهی این محصول حذف شود؟"
-        )
-    ){
-
+    if(!confirm(
+        "مطمئنی می‌خواهی این محصول حذف شود؟"
+    )){
         return;
-
     }
-
 
     try{
 
-        const response =
+        const res =
             await fetch(
                 "/api/products",
                 {
@@ -1040,105 +646,100 @@ async function deleteProduct(id){
                     },
 
                     body:
-                        JSON.stringify({
-                            id:id
-                        })
+                        JSON.stringify({id})
                 }
             );
 
-
         const data =
-            await response.json();
+            await res.json();
 
-
-        if(!response.ok){
+        if(!res.ok){
 
             throw new Error(
-                data.error ||
-                "خطا در حذف محصول"
+                data.error || "خطا"
             );
-
         }
 
-
-        alert(
-            "✅ محصول حذف شد"
-        );
-
-
         loadProducts();
-
 
     }catch(error){
 
         alert(
-            "❌ " +
-            error.message
+            "❌ " + error.message
         );
-
     }
-
 }
 
 
 
 // ==========================================
-// دریافت سفارش‌ها
+// سفارش‌ها
 // ==========================================
 
 async function loadOrders(){
 
-    const container =
-        document.getElementById(
-            "orders"
-        );
+    const box =
+        document.getElementById("orders");
 
-
-    container.innerHTML =
+    box.innerHTML =
         `<div class="loading">
             در حال دریافت سفارش‌ها...
         </div>`;
 
-
     try{
 
-        const response =
-            await fetch(
-                "/api/orders"
-            );
-
+        const res =
+            await fetch("/api/orders");
 
         const data =
-            await response.json();
+            await res.json();
 
-
-        if(!response.ok){
+        if(!res.ok){
 
             throw new Error(
-                data.error ||
-                "خطا در دریافت سفارش‌ها"
+                data.error || "خطا"
             );
-
         }
-
 
         const orders =
             data.orders || [];
 
+        document.getElementById(
+            "ordersCount"
+        ).textContent =
+            orders.length.toLocaleString("fa-IR");
+
+
+        // محاسبه فروش کل
+        const totalSales =
+            orders.reduce(
+                (sum, order) =>
+                    sum +
+                    Number(
+                        order.totalAmount || 0
+                    ),
+                0
+            );
+
+        document.getElementById(
+            "salesTotal"
+        ).textContent =
+            totalSales.toLocaleString("fa-IR")
+            + " تومان";
+
 
         if(!orders.length){
 
-            container.innerHTML =
+            box.innerHTML =
                 `<div class="empty">
                     هنوز سفارشی ثبت نشده است.
                 </div>`;
 
             return;
-
         }
 
 
-        container.innerHTML =
+        box.innerHTML =
             orders.map(
                 (order,index) => `
 
@@ -1147,17 +748,21 @@ async function loadOrders(){
                     <div class="order-header">
 
                         <div class="order-title">
+
                             📦 سفارش شماره
                             ${(
                                 index + 1
                             ).toLocaleString("fa-IR")}
+
                         </div>
 
                         <div class="order-date">
+
                             🕐
                             ${formatDate(
                                 order.createdAt
                             )}
+
                         </div>
 
                     </div>
@@ -1200,13 +805,11 @@ async function loadOrders(){
 
                     <div class="order-products">
 
-                        <strong>
-                            🛍️ محصولات
-                        </strong>
+                        🛍️ <strong>محصولات</strong>
 
                         <br><br>
 
-                        ${renderOrderProducts(
+                        ${renderProducts(
                             order.products
                         )}
 
@@ -1223,10 +826,56 @@ async function loadOrders(){
 
                         <br>
 
-                        🔢 تعداد کل:
+                        🔢 تعداد:
                         ${Number(
                             order.quantity || 0
                         ).toLocaleString("fa-IR")}
+
+                    </div>
+
+
+                    <div class="status">
+
+                        <strong>
+                            وضعیت سفارش:
+                        </strong>
+
+                        <select
+                            onchange="changeStatus(
+                                '${order.id}',
+                                this.value
+                            )"
+                        >
+
+                            <option
+                                value="new"
+                                ${order.status === "new" ? "selected" : ""}
+                            >
+                                🟡 جدید
+                            </option>
+
+                            <option
+                                value="preparing"
+                                ${order.status === "preparing" ? "selected" : ""}
+                            >
+                                🔵 آماده‌سازی
+                            </option>
+
+                            <option
+                                value="shipped"
+                                ${order.status === "shipped" ? "selected" : ""}
+                            >
+                                🚚 ارسال شد
+                            </option>
+
+                            <option
+                                value="delivered"
+                                ${order.status === "delivered" ? "selected" : ""}
+                            >
+                                🟢 تحویل شد
+                            </option>
+
+                        </select>
 
                     </div>
 
@@ -1238,15 +887,62 @@ async function loadOrders(){
 
     }catch(error){
 
-        container.innerHTML =
+        box.innerHTML =
             `<div class="empty">
-                ❌ ${escapeHtml(
-                    error.message
-                )}
+                ❌ ${escapeHtml(error.message)}
             </div>`;
-
     }
+}
 
+
+
+// ==========================================
+// تغییر وضعیت
+// ==========================================
+
+async function changeStatus(id,status){
+
+    try{
+
+        const res =
+            await fetch(
+                "/api/orders",
+                {
+                    method:"PATCH",
+
+                    headers:{
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify({
+                            id,
+                            status
+                        })
+                }
+            );
+
+        const data =
+            await res.json();
+
+        if(!res.ok){
+
+            throw new Error(
+                data.error || "خطا"
+            );
+        }
+
+        loadOrders();
+
+    }catch(error){
+
+        alert(
+            "❌ " + error.message
+        );
+
+        loadOrders();
+    }
 }
 
 
@@ -1255,22 +951,17 @@ async function loadOrders(){
 // محصولات سفارش
 // ==========================================
 
-function renderOrderProducts(products){
+function renderProducts(products){
 
-    if(
-        !Array.isArray(products) ||
-        !products.length
-    ){
-
+    if(!Array.isArray(products)){
         return "محصولی ثبت نشده";
     }
-
 
     return products.map(
         product => `
 
         <div style="
-            padding:8px 0;
+            padding:7px 0;
             border-bottom:1px solid #eee;
         ">
 
@@ -1288,7 +979,7 @@ function renderOrderProducts(products){
 
             <br>
 
-            💰 قیمت:
+            💰
             ${Number(
                 product.price || 0
             ).toLocaleString("fa-IR")}
@@ -1298,7 +989,6 @@ function renderOrderProducts(products){
 
         `
     ).join("");
-
 }
 
 
@@ -1313,20 +1003,12 @@ function formatDate(value){
         return "-";
     }
 
-
     const date =
         new Date(value);
 
-
-    if(
-        isNaN(
-            date.getTime()
-        )
-    ){
-
+    if(isNaN(date.getTime())){
         return "-";
     }
-
 
     return date.toLocaleString(
         "fa-IR",
@@ -1335,17 +1017,52 @@ function formatDate(value){
             month:"2-digit",
             day:"2-digit",
             hour:"2-digit",
-            minute:"2-digit",
-            second:"2-digit"
+            minute:"2-digit"
         }
     );
-
 }
 
 
 
 // ==========================================
-// جلوگیری از HTML ناخواسته
+// پاک کردن فرم
+// ==========================================
+
+function clearForm(){
+
+    document.getElementById(
+        "productId"
+    ).value = "";
+
+    document.getElementById(
+        "name"
+    ).value = "";
+
+    document.getElementById(
+        "price"
+    ).value = "";
+
+    document.getElementById(
+        "oldPrice"
+    ).value = "";
+
+    document.getElementById(
+        "category"
+    ).value = "";
+
+    document.getElementById(
+        "image"
+    ).value = "";
+
+    document.getElementById(
+        "imageFile"
+    ).value = "";
+}
+
+
+
+// ==========================================
+// امنیت نمایش متن
 // ==========================================
 
 function escapeHtml(value){
@@ -1356,7 +1073,6 @@ function escapeHtml(value){
         .replace(/>/g,"&gt;")
         .replace(/"/g,"&quot;")
         .replace(/'/g,"&#039;");
-
 }
 
 
@@ -1366,7 +1082,6 @@ function escapeHtml(value){
 // ==========================================
 
 loadProducts();
-
 loadOrders();
 
 </script>
