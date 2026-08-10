@@ -12,17 +12,25 @@ if (!admin.apps.length) {
 
 const db = admin.firestore();
 
+const allowedStatuses = [
+  "new",
+  "preparing",
+  "shipped",
+  "delivered"
+];
+
 export default async function handler(req, res) {
 
   // =========================
-  // GET سفارش
+  // GET
   // =========================
+
   if (req.method === "GET") {
+
     try {
 
       const id = req.query?.id;
 
-      // دریافت یک سفارش برای مشتری
       if (id) {
 
         const doc = await db
@@ -31,10 +39,12 @@ export default async function handler(req, res) {
           .get();
 
         if (!doc.exists) {
+
           return res.status(404).json({
             success: false,
             error: "سفارش پیدا نشد"
           });
+
         }
 
         const data = doc.data();
@@ -51,11 +61,12 @@ export default async function handler(req, res) {
         });
       }
 
-      // دریافت همه سفارش‌ها برای پنل
+
       const snapshot = await db
         .collection("orders")
         .orderBy("createdAt", "desc")
         .get();
+
 
       const orders = snapshot.docs.map(doc => {
 
@@ -64,13 +75,33 @@ export default async function handler(req, res) {
         return {
           id: doc.id,
           ...data,
-          status: data.status || "new",
-          createdAt: data.createdAt
-            ? data.createdAt.toDate().toISOString()
-            : null
+
+          status:
+            data.status || "new",
+
+          trackingCode:
+            data.trackingCode || "",
+
+          customerReceived:
+            data.customerReceived || false,
+
+          customerReceivedAt:
+            data.customerReceivedAt
+              ? data.customerReceivedAt
+                  .toDate()
+                  .toISOString()
+              : null,
+
+          createdAt:
+            data.createdAt
+              ? data.createdAt
+                  .toDate()
+                  .toISOString()
+              : null
         };
 
       });
+
 
       return res.status(200).json({
         success: true,
@@ -79,7 +110,10 @@ export default async function handler(req, res) {
 
     } catch (error) {
 
-      console.error("GET ORDERS ERROR:", error);
+      console.error(
+        "GET ORDERS ERROR:",
+        error
+      );
 
       return res.status(500).json({
         success: false,
@@ -90,9 +124,11 @@ export default async function handler(req, res) {
 
 
   // =========================
-  // POST ثبت سفارش
+  // POST
   // =========================
+
   if (req.method === "POST") {
+
     try {
 
       const {
@@ -105,6 +141,7 @@ export default async function handler(req, res) {
         totalAmount
       } = req.body;
 
+
       if (
         !name ||
         !mobile ||
@@ -114,11 +151,14 @@ export default async function handler(req, res) {
         quantity === undefined ||
         totalAmount === undefined
       ) {
+
         return res.status(400).json({
           success: false,
           error: "اطلاعات سفارش کامل نیست"
         });
+
       }
+
 
       const docRef = await db
         .collection("orders")
@@ -134,18 +174,36 @@ export default async function handler(req, res) {
 
           status: "new",
 
-          createdAt: admin.firestore.FieldValue.serverTimestamp()
+          trackingCode: "",
+
+          customerReceived: false,
+
+          customerReceivedAt: null,
+
+          createdAt:
+            admin.firestore.FieldValue
+              .serverTimestamp(),
+
+          updatedAt:
+            admin.firestore.FieldValue
+              .serverTimestamp()
 
         });
 
+
       return res.status(200).json({
         success: true,
-        orderId: docRef.id
+        orderId: docRef.id,
+        status: "new"
       });
+
 
     } catch (error) {
 
-      console.error("ORDER ERROR:", error);
+      console.error(
+        "ORDER ERROR:",
+        error
+      );
 
       return res.status(500).json({
         success: false,
@@ -157,57 +215,105 @@ export default async function handler(req, res) {
 
 
   // =========================
-  // تغییر وضعیت سفارش
+  // PATCH
   // =========================
+
   if (req.method === "PATCH") {
+
     try {
 
       const {
         id,
-        status
+        status,
+        trackingCode,
+        customerReceived
       } = req.body;
 
-      const allowedStatuses = [
-        "new",
-        "preparing",
-        "shipped",
-        "delivered"
-      ];
 
       if (!id) {
+
         return res.status(400).json({
           success: false,
           error: "شناسه سفارش ارسال نشده است"
         });
+
       }
 
-      if (!allowedStatuses.includes(status)) {
-        return res.status(400).json({
-          success: false,
-          error: "وضعیت سفارش نامعتبر است"
-        });
+
+      const updateData = {
+
+        updatedAt:
+          admin.firestore.FieldValue
+            .serverTimestamp()
+
+      };
+
+
+      // وضعیت سفارش
+
+      if (status !== undefined) {
+
+        if (
+          !allowedStatuses.includes(status)
+        ) {
+
+          return res.status(400).json({
+            success: false,
+            error: "وضعیت سفارش نامعتبر است"
+          });
+
+        }
+
+        updateData.status = status;
       }
+
+
+      // کد رهگیری
+
+      if (trackingCode !== undefined) {
+
+        updateData.trackingCode =
+          String(trackingCode).trim();
+
+      }
+
+
+      // اعلام دریافت مشتری
+
+      if (customerReceived === true) {
+
+        updateData.customerReceived = true;
+
+        updateData.customerReceivedAt =
+          admin.firestore.FieldValue
+            .serverTimestamp();
+
+      }
+
 
       await db
         .collection("orders")
         .doc(id)
-        .update({
-          status,
-          updatedAt: admin.firestore.FieldValue.serverTimestamp()
-        });
+        .update(updateData);
+
 
       return res.status(200).json({
         success: true
       });
 
+
     } catch (error) {
 
-      console.error("UPDATE ORDER ERROR:", error);
+      console.error(
+        "UPDATE ORDER ERROR:",
+        error
+      );
 
       return res.status(500).json({
         success: false,
         error: error.message
       });
+
     }
   }
 
@@ -216,4 +322,5 @@ export default async function handler(req, res) {
     success: false,
     error: "Method not allowed"
   });
+
 }
