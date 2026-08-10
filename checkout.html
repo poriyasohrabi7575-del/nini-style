@@ -517,177 +517,221 @@
     }
 
 
+   /*
+  ثبت سفارش
+*/
+document
+  .getElementById("checkout-form")
+  .addEventListener("submit", async function (event) {
+
+    event.preventDefault();
+
     /*
-      ثبت سفارش
+      دریافت سبد
     */
-    document
-      .getElementById("checkout-form")
-      .addEventListener("submit", function(event) {
+    const cart = getCart();
 
-        event.preventDefault();
+    /*
+      جلوگیری از سفارش بدون محصول
+    */
+    if (!cart.length) {
+      alert("سبد خرید شما خالی است.");
+      return;
+    }
 
+    /*
+      اطلاعات مشتری
+    */
+    const name =
+      document
+        .getElementById("name")
+        .value
+        .trim();
 
-        /*
-          دریافت سبد
-        */
-        const cart = getCart();
+    const phone =
+      document
+        .getElementById("phone")
+        .value
+        .trim();
 
+    const postalCode =
+      document
+        .getElementById("postalCode")
+        .value
+        .trim();
 
-        /*
-          جلوگیری از سفارش بدون محصول
-        */
-        if (!cart.length) {
+    const address =
+      document
+        .getElementById("address")
+        .value
+        .trim();
 
-          alert(
-            "سبد خرید شما خالی است."
-          );
+    /*
+      بررسی اطلاعات
+    */
+    if (
+      !name ||
+      !phone ||
+      !postalCode ||
+      !address
+    ) {
+      alert("لطفاً همه اطلاعات را کامل وارد کنید.");
+      return;
+    }
 
-          return;
-        }
+    /*
+      بررسی کد پستی
+    */
+    if (!/^\d{10}$/.test(postalCode)) {
+      alert("کد پستی باید دقیقاً ۱۰ رقم باشد.");
+      return;
+    }
 
+    /*
+      محاسبه مبلغ کل
+    */
+    let total = 0;
+    let totalQuantity = 0;
 
-        /*
-          اطلاعات مشتری
-        */
-        const name =
-          document
-            .getElementById("name")
-            .value
-            .trim();
+    cart.forEach(item => {
 
+      const price = getItemPrice(item);
+      const quantity = getItemQuantity(item);
 
-        const phone =
-          document
-            .getElementById("phone")
-            .value
-            .trim();
+      total += price * quantity;
+      totalQuantity += quantity;
 
+    });
 
-        const postalCode =
-          document
-            .getElementById("postalCode")
-            .value
-            .trim();
+    /*
+      دکمه ثبت سفارش
+    */
+    const submitButton =
+      document.querySelector(".submit-btn");
 
+    submitButton.disabled = true;
+    submitButton.textContent = "در حال ثبت سفارش...";
 
-        const address =
-          document
-            .getElementById("address")
-            .value
-            .trim();
+    try {
 
+      /*
+        ارسال سفارش به Firebase
+      */
+      const response = await fetch("/api/orders", {
+        method: "POST",
 
-        /*
-          بررسی اطلاعات
-        */
-        if (
-          !name ||
-          !phone ||
-          !postalCode ||
-          !address
-        ) {
+        headers: {
+          "Content-Type": "application/json"
+        },
 
-          alert(
-            "لطفاً همه اطلاعات را کامل وارد کنید."
-          );
+        body: JSON.stringify({
 
-          return;
-        }
+          name: name,
 
+          mobile: phone,
 
-        /*
-          بررسی کد پستی
-        */
-        if (
-          !/^\d{10}$/.test(postalCode)
-        ) {
+          postalCode: postalCode,
 
-          alert(
-            "کد پستی باید دقیقاً ۱۰ رقم باشد."
-          );
+          address: address,
 
-          return;
-        }
+          products: cart,
 
+          quantity: totalQuantity,
 
-        /*
-          محاسبه مبلغ کل
-        */
-        let total = 0;
+          totalAmount: total
 
-        cart.forEach(item => {
-
-          const price =
-            getItemPrice(item);
-
-          const quantity =
-            getItemQuantity(item);
-
-          total +=
-            price * quantity;
-
-        });
-
-
-        /*
-          ساخت سفارش
-        */
-        const order = {
-
-          id:
-            "ORDER-" +
-            Date.now(),
-
-          customer: {
-
-            name: name,
-
-            phone: phone,
-
-            postalCode: postalCode,
-
-            address: address
-
-          },
-
-          items: cart,
-
-          total: total,
-
-          createdAt:
-            new Date().toISOString()
-
-        };
-
-
-        /*
-          ذخیره موقت سفارش
-        */
-        localStorage.setItem(
-          "pendingOrder",
-          JSON.stringify(order)
-        );
-
-
-        /*
-          نمایش پیام موفقیت
-        */
-        document
-          .getElementById("success-message")
-          .style.display = "block";
-
-
-        console.log(
-          "Order:",
-          order
-        );
-
+        })
       });
 
+      const result = await response.json();
 
-    /*
-      اجرای اولیه
-    */
+      /*
+        بررسی نتیجه API
+      */
+      if (!response.ok || !result.success) {
+
+        throw new Error(
+          result.error || "خطا در ثبت سفارش"
+        );
+
+      }
+
+      /*
+        ذخیره نسخه سفارش در مرورگر
+      */
+      const order = {
+
+        id: result.orderId,
+
+        customer: {
+
+          name: name,
+
+          phone: phone,
+
+          postalCode: postalCode,
+
+          address: address
+
+        },
+
+        items: cart,
+
+        total: total,
+
+        quantity: totalQuantity
+
+      };
+
+      localStorage.setItem(
+        "pendingOrder",
+        JSON.stringify(order)
+      );
+
+      /*
+        نمایش پیام موفقیت
+      */
+      document
+        .getElementById("success-message")
+        .style.display = "block";
+
+      /*
+        پاک کردن سبد خرید
+      */
+      localStorage.removeItem(CART_KEY);
+
+      /*
+        غیرفعال کردن دکمه
+      */
+      submitButton.textContent =
+        "سفارش با موفقیت ثبت شد ❤️";
+
+      submitButton.disabled = true;
+
+      console.log(
+        "Order saved successfully:",
+        result
+      );
+
+    } catch (error) {
+
+      console.error(
+        "Order error:",
+        error
+      );
+
+      alert(
+        "ثبت سفارش انجام نشد. لطفاً دوباره تلاش کنید."
+      );
+
+      submitButton.disabled = false;
+
+      submitButton.textContent =
+        "ثبت سفارش 🛒";
+
+    }
+
+  });
     renderOrder();
 
   </script>
