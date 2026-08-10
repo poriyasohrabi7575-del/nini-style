@@ -180,11 +180,6 @@ button{
     margin-top:6px;
 }
 
-
-/* =========================
-   حذف سفارش
-   ========================= */
-
 .delete-order-button{
     background:#e74c3c;
     margin-top:12px;
@@ -193,11 +188,6 @@ button{
 .delete-order-button:hover{
     background:#c0392b;
 }
-
-
-/* =========================
-   کد رهگیری
-   ========================= */
 
 .tracking-box{
     margin-top:12px;
@@ -223,11 +213,6 @@ button{
     color:#287a43;
 }
 
-
-/* =========================
-   دریافت مشتری
-   ========================= */
-
 .customer-received{
     margin-top:12px;
     padding:14px;
@@ -247,11 +232,6 @@ button{
     color:#8a6415;
     line-height:1.9;
 }
-
-
-/* =========================
-   جستجو و فیلتر
-   ========================= */
 
 .orders-tools{
     margin-top:15px;
@@ -314,11 +294,6 @@ button{
     margin-top:4px;
 }
 
-
-/* =========================
-   صفحه‌بندی
-   ========================= */
-
 .pagination{
     display:flex;
     justify-content:center;
@@ -366,6 +341,70 @@ button{
     color:#888;
 }
 
+
+/* =========================
+   صفحه ورود
+   ========================= */
+
+#loginScreen{
+    position:fixed;
+    inset:0;
+    background:#fff5fa;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:99999;
+    padding:20px;
+    box-sizing:border-box;
+}
+
+.login-box{
+    width:100%;
+    max-width:400px;
+    background:#fff;
+    padding:30px;
+    border-radius:18px;
+    box-shadow:0 5px 25px rgba(0,0,0,.1);
+    text-align:center;
+}
+
+.login-box h2{
+    color:#e88aaa;
+    margin-bottom:10px;
+}
+
+.login-box input{
+    width:100%;
+    padding:13px;
+    margin-top:10px;
+    box-sizing:border-box;
+    border:1px solid #ddd;
+    border-radius:9px;
+    font-family:tahoma;
+}
+
+.login-box button{
+    width:100%;
+    padding:13px;
+    margin-top:15px;
+    border:0;
+    border-radius:9px;
+    background:#ff5ca8;
+    color:white;
+    font-family:tahoma;
+    font-size:15px;
+    cursor:pointer;
+}
+
+#loginError{
+    margin-top:12px;
+    color:#e74c3c;
+}
+
+#adminContent{
+    display:none;
+}
+
 @media(max-width:700px){
 
     body{
@@ -391,6 +430,54 @@ button{
 </head>
 
 <body>
+
+
+<!-- =========================
+     صفحه ورود
+     ========================= -->
+
+<div id="loginScreen">
+
+<div class="login-box">
+
+<h2>
+🔐 ورود به پنل نی نی استایل
+</h2>
+
+<p>
+لطفاً نام کاربری و رمز عبور را وارد کنید.
+</p>
+
+<input
+id="loginUsername"
+type="text"
+placeholder="نام کاربری"
+autocomplete="username"
+>
+
+<input
+id="loginPassword"
+type="password"
+placeholder="رمز عبور"
+autocomplete="current-password"
+>
+
+<button onclick="adminLogin()">
+🔓 ورود به پنل
+</button>
+
+<div id="loginError"></div>
+
+</div>
+
+</div>
+
+
+<!-- =========================
+     محتوای پنل
+     ========================= -->
+
+<div id="adminContent">
 
 
 <!-- =========================
@@ -539,7 +626,6 @@ onclick="loadOrders()"
 🔄 بروزرسانی سفارش‌ها
 </button>
 
-
 <div class="orders-tools">
 
 <input
@@ -549,7 +635,6 @@ type="text"
 placeholder="🔎 جستجو با نام، موبایل، کد سفارش یا کد رهگیری..."
 oninput="filterOrders()"
 >
-
 
 <div class="order-filters">
 
@@ -595,7 +680,6 @@ onclick="setOrderFilter('delivered')"
 
 </div>
 
-
 <div class="order-stats">
 
 <div class="order-stat">
@@ -627,12 +711,10 @@ onclick="setOrderFilter('delivered')"
 
 </div>
 
-
 <div
 id="searchResultInfo"
 class="search-result-info"
 ></div>
-
 
 <div id="orders"></div>
 
@@ -640,8 +722,164 @@ class="search-result-info"
 
 </div>
 
+</div>
+
 
 <script>
+
+
+// ==========================================
+// ورود به پنل
+// ==========================================
+
+async function adminLogin(){
+
+const username =
+document.getElementById(
+"loginUsername"
+).value.trim();
+
+const password =
+document.getElementById(
+"loginPassword"
+).value;
+
+
+const errorBox =
+document.getElementById(
+"loginError"
+);
+
+
+errorBox.textContent =
+"";
+
+
+if(!username || !password){
+
+errorBox.textContent =
+"⚠️ نام کاربری و رمز عبور را وارد کنید.";
+
+return;
+
+}
+
+
+try{
+
+const res =
+await fetch(
+"/api/login",
+{
+method:"POST",
+
+headers:{
+"Content-Type":
+"application/json"
+},
+
+body:
+JSON.stringify({
+username,
+password
+})
+}
+);
+
+
+const data =
+await res.json();
+
+
+if(!res.ok || !data.authenticated){
+
+throw new Error(
+data.error ||
+"نام کاربری یا رمز عبور اشتباه است."
+);
+
+}
+
+
+document.getElementById(
+"loginScreen"
+).style.display =
+"none";
+
+
+document.getElementById(
+"adminContent"
+).style.display =
+"block";
+
+
+loadProducts();
+
+loadOrders();
+
+
+}catch(error){
+
+errorBox.textContent =
+"❌ " +
+error.message;
+
+}
+
+}
+
+
+// ==========================================
+// بررسی ورود قبلی
+// ==========================================
+
+async function checkLogin(){
+
+try{
+
+const res =
+await fetch(
+"/api/login"
+);
+
+
+const data =
+await res.json();
+
+
+if(
+data &&
+data.authenticated === true
+){
+
+document.getElementById(
+"loginScreen"
+).style.display =
+"none";
+
+
+document.getElementById(
+"adminContent"
+).style.display =
+"block";
+
+
+loadProducts();
+
+loadOrders();
+
+}
+
+}catch(error){
+
+console.log(
+"Login check:",
+error
+);
+
+}
+
+}
 
 
 // ==========================================
@@ -1530,8 +1768,6 @@ order.quantity || 0
 </div>
 
 
-<!-- کد رهگیری -->
-
 <div class="tracking-box">
 
 <div class="tracking-title">
@@ -1568,14 +1804,10 @@ class="tracking-result"
 </div>
 
 
-<!-- دریافت مشتری -->
-
 ${renderCustomerReceived(
 order
 )}
 
-
-<!-- وضعیت -->
 
 <div class="status">
 
@@ -1647,8 +1879,6 @@ order.status ===
 
 </div>
 
-
-<!-- حذف سفارش -->
 
 <button
 class="delete-order-button"
@@ -2385,9 +2615,7 @@ return String(value)
 // شروع
 // ==========================================
 
-loadProducts();
-
-loadOrders();
+checkLogin();
 
 </script>
 
