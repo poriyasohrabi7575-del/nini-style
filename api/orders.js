@@ -21,9 +21,9 @@ const allowedStatuses = [
 
 export default async function handler(req, res) {
 
-  // =========================
+  // ==========================================
   // GET
-  // =========================
+  // ==========================================
 
   if (req.method === "GET") {
 
@@ -31,6 +31,7 @@ export default async function handler(req, res) {
 
       const id = req.query?.id;
 
+      // دریافت یک سفارش
       if (id) {
 
         const doc = await db
@@ -51,62 +52,81 @@ export default async function handler(req, res) {
 
         return res.status(200).json({
           success: true,
+
           order: {
             id: doc.id,
             ...data,
-            createdAt: data.createdAt
-              ? data.createdAt.toDate().toISOString()
-              : null
+
+            createdAt:
+              data.createdAt
+                ? data.createdAt.toDate().toISOString()
+                : null,
+
+            customerReceivedAt:
+              data.customerReceivedAt
+                ? data.customerReceivedAt.toDate().toISOString()
+                : null
           }
+
         });
+
       }
 
 
+      // دریافت همه سفارش‌ها
       const snapshot = await db
         .collection("orders")
         .orderBy("createdAt", "desc")
         .get();
 
 
-      const orders = snapshot.docs.map(doc => {
+      const orders =
+        snapshot.docs.map(doc => {
 
-        const data = doc.data();
+          const data = doc.data();
 
-        return {
-          id: doc.id,
-          ...data,
+          return {
 
-          status:
-            data.status || "new",
+            id: doc.id,
 
-          trackingCode:
-            data.trackingCode || "",
+            ...data,
 
-          customerReceived:
-            data.customerReceived || false,
+            status:
+              data.status || "new",
 
-          customerReceivedAt:
-            data.customerReceivedAt
-              ? data.customerReceivedAt
-                  .toDate()
-                  .toISOString()
-              : null,
+            trackingCode:
+              data.trackingCode || "",
 
-          createdAt:
-            data.createdAt
-              ? data.createdAt
-                  .toDate()
-                  .toISOString()
-              : null
-        };
+            customerReceived:
+              data.customerReceived || false,
 
-      });
+            customerReceivedAt:
+              data.customerReceivedAt
+                ? data.customerReceivedAt
+                    .toDate()
+                    .toISOString()
+                : null,
+
+            createdAt:
+              data.createdAt
+                ? data.createdAt
+                    .toDate()
+                    .toISOString()
+                : null
+
+          };
+
+        });
 
 
       return res.status(200).json({
+
         success: true,
+
         orders
+
       });
+
 
     } catch (error) {
 
@@ -116,22 +136,31 @@ export default async function handler(req, res) {
       );
 
       return res.status(500).json({
+
         success: false,
-        error: error.message
+
+        error:
+          error.message
+
       });
+
     }
+
   }
 
 
-  // =========================
+
+  // ==========================================
   // POST
-  // =========================
+  // ثبت سفارش جدید
+  // ==========================================
 
   if (req.method === "POST") {
 
     try {
 
       const {
+
         name,
         mobile,
         postalCode,
@@ -139,6 +168,7 @@ export default async function handler(req, res) {
         products,
         quantity,
         totalAmount
+
       } = req.body;
 
 
@@ -153,48 +183,71 @@ export default async function handler(req, res) {
       ) {
 
         return res.status(400).json({
+
           success: false,
-          error: "اطلاعات سفارش کامل نیست"
+
+          error:
+            "اطلاعات سفارش کامل نیست"
+
         });
 
       }
 
 
-      const docRef = await db
-        .collection("orders")
-        .add({
+      const docRef =
+        await db
+          .collection("orders")
+          .add({
 
-          name,
-          mobile,
-          postalCode,
-          address,
-          products,
-          quantity,
-          totalAmount,
+            name,
 
-          status: "new",
+            mobile,
 
-          trackingCode: "",
+            postalCode,
 
-          customerReceived: false,
+            address,
 
-          customerReceivedAt: null,
+            products,
 
-          createdAt:
-            admin.firestore.FieldValue
-              .serverTimestamp(),
+            quantity,
 
-          updatedAt:
-            admin.firestore.FieldValue
-              .serverTimestamp()
+            totalAmount,
 
-        });
+            status:
+              "new",
+
+            trackingCode:
+              "",
+
+            customerReceived:
+              false,
+
+            customerReceivedAt:
+              null,
+
+            createdAt:
+              admin.firestore
+                .FieldValue
+                .serverTimestamp(),
+
+            updatedAt:
+              admin.firestore
+                .FieldValue
+                .serverTimestamp()
+
+          });
 
 
       return res.status(200).json({
+
         success: true,
-        orderId: docRef.id,
-        status: "new"
+
+        orderId:
+          docRef.id,
+
+        status:
+          "new"
+
       });
 
 
@@ -206,35 +259,51 @@ export default async function handler(req, res) {
       );
 
       return res.status(500).json({
+
         success: false,
-        error: "خطا در ثبت سفارش",
-        details: error.message
+
+        error:
+          "خطا در ثبت سفارش",
+
+        details:
+          error.message
+
       });
+
     }
+
   }
 
 
-  // =========================
+
+  // ==========================================
   // PATCH
-  // =========================
+  // تغییر وضعیت / کد رهگیری / دریافت مشتری
+  // ==========================================
 
   if (req.method === "PATCH") {
 
     try {
 
       const {
+
         id,
         status,
         trackingCode,
         customerReceived
+
       } = req.body;
 
 
       if (!id) {
 
         return res.status(400).json({
+
           success: false,
-          error: "شناسه سفارش ارسال نشده است"
+
+          error:
+            "شناسه سفارش ارسال نشده است"
+
         });
 
       }
@@ -243,52 +312,79 @@ export default async function handler(req, res) {
       const updateData = {
 
         updatedAt:
-          admin.firestore.FieldValue
+          admin.firestore
+            .FieldValue
             .serverTimestamp()
 
       };
 
 
+      // ==============================
       // وضعیت سفارش
+      // ==============================
 
       if (status !== undefined) {
 
         if (
-          !allowedStatuses.includes(status)
+          !allowedStatuses.includes(
+            status
+          )
         ) {
 
           return res.status(400).json({
+
             success: false,
-            error: "وضعیت سفارش نامعتبر است"
+
+            error:
+              "وضعیت سفارش نامعتبر است"
+
           });
 
         }
 
-        updateData.status = status;
+
+        updateData.status =
+          status;
+
       }
 
 
-      // کد رهگیری
 
-      if (trackingCode !== undefined) {
+      // ==============================
+      // کد رهگیری
+      // ==============================
+
+      if (
+        trackingCode !== undefined
+      ) {
 
         updateData.trackingCode =
-          String(trackingCode).trim();
+          String(
+            trackingCode
+          ).trim();
 
       }
 
 
+
+      // ==============================
       // اعلام دریافت مشتری
+      // ==============================
 
-      if (customerReceived === true) {
+      if (
+        customerReceived === true
+      ) {
 
-        updateData.customerReceived = true;
+        updateData.customerReceived =
+          true;
 
         updateData.customerReceivedAt =
-          admin.firestore.FieldValue
+          admin.firestore
+            .FieldValue
             .serverTimestamp();
 
       }
+
 
 
       await db
@@ -298,7 +394,9 @@ export default async function handler(req, res) {
 
 
       return res.status(200).json({
+
         success: true
+
       });
 
 
@@ -310,17 +408,130 @@ export default async function handler(req, res) {
       );
 
       return res.status(500).json({
+
         success: false,
-        error: error.message
+
+        error:
+          error.message
+
       });
 
     }
+
   }
 
 
+
+  // ==========================================
+  // DELETE
+  // حذف کامل سفارش
+  // ==========================================
+
+  if (req.method === "DELETE") {
+
+    try {
+
+      const id =
+        req.body?.id ||
+        req.query?.id;
+
+
+      if (!id) {
+
+        return res.status(400).json({
+
+          success: false,
+
+          error:
+            "شناسه سفارش ارسال نشده است"
+
+        });
+
+      }
+
+
+      const orderRef =
+        db
+          .collection("orders")
+          .doc(id);
+
+
+      const orderDoc =
+        await orderRef.get();
+
+
+      if (!orderDoc.exists) {
+
+        return res.status(404).json({
+
+          success: false,
+
+          error:
+            "سفارش پیدا نشد"
+
+        });
+
+      }
+
+
+      await orderRef.delete();
+
+
+      console.log(
+        "ORDER DELETED:",
+        id
+      );
+
+
+      return res.status(200).json({
+
+        success: true,
+
+        message:
+          "سفارش با موفقیت حذف شد",
+
+        orderId:
+          id
+
+      });
+
+
+    } catch (error) {
+
+      console.error(
+        "DELETE ORDER ERROR:",
+        error
+      );
+
+      return res.status(500).json({
+
+        success: false,
+
+        error:
+          "خطا در حذف سفارش",
+
+        details:
+          error.message
+
+      });
+
+    }
+
+  }
+
+
+
+  // ==========================================
+  // متد نامعتبر
+  // ==========================================
+
   return res.status(405).json({
+
     success: false,
-    error: "Method not allowed"
+
+    error:
+      "Method not allowed"
+
   });
 
 }
