@@ -2,1247 +2,1467 @@
 <html lang="fa" dir="rtl">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>ثبت سفارش | نی نی استایل</title>
+<title>ثبت سفارش | نی نی استایل</title>
 
-  <style>
+<style>
 
-    * {
-      box-sizing: border-box;
-    }
+*{
+  box-sizing:border-box;
+}
 
-    body {
-      margin: 0;
-      font-family: Tahoma, Arial, sans-serif;
-      background: #fff8fb;
-      color: #444;
-    }
+body{
+  margin:0;
+  font-family:Tahoma,Arial,sans-serif;
+  background:#fff8fb;
+  color:#444;
+}
 
-    .header {
-      background: #fff;
-      padding: 20px;
-      text-align: center;
-      border-bottom: 1px solid #f3dce6;
-    }
+.header{
+  background:#fff;
+  padding:20px;
+  text-align:center;
+  border-bottom:1px solid #f3dce6;
+}
 
-    .logo {
-      font-size: 28px;
-      font-weight: bold;
-      color: #e88aaa;
-    }
+.logo{
+  font-size:28px;
+  font-weight:bold;
+  color:#e88aaa;
+}
 
-    .container {
-      max-width: 900px;
-      margin: 30px auto;
-      padding: 20px;
-    }
+.container{
+  max-width:900px;
+  margin:30px auto;
+  padding:20px;
+}
 
-    .box {
-      background: #fff;
-      border-radius: 18px;
-      padding: 25px;
-      margin-bottom: 20px;
-      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.06);
-    }
+.box{
+  background:#fff;
+  border-radius:18px;
+  padding:25px;
+  margin-bottom:20px;
+  box-shadow:0 5px 20px rgba(0,0,0,.06);
+}
 
-    h2 {
-      margin-top: 0;
-      color: #e88aaa;
-      font-size: 21px;
-    }
+h2{
+  margin-top:0;
+  color:#e88aaa;
+  font-size:21px;
+}
 
-    .form-group {
-      margin-bottom: 18px;
-    }
+.form-group{
+  margin-bottom:18px;
+}
 
-    label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: bold;
-      color: #555;
-    }
+label{
+  display:block;
+  margin-bottom:8px;
+  font-weight:bold;
+}
 
-    input,
-    textarea {
-      width: 100%;
-      padding: 13px;
-      border: 1px solid #ead5df;
-      border-radius: 10px;
-      font-family: inherit;
-      font-size: 15px;
-      outline: none;
-    }
+input,
+textarea{
+  width:100%;
+  padding:13px;
+  border:1px solid #ead5df;
+  border-radius:10px;
+  font-family:inherit;
+  font-size:15px;
+  outline:none;
+}
 
-    input:focus,
-    textarea:focus {
-      border-color: #e88aaa;
-    }
+input:focus,
+textarea:focus{
+  border-color:#e88aaa;
+}
 
-    textarea {
-      min-height: 110px;
-      resize: vertical;
-    }
+textarea{
+  min-height:110px;
+  resize:vertical;
+}
 
-    .order-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 15px;
-      padding: 14px 0;
-      border-bottom: 1px solid #f1e3e8;
-    }
+.order-item{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  padding:14px 0;
+  border-bottom:1px solid #f1e3e8;
+}
 
-    .order-item:last-child {
-      border-bottom: none;
-    }
+.item-info{
+  flex:1;
+}
 
-    .item-info {
-      flex: 1;
-    }
+.item-name{
+  font-weight:bold;
+  margin-bottom:6px;
+}
 
-    .item-name {
-      font-weight: bold;
-      margin-bottom: 6px;
-      color: #444;
-    }
+.item-price{
+  color:#888;
+  font-size:14px;
+}
 
-    .item-price {
-      color: #888;
-      font-size: 14px;
-    }
+.item-total{
+  font-weight:bold;
+  color:#e88aaa;
+  white-space:nowrap;
+}
 
-    .item-total {
-      font-weight: bold;
-      color: #e88aaa;
-      white-space: nowrap;
-    }
+.total{
+  display:flex;
+  justify-content:space-between;
+  margin-top:20px;
+  padding-top:18px;
+  border-top:2px solid #f1d8e2;
+  font-size:19px;
+  font-weight:bold;
+}
 
-    .total {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 20px;
-      padding-top: 18px;
-      border-top: 2px solid #f1d8e2;
-      font-size: 19px;
-      font-weight: bold;
-    }
+.submit-btn{
+  width:100%;
+  border:none;
+  padding:16px;
+  border-radius:12px;
+  background:#e88aaa;
+  color:#fff;
+  font-size:17px;
+  font-family:inherit;
+  cursor:pointer;
+}
 
-    .submit-btn {
-      width: 100%;
-      border: none;
-      padding: 16px;
-      border-radius: 12px;
-      background: #e88aaa;
-      color: white;
-      font-size: 17px;
-      font-family: inherit;
-      cursor: pointer;
-      transition: 0.2s;
-    }
+.submit-btn:disabled{
+  opacity:.7;
+  cursor:not-allowed;
+}
 
-    .submit-btn:hover {
-      background: #df7599;
-      transform: translateY(-1px);
-    }
+.back-btn{
+  display:block;
+  text-align:center;
+  margin-top:15px;
+  color:#e88aaa;
+  text-decoration:none;
+}
 
-    .submit-btn:disabled {
-      opacity: 0.7;
-      cursor: not-allowed;
-      transform: none;
-    }
+.empty{
+  text-align:center;
+  padding:30px;
+  color:#888;
+}
 
-    .back-btn {
-      display: block;
-      text-align: center;
-      margin-top: 15px;
-      color: #e88aaa;
-      text-decoration: none;
-    }
+.success{
+  display:none;
+  background:#eefaf2;
+  color:#287a45;
+  border:1px solid #c9ead4;
+  padding:15px;
+  border-radius:12px;
+  margin-top:15px;
+  text-align:center;
+}
 
-    .empty {
-      text-align: center;
-      padding: 30px;
-      color: #888;
-    }
+/* =========================
+   پیگیری سفارش
+========================= */
 
-    .success {
-      display: none;
-      background: #eefaf2;
-      color: #287a45;
-      border: 1px solid #c9ead4;
-      padding: 15px;
-      border-radius: 12px;
-      margin-top: 15px;
-      text-align: center;
-    }
+#tracking-box{
+  display:none;
+  margin-top:15px;
+  padding:20px;
+  border-radius:15px;
+  background:#fff8fb;
+  border:1px solid #f1d8e2;
+  text-align:center;
+}
 
-    .error {
-      background: #fff1f1;
-      color: #b33a3a;
-      border: 1px solid #f0caca;
-      padding: 15px;
-      border-radius: 12px;
-      margin-bottom: 15px;
-      text-align: center;
-    }
+.tracking-title{
+  font-size:20px;
+  font-weight:bold;
+  color:#e88aaa;
+  margin-bottom:12px;
+}
 
-    /* =========================
-       پیگیری سفارش
-    ========================= */
+#order-number{
+  font-size:14px;
+  color:#666;
+}
 
-    #tracking-box {
-      display: none;
-      margin-top: 15px;
-      padding: 20px;
-      border-radius: 15px;
-      background: #fff8fb;
-      border: 1px solid #f1d8e2;
-      text-align: center;
-    }
+#order-status{
+  margin-top:15px;
+  padding:14px;
+  border-radius:10px;
+  background:#fff3cd;
+  font-weight:bold;
+}
 
-    .tracking-title {
-      font-size: 20px;
-      font-weight: bold;
-      color: #e88aaa;
-      margin-bottom: 12px;
-    }
+#tracking-code-box{
+  display:none;
+  margin-top:15px;
+  padding:14px;
+  background:#fff;
+  border-radius:10px;
+  border:1px solid #ead5df;
+}
 
-    #order-number {
-      font-size: 14px;
-      color: #666;
-    }
+#customer-received-box{
+  display:none;
+  margin-top:15px;
+}
 
-    #order-status {
-      margin-top: 15px;
-      padding: 14px;
-      border-radius: 10px;
-      background: #fff3cd;
-      font-weight: bold;
-      color: #555;
-      transition: 0.3s;
-    }
+.received-btn{
+  width:100%;
+  border:none;
+  padding:14px;
+  border-radius:12px;
+  background:#62b879;
+  color:#fff;
+  font-size:16px;
+  font-family:inherit;
+  cursor:pointer;
+}
 
-    .tracking-note {
-      margin-top: 12px;
-      font-size: 12px;
-      color: #888;
-    }
+.received-btn:disabled{
+  opacity:.7;
+  cursor:not-allowed;
+}
 
-    @media (max-width: 600px) {
+.received-message{
+  display:none;
+  margin-top:10px;
+  padding:12px;
+  border-radius:10px;
+  background:#eefaf2;
+  color:#287a45;
+  font-weight:bold;
+}
 
-      .container {
-        padding: 12px;
-        margin: 15px auto;
-      }
+.tracking-note{
+  margin-top:12px;
+  font-size:12px;
+  color:#888;
+}
 
-      .box {
-        padding: 18px;
-      }
+@media(max-width:600px){
 
-      .order-item {
-        align-items: flex-start;
-      }
+  .container{
+    padding:12px;
+    margin:15px auto;
+  }
 
-      .item-total {
-        font-size: 14px;
-      }
+  .box{
+    padding:18px;
+  }
 
-    }
+  .order-item{
+    align-items:flex-start;
+  }
 
-  </style>
+}
+
+</style>
 </head>
 
 <body>
 
-  <header class="header">
-    <div class="logo">نی نی استایل 🎀</div>
-  </header>
+<header class="header">
+  <div class="logo">
+    نی نی استایل 🎀
+  </div>
+</header>
 
 
-  <main class="container">
+<main class="container">
 
-    <!-- =========================
-         اطلاعات مشتری
-    ========================== -->
 
-    <div class="box">
+<!-- =========================
+     اطلاعات مشتری
+========================= -->
 
-      <h2>🛍️ اطلاعات سفارش</h2>
+<div class="box">
 
-      <form id="checkout-form">
+<h2>🛍️ اطلاعات سفارش</h2>
 
-        <div class="form-group">
+<form id="checkout-form">
 
-          <label for="name">
-            نام و نام خانوادگی
-          </label>
+<div class="form-group">
 
-          <input
-            type="text"
-            id="name"
-            required
-            placeholder="مثلاً: پوریا صادقی"
-          >
+<label for="name">
+نام و نام خانوادگی
+</label>
 
-        </div>
+<input
+type="text"
+id="name"
+required
+placeholder="مثلاً: پوریا صادقی"
+>
 
+</div>
 
-        <div class="form-group">
 
-          <label for="phone">
-            شماره موبایل
-          </label>
+<div class="form-group">
 
-          <input
-            type="tel"
-            id="phone"
-            required
-            placeholder="مثلاً: 09123456789"
-            inputmode="tel"
-            maxlength="11"
-          >
+<label for="phone">
+شماره موبایل
+</label>
 
-        </div>
+<input
+type="tel"
+id="phone"
+required
+placeholder="مثلاً: 09123456789"
+inputmode="tel"
+maxlength="11"
+>
 
+</div>
 
-        <div class="form-group">
 
-          <label for="postalCode">
-            کد پستی
-          </label>
+<div class="form-group">
 
-          <input
-            type="text"
-            id="postalCode"
-            required
-            placeholder="کد پستی ۱۰ رقمی"
-            inputmode="numeric"
-            maxlength="10"
-          >
+<label for="postalCode">
+کد پستی
+</label>
 
-        </div>
+<input
+type="text"
+id="postalCode"
+required
+placeholder="کد پستی ۱۰ رقمی"
+inputmode="numeric"
+maxlength="10"
+>
 
+</div>
 
-        <div class="form-group">
 
-          <label for="address">
-            آدرس کامل
-          </label>
+<div class="form-group">
 
-          <textarea
-            id="address"
-            required
-            placeholder="استان، شهر، خیابان، کوچه، پلاک و واحد"
-          ></textarea>
+<label for="address">
+آدرس کامل
+</label>
 
-        </div>
+<textarea
+id="address"
+required
+placeholder="استان، شهر، خیابان، کوچه، پلاک و واحد"
+></textarea>
 
+</div>
 
-        <button
-          type="submit"
-          class="submit-btn"
-        >
-          ثبت سفارش 🛒
-        </button>
 
+<button
+type="submit"
+class="submit-btn"
+>
+ثبت سفارش 🛒
+</button>
 
-        <!-- پیام موفقیت -->
 
-        <div
-          id="success-message"
-          class="success"
-        >
-          سفارش شما با موفقیت ثبت شد ❤️
-        </div>
+<div
+id="success-message"
+class="success"
+>
+سفارش شما با موفقیت ثبت شد ❤️
+</div>
 
 
-        <!-- =========================
-             پیگیری سفارش
-        ========================== -->
+<!-- =========================
+     پیگیری سفارش
+========================= -->
 
-        <div id="tracking-box">
+<div id="tracking-box">
 
-          <div class="tracking-title">
-            📦 پیگیری سفارش
-          </div>
+<div class="tracking-title">
+📦 پیگیری سفارش
+</div>
 
-          <div id="order-number">
-            کد سفارش
-          </div>
+<div id="order-number">
+کد سفارش
+</div>
 
-          <div id="order-status">
-            🟡 سفارش جدید
-          </div>
 
-          <div class="tracking-note">
-            وضعیت سفارش به صورت خودکار بروزرسانی می‌شود.
-          </div>
+<div id="order-status">
+🟡 سفارش جدید
+</div>
 
-        </div>
 
-      </form>
+<!-- کد رهگیری -->
 
-    </div>
+<div id="tracking-code-box">
 
+<div style="
+font-weight:bold;
+margin-bottom:7px;
+">
+📮 کد رهگیری مرسوله
+</div>
 
-    <!-- =========================
-         خلاصه سفارش
-    ========================== -->
+<div
+id="tracking-code"
+style="
+font-size:18px;
+font-weight:bold;
+color:#e88aaa;
+"
+>
+-
+</div>
 
-    <div class="box">
+</div>
 
-      <h2>📦 خلاصه سفارش</h2>
 
-      <div id="order-items"></div>
+<!-- اعلام دریافت مشتری -->
 
-      <div class="total">
+<div id="customer-received-box">
 
-        <span>
-          مبلغ کل
-        </span>
+<button
+type="button"
+id="received-btn"
+class="received-btn"
+onclick="customerReceivedOrder()"
+>
+👤 بسته را تحویل گرفتم
+</button>
 
-        <span id="order-total">
-          ۰ تومان
-        </span>
 
-      </div>
+<div
+id="received-message"
+class="received-message"
+>
+✅ دریافت بسته توسط شما ثبت شد.
+</div>
 
-    </div>
+</div>
 
 
-    <a
-      href="index.html"
-      class="back-btn"
-    >
-      ← بازگشت به فروشگاه
-    </a>
+<div class="tracking-note">
+وضعیت سفارش به صورت خودکار بروزرسانی می‌شود.
+</div>
 
-  </main>
+</div>
 
+</form>
 
-  <script>
+</div>
 
-    /*
-      کلید اصلی سبد خرید
-    */
 
-    const CART_KEY = "niniCart";
 
+<!-- =========================
+     خلاصه سفارش
+========================= -->
 
-    /*
-      خواندن سبد خرید
-    */
+<div class="box">
 
-    function getCart() {
+<h2>
+📦 خلاصه سفارش
+</h2>
 
-      try {
+<div id="order-items"></div>
 
-        const data =
-          localStorage.getItem(CART_KEY);
+<div class="total">
 
-        if (!data) {
-          return [];
-        }
+<span>
+مبلغ کل
+</span>
 
-        const cart =
-          JSON.parse(data);
+<span id="order-total">
+۰ تومان
+</span>
 
-        if (Array.isArray(cart)) {
-          return cart;
-        }
+</div>
 
-        return [];
+</div>
 
-      } catch (error) {
 
-        console.error(
-          "خطا در خواندن سبد خرید:",
-          error
-        );
+<a
+href="index.html"
+class="back-btn"
+>
+← بازگشت به فروشگاه
+</a>
 
-        return [];
-      }
-    }
+</main>
 
 
-    /*
-      تبدیل قیمت به عدد
-    */
 
-    function getItemPrice(item) {
+<script>
 
-      const possiblePrices = [
 
-        item.price,
-        item.salePrice,
-        item.discountPrice,
-        item.finalPrice,
-        item.amount
+/* =========================
+   تنظیمات
+========================= */
 
-      ];
+const CART_KEY = "niniCart";
 
-      for (const value of possiblePrices) {
+const ORDER_KEY = "pendingOrder";
 
-        if (
-          value !== undefined &&
-          value !== null &&
-          value !== ""
-        ) {
 
-          const number =
-            Number(
-              String(value)
-                .replace(/,/g, "")
-                .replace(/٬/g, "")
-                .replace(/[^\d.]/g, "")
-            );
 
-          if (!isNaN(number)) {
-            return number;
-          }
-        }
-      }
+/* =========================
+   دریافت سبد
+========================= */
 
-      return 0;
-    }
+function getCart(){
 
+try{
 
-    /*
-      تعداد محصول
-    */
+const data =
+localStorage.getItem(CART_KEY);
 
-    function getItemQuantity(item) {
+if(!data){
+return [];
+}
 
-      const quantity =
-        item.quantity ??
-        item.qty ??
-        item.count ??
-        1;
+const cart =
+JSON.parse(data);
 
-      const number =
-        Number(quantity);
+return Array.isArray(cart)
+? cart
+: [];
 
-      return number > 0
-        ? number
-        : 1;
-    }
+}catch(error){
 
+console.error(error);
 
-    /*
-      نام محصول
-    */
+return [];
 
-    function getItemName(item) {
+}
 
-      return (
-        item.name ||
-        item.title ||
-        item.productName ||
-        "محصول"
-      );
-    }
+}
 
 
-    /*
-      فرمت قیمت
-    */
 
-    function formatPrice(price) {
+/* =========================
+   قیمت
+========================= */
 
-      return (
-        Number(price || 0)
-          .toLocaleString("fa-IR")
-        + " تومان"
-      );
-    }
+function getItemPrice(item){
 
+const prices = [
 
-    /*
-      نمایش خلاصه سفارش
-    */
+item.price,
+item.salePrice,
+item.discountPrice,
+item.finalPrice,
+item.amount
 
-    function renderOrder() {
+];
 
-      const cart =
-        getCart();
+for(const value of prices){
 
-      const container =
-        document.getElementById(
-          "order-items"
-        );
+if(
+value !== undefined &&
+value !== null &&
+value !== ""
+){
 
-      const totalElement =
-        document.getElementById(
-          "order-total"
-        );
+const number =
+Number(
+String(value)
+.replace(/,/g,"")
+.replace(/٬/g,"")
+.replace(/[^\d.]/g,"")
+);
 
+if(!isNaN(number)){
+return number;
+}
 
-      /*
-        اگر سبد خالی باشد
-      */
+}
 
-      if (!cart.length) {
+}
 
-        container.innerHTML = `
-          <div class="empty">
-            سبد خرید شما خالی است.
-          </div>
-        `;
+return 0;
 
-        totalElement.textContent =
-          "۰ تومان";
+}
 
-        return;
-      }
 
 
-      let total = 0;
+/* =========================
+   تعداد
+========================= */
 
+function getItemQuantity(item){
 
-      /*
-        ساخت لیست محصولات
-      */
+const quantity =
+item.quantity ??
+item.qty ??
+item.count ??
+1;
 
-      container.innerHTML =
-        cart.map(item => {
+const number =
+Number(quantity);
 
-          const name =
-            getItemName(item);
+return number > 0
+? number
+: 1;
 
-          const price =
-            getItemPrice(item);
+}
 
-          const quantity =
-            getItemQuantity(item);
 
-          const itemTotal =
-            price * quantity;
 
-          total += itemTotal;
+/* =========================
+   نام محصول
+========================= */
 
+function getItemName(item){
 
-          return `
+return(
+item.name ||
+item.title ||
+item.productName ||
+"محصول"
+);
 
-            <div class="order-item">
+}
 
-              <div class="item-info">
 
-                <div class="item-name">
-                  ${name}
-                </div>
 
-                <div class="item-price">
+/* =========================
+   فرمت قیمت
+========================= */
 
-                  ${formatPrice(price)}
+function formatPrice(price){
 
-                  ×
+return(
+Number(price || 0)
+.toLocaleString("fa-IR")
++
+" تومان"
+);
 
-                  ${quantity.toLocaleString("fa-IR")}
+}
 
-                </div>
 
-              </div>
 
+/* =========================
+   نمایش سفارش
+========================= */
 
-              <div class="item-total">
+function renderOrder(){
 
-                ${formatPrice(itemTotal)}
+const cart =
+getCart();
 
-              </div>
+const container =
+document.getElementById(
+"order-items"
+);
 
-            </div>
+const totalElement =
+document.getElementById(
+"order-total"
+);
 
-          `;
 
-        }).join("");
+if(!cart.length){
 
+container.innerHTML = `
+<div class="empty">
+سبد خرید شما خالی است.
+</div>
+`;
 
-      /*
-        نمایش مبلغ کل
-      */
+totalElement.textContent =
+"۰ تومان";
 
-      totalElement.textContent =
-        formatPrice(total);
-    }
+return;
 
+}
 
 
-    /*
-      ========================================
-      نمایش وضعیت سفارش
-      ========================================
-    */
+let total = 0;
 
-    function showOrderStatus(order) {
 
-      if (!order || !order.id) {
-        return;
-      }
+container.innerHTML =
+cart.map(item => {
 
+const name =
+getItemName(item);
 
-      const box =
-        document.getElementById(
-          "tracking-box"
-        );
+const price =
+getItemPrice(item);
 
-      const number =
-        document.getElementById(
-          "order-number"
-        );
+const quantity =
+getItemQuantity(item);
 
-      const status =
-        document.getElementById(
-          "order-status"
-        );
+const itemTotal =
+price * quantity;
 
+total += itemTotal;
 
-      box.style.display =
-        "block";
 
+return `
 
-      number.innerHTML =
-        "🔢 کد سفارش: <strong>" +
-        order.id +
-        "</strong>";
+<div class="order-item">
 
+<div class="item-info">
 
-      const statuses = {
+<div class="item-name">
+${name}
+</div>
 
-        new: {
+<div class="item-price">
 
-          text:
-            "🟡 سفارش جدید",
+${formatPrice(price)}
 
-          bg:
-            "#fff3cd"
+×
 
-        },
+${quantity.toLocaleString("fa-IR")}
 
-        preparing: {
+</div>
 
-          text:
-            "🔵 در حال آماده‌سازی",
+</div>
 
-          bg:
-            "#e7f1ff"
 
-        },
+<div class="item-total">
 
-        shipped: {
+${formatPrice(itemTotal)}
 
-          text:
-            "🚚 سفارش ارسال شد",
+</div>
 
-          bg:
-            "#e8f7ff"
+</div>
 
-        },
+`;
 
-        delivered: {
+}).join("");
 
-          text:
-            "🟢 سفارش تحویل داده شد",
 
-          bg:
-            "#eaf8ee"
+totalElement.textContent =
+formatPrice(total);
 
-        }
+}
 
-      };
 
 
-      const current =
-        statuses[
-          order.status
-        ] || statuses.new;
+/* =========================
+   نمایش وضعیت
+========================= */
 
+function showOrderStatus(order){
 
-      status.textContent =
-        current.text;
+if(!order || !order.id){
+return;
+}
 
 
-      status.style.background =
-        current.bg;
-    }
+const box =
+document.getElementById(
+"tracking-box"
+);
 
+const number =
+document.getElementById(
+"order-number"
+);
 
+const status =
+document.getElementById(
+"order-status"
+);
 
-    /*
-      ========================================
-      دریافت وضعیت سفارش از Firebase
-      ========================================
-    */
+const trackingBox =
+document.getElementById(
+"tracking-code-box"
+);
 
-    async function refreshOrderStatus() {
+const trackingCode =
+document.getElementById(
+"tracking-code"
+);
 
-      try {
+const receivedBox =
+document.getElementById(
+"customer-received-box"
+);
 
-        const saved =
-          localStorage.getItem(
-            "pendingOrder"
-          );
+const receivedBtn =
+document.getElementById(
+"received-btn"
+);
 
+const receivedMessage =
+document.getElementById(
+"received-message"
+);
 
-        if (!saved) {
-          return;
-        }
 
+box.style.display =
+"block";
 
-        const oldOrder =
-          JSON.parse(saved);
 
+number.innerHTML =
+"🔢 کد سفارش: <strong>"
++
+order.id
++
+"</strong>";
 
-        if (!oldOrder.id) {
-          return;
-        }
 
+const statuses = {
 
-        const response =
-          await fetch(
-            "/api/orders?id=" +
-            encodeURIComponent(
-              oldOrder.id
-            )
-          );
+new:{
+text:"🟡 سفارش جدید",
+bg:"#fff3cd"
+},
 
+preparing:{
+text:"🔵 در حال آماده‌سازی",
+bg:"#e7f1ff"
+},
 
-        const result =
-          await response.json();
+shipped:{
+text:"🚚 سفارش ارسال شد",
+bg:"#e8f7ff"
+},
 
+delivered:{
+text:"🟢 سفارش تحویل داده شد",
+bg:"#eaf8ee"
+}
 
-        if (
-          response.ok &&
-          result.success &&
-          result.order
-        ) {
+};
 
-          /*
-            نمایش وضعیت
-          */
 
-          showOrderStatus(
-            result.order
-          );
+const current =
+statuses[
+order.status
+] || statuses.new;
 
 
-          /*
-            ذخیره وضعیت جدید
-            در مرورگر
-          */
+status.textContent =
+current.text;
 
-          oldOrder.status =
-            result.order.status ||
-            "new";
+status.style.background =
+current.bg;
 
 
-          localStorage.setItem(
-            "pendingOrder",
-            JSON.stringify(
-              oldOrder
-            )
-          );
+/* کد رهگیری */
 
-        }
+if(
+order.trackingCode
+){
 
-      } catch (error) {
+trackingBox.style.display =
+"block";
 
-        console.error(
-          "خطا در دریافت وضعیت سفارش:",
-          error
-        );
+trackingCode.textContent =
+order.trackingCode;
 
-      }
+}else{
 
-    }
+trackingBox.style.display =
+"none";
 
+}
 
 
-    /*
-      ========================================
-      ثبت سفارش
-      ========================================
-    */
+/* دکمه دریافت */
 
-    document
-      .getElementById(
-        "checkout-form"
-      )
-      .addEventListener(
-        "submit",
-        async function(event) {
+if(
+order.status === "shipped" &&
+!order.customerReceived
+){
 
-          event.preventDefault();
+receivedBox.style.display =
+"block";
 
+receivedBtn.style.display =
+"block";
 
-          /*
-            دریافت سبد
-          */
+receivedBtn.disabled =
+false;
 
-          const cart =
-            getCart();
+receivedMessage.style.display =
+"none";
 
+}else{
 
-          /*
-            جلوگیری از سفارش بدون محصول
-          */
+receivedBox.style.display =
+"none";
 
-          if (!cart.length) {
+}
 
-            alert(
-              "سبد خرید شما خالی است."
-            );
 
-            return;
-          }
+/* مشتری قبلاً دریافت را اعلام کرده */
 
+if(
+order.customerReceived
+){
 
-          /*
-            اطلاعات مشتری
-          */
+receivedBox.style.display =
+"block";
 
-          const name =
-            document
-              .getElementById("name")
-              .value
-              .trim();
+receivedBtn.style.display =
+"none";
 
+receivedMessage.style.display =
+"block";
 
-          const phone =
-            document
-              .getElementById("phone")
-              .value
-              .trim();
+}
 
+}
 
-          const postalCode =
-            document
-              .getElementById("postalCode")
-              .value
-              .trim();
 
 
-          const address =
-            document
-              .getElementById("address")
-              .value
-              .trim();
+/* =========================
+   دریافت وضعیت از Firebase
+========================= */
 
+async function refreshOrderStatus(){
 
-          /*
-            بررسی اطلاعات
-          */
+try{
 
-          if (
-            !name ||
-            !phone ||
-            !postalCode ||
-            !address
-          ) {
+const saved =
+localStorage.getItem(
+ORDER_KEY
+);
 
-            alert(
-              "لطفاً همه اطلاعات را کامل وارد کنید."
-            );
 
-            return;
-          }
+if(!saved){
+return;
+}
 
 
-          /*
-            بررسی کد پستی
-          */
+const oldOrder =
+JSON.parse(saved);
 
-          if (
-            !/^\d{10}$/.test(
-              postalCode
-            )
-          ) {
 
-            alert(
-              "کد پستی باید دقیقاً ۱۰ رقم باشد."
-            );
+if(!oldOrder.id){
+return;
+}
 
-            return;
-          }
 
+const response =
+await fetch(
+"/api/orders?id="
++
+encodeURIComponent(
+oldOrder.id
+)
+);
 
-          /*
-            محاسبه مبلغ کل
-          */
 
-          let total = 0;
+const result =
+await response.json();
 
-          let totalQuantity = 0;
 
+if(
+response.ok &&
+result.success &&
+result.order
+){
 
-          cart.forEach(item => {
+showOrderStatus(
+result.order
+);
 
-            const price =
-              getItemPrice(item);
 
-            const quantity =
-              getItemQuantity(item);
+oldOrder.status =
+result.order.status ||
+"new";
 
 
-            total +=
-              price * quantity;
+oldOrder.trackingCode =
+result.order.trackingCode ||
+"";
 
 
-            totalQuantity +=
-              quantity;
+oldOrder.customerReceived =
+result.order.customerReceived ||
+false;
 
-          });
 
+localStorage.setItem(
+ORDER_KEY,
+JSON.stringify(oldOrder)
+);
 
-          /*
-            دکمه ثبت سفارش
-          */
+}
 
-          const submitButton =
-            document.querySelector(
-              ".submit-btn"
-            );
+}catch(error){
 
+console.error(
+"Status error:",
+error
+);
 
-          submitButton.disabled =
-            true;
+}
 
+}
 
-          submitButton.textContent =
-            "در حال ثبت سفارش...";
 
 
-          try {
+/* =========================
+   مشتری اعلام دریافت کرد
+========================= */
 
-            /*
-              ارسال سفارش به Firebase
-            */
+async function customerReceivedOrder(){
 
-            const response =
-              await fetch(
-                "/api/orders",
-                {
+try{
 
-                  method: "POST",
+const saved =
+localStorage.getItem(
+ORDER_KEY
+);
 
-                  headers: {
 
-                    "Content-Type":
-                      "application/json"
+if(!saved){
 
-                  },
+alert(
+"سفارش قابل شناسایی نیست."
+);
 
-                  body:
-                    JSON.stringify({
+return;
 
-                      name: name,
+}
 
-                      mobile: phone,
 
-                      postalCode:
-                        postalCode,
+const order =
+JSON.parse(saved);
 
-                      address:
-                        address,
 
-                      products:
-                        cart,
+if(!order.id){
 
-                      quantity:
-                        totalQuantity,
+return;
 
-                      totalAmount:
-                        total
+}
 
-                    })
 
-                }
-              );
+const button =
+document.getElementById(
+"received-btn"
+);
 
 
-            const result =
-              await response.json();
+button.disabled =
+true;
 
+button.textContent =
+"در حال ثبت...";
 
-            /*
-              بررسی نتیجه API
-            */
 
-            if (
-              !response.ok ||
-              !result.success
-            ) {
+const response =
+await fetch(
+"/api/orders",
+{
 
-              throw new Error(
-                result.error ||
-                "خطا در ثبت سفارش"
-              );
+method:"PATCH",
 
-            }
+headers:{
+"Content-Type":
+"application/json"
+},
 
+body:JSON.stringify({
 
-            /*
-              ذخیره سفارش در مرورگر
-            */
+id:order.id,
 
-            const order = {
+customerReceived:true
 
-              id:
-                result.orderId,
+})
 
-              status:
-                "new",
+}
+);
 
-              customer: {
 
-                name:
-                  name,
+const result =
+await response.json();
 
-                phone:
-                  phone,
 
-                postalCode:
-                  postalCode,
+if(
+!response.ok ||
+!result.success
+){
 
-                address:
-                  address
+throw new Error(
+result.error ||
+"خطا در ثبت دریافت"
+);
 
-              },
+}
 
-              items:
-                cart,
 
-              total:
-                total,
+/* ذخیره محلی */
 
-              quantity:
-                totalQuantity
+order.customerReceived =
+true;
 
-            };
 
+localStorage.setItem(
+ORDER_KEY,
+JSON.stringify(order)
+);
 
-            localStorage.setItem(
-              "pendingOrder",
-              JSON.stringify(order)
-            );
 
+/* نمایش پیام */
 
-            /*
-              نمایش پیام موفقیت
-            */
+button.style.display =
+"none";
 
-            document
-              .getElementById(
-                "success-message"
-              )
-              .style.display =
-                "block";
 
+document.getElementById(
+"received-message"
+).style.display =
+"block";
 
-            /*
-              نمایش پیگیری سفارش
-            */
 
-            showOrderStatus(
-              order
-            );
+/* دریافت اطلاعات جدید */
 
+refreshOrderStatus();
 
-            /*
-              پاک کردن سبد خرید
-            */
 
-            localStorage.removeItem(
-              CART_KEY
-            );
+}catch(error){
 
+console.error(error);
 
-            /*
-              تغییر متن دکمه
-            */
 
-            submitButton.textContent =
-              "سفارش با موفقیت ثبت شد ❤️";
+const button =
+document.getElementById(
+"received-btn"
+);
 
+button.disabled =
+false;
 
-            submitButton.disabled =
-              true;
+button.textContent =
+"👤 بسته را تحویل گرفتم";
 
 
-            /*
-              دریافت وضعیت واقعی
-              از Firebase
-            */
+alert(
+"ثبت دریافت انجام نشد. لطفاً دوباره تلاش کنید."
+);
 
-            refreshOrderStatus();
+}
 
+}
 
-            console.log(
-              "Order saved successfully:",
-              result
-            );
 
 
-          } catch (error) {
+/* =========================
+   ثبت سفارش
+========================= */
 
-            console.error(
-              "Order error:",
-              error
-            );
+document
+.getElementById(
+"checkout-form"
+)
+.addEventListener(
+"submit",
+async function(event){
 
+event.preventDefault();
 
-            alert(
-              "ثبت سفارش انجام نشد. لطفاً دوباره تلاش کنید."
-            );
 
+const cart =
+getCart();
 
-            submitButton.disabled =
-              false;
 
+if(!cart.length){
 
-            submitButton.textContent =
-              "ثبت سفارش 🛒";
+alert(
+"سبد خرید شما خالی است."
+);
 
-          }
+return;
 
-        }
-      );
+}
 
 
+const name =
+document
+.getElementById("name")
+.value
+.trim();
 
-    /*
-      ========================================
-      اگر قبلاً سفارش ثبت شده،
-      وضعیت آن را نمایش بده
-      ========================================
-    */
 
-    refreshOrderStatus();
+const phone =
+document
+.getElementById("phone")
+.value
+.trim();
 
 
+const postalCode =
+document
+.getElementById("postalCode")
+.value
+.trim();
 
-    /*
-      ========================================
-      هر ۱۰ ثانیه وضعیت را بررسی کن
-      ========================================
-    */
 
-    setInterval(
-      refreshOrderStatus,
-      10000
-    );
+const address =
+document
+.getElementById("address")
+.value
+.trim();
 
 
+if(
+!name ||
+!phone ||
+!postalCode ||
+!address
+){
 
-    /*
-      نمایش سفارش
-    */
+alert(
+"لطفاً همه اطلاعات را کامل وارد کنید."
+);
 
-    renderOrder();
+return;
 
-  </script>
+}
+
+
+if(
+!/^\d{10}$/.test(
+postalCode
+)
+){
+
+alert(
+"کد پستی باید دقیقاً ۱۰ رقم باشد."
+);
+
+return;
+
+}
+
+
+let total = 0;
+
+let totalQuantity = 0;
+
+
+cart.forEach(item => {
+
+const price =
+getItemPrice(item);
+
+const quantity =
+getItemQuantity(item);
+
+
+total +=
+price * quantity;
+
+
+totalQuantity +=
+quantity;
+
+});
+
+
+const submitButton =
+document.querySelector(
+".submit-btn"
+);
+
+
+submitButton.disabled =
+true;
+
+
+submitButton.textContent =
+"در حال ثبت سفارش...";
+
+
+try{
+
+const response =
+await fetch(
+"/api/orders",
+{
+
+method:"POST",
+
+headers:{
+"Content-Type":
+"application/json"
+},
+
+body:JSON.stringify({
+
+name:name,
+
+mobile:phone,
+
+postalCode:
+postalCode,
+
+address:
+address,
+
+products:
+cart,
+
+quantity:
+totalQuantity,
+
+totalAmount:
+total
+
+})
+
+}
+);
+
+
+const result =
+await response.json();
+
+
+if(
+!response.ok ||
+!result.success
+){
+
+throw new Error(
+result.error ||
+"خطا در ثبت سفارش"
+);
+
+}
+
+
+/* =========================
+   ذخیره سفارش
+========================= */
+
+const order = {
+
+id:
+result.orderId,
+
+status:
+"new",
+
+trackingCode:
+"",
+
+customerReceived:
+false,
+
+customerReceivedAt:
+null,
+
+customer:{
+
+name:name,
+
+phone:phone,
+
+postalCode:
+postalCode,
+
+address:
+address
+
+},
+
+items:
+cart,
+
+total:
+total,
+
+quantity:
+totalQuantity
+
+};
+
+
+localStorage.setItem(
+ORDER_KEY,
+JSON.stringify(order)
+);
+
+
+/* پیام موفقیت */
+
+document
+.getElementById(
+"success-message"
+)
+.style.display =
+"block";
+
+
+/* نمایش پیگیری */
+
+showOrderStatus(
+order
+);
+
+
+/* پاک کردن سبد */
+
+localStorage.removeItem(
+CART_KEY
+);
+
+
+submitButton.textContent =
+"سفارش با موفقیت ثبت شد ❤️";
+
+
+submitButton.disabled =
+true;
+
+
+/* دریافت اطلاعات واقعی */
+
+refreshOrderStatus();
+
+
+}catch(error){
+
+console.error(
+"Order error:",
+error
+);
+
+
+alert(
+"ثبت سفارش انجام نشد. لطفاً دوباره تلاش کنید."
+);
+
+
+submitButton.disabled =
+false;
+
+
+submitButton.textContent =
+"ثبت سفارش 🛒";
+
+}
+
+}
+);
+
+
+
+/* =========================
+   اجرای اولیه
+========================= */
+
+renderOrder();
+
+refreshOrderStatus();
+
+
+/* هر ۱۰ ثانیه */
+
+setInterval(
+refreshOrderStatus,
+10000
+);
+
+</script>
 
 </body>
-
 </html>
