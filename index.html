@@ -1674,7 +1674,6 @@ function searchProducts(){
 
   if(!searchText){
     loadProducts();
-loadDiscountProducts();
     return;
   }
 
@@ -1848,6 +1847,7 @@ async function loadProducts(){
 updateCartCount();
 
 loadProducts();
+loadDiscountProducts();
 
 </script>
 
