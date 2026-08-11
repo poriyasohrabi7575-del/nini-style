@@ -1091,7 +1091,6 @@ footer{
   class="offer"
   id="discount"
 >
-
   <h2>
     🎉 تخفیف ویژه این هفته
   </h2>
@@ -1100,12 +1099,14 @@ footer{
     منتخب لباس‌های کودک را با قیمت ویژه ببینید.
   </p>
 
-  <button
-    type="button"
-    onclick="window.location.href='takhfif.html';"
+  <div
+    class="product-grid"
+    id="discount-product-grid"
   >
-    مشاهده محصولات
-  </button>
+    <div class="empty-products">
+      در حال بارگذاری محصولات تخفیف‌خورده...
+    </div>
+  </div>
 
 </section>
 
@@ -1541,6 +1542,119 @@ function escapeHtml(value){
 }
 
 
+
+async function loadDiscountProducts(){
+
+  const grid =
+    document.getElementById('discount-product-grid');
+
+  if(!grid){
+    return;
+  }
+
+  try{
+
+    const response =
+      await fetch('/api/products');
+
+    if(!response.ok){
+      throw new Error('خطا در دریافت محصولات تخفیف‌خورده');
+    }
+
+    const data =
+      await response.json();
+
+    const discounted =
+      Array.isArray(data)
+        ? data.filter(p => {
+            const d = Number(
+              String(p.discount ?? '')
+                .replace(/[^0-9.]/g, '')
+            );
+            return d > 0 || p.oldPrice;
+          })
+        : [];
+
+    if(!discounted.length){
+      grid.innerHTML =
+        '<div class="empty-products">فعلاً محصول تخفیف‌خورده‌ای ثبت نشده است.</div>';
+      return;
+    }
+
+    grid.innerHTML =
+      discounted.map(p => {
+
+        const discount =
+          p.discount
+          ? `<div class="discount">${escapeHtml(p.discount)}٪ تخفیف</div>`
+          : '';
+
+        return `
+          <article class="product-card">
+
+            <div class="product-image-wrap">
+
+              <img
+                class="product-image ${p.image ? '' : 'placeholder'}"
+                src="${escapeHtml(safeImage(p.image))}"
+                alt="${escapeHtml(p.name || 'محصول')}"
+                onerror="this.src='dokhtarane.png';this.classList.add('placeholder')"
+              >
+
+              ${discount}
+
+              <button
+                class="heart"
+                aria-label="افزودن به علاقه‌مندی"
+              >
+                ♡
+              </button>
+
+            </div>
+
+            <div class="product-info">
+
+              <h3>
+                ${escapeHtml(p.name || 'محصول')}
+              </h3>
+
+              <div class="old-price">
+                ${
+                  p.oldPrice
+                  ? formatPrice(p.oldPrice) + ' تومان'
+                  : ''
+                }
+              </div>
+
+              <div class="price">
+                ${formatPrice(p.price)}
+                تومان
+              </div>
+
+              <button
+                class="buy-btn"
+                onclick='addTocart(${JSON.stringify(p).replace(/</g, "\\u003c")})'
+              >
+                🛒 افزودن به سبد
+              </button>
+
+            </div>
+
+          </article>
+        `;
+
+      }).join('');
+
+  }catch(err){
+
+    grid.innerHTML =
+      '<div class="empty-products">در دریافت محصولات تخفیف‌خورده مشکلی پیش آمد. لطفاً صفحه را دوباره باز کنید.</div>';
+
+    console.error(err);
+  }
+
+}
+
 function searchProducts(){
 
   const keyword = prompt('نام محصول را وارد کنید:');
@@ -1560,6 +1674,7 @@ function searchProducts(){
 
   if(!searchText){
     loadProducts();
+loadDiscountProducts();
     return;
   }
 
