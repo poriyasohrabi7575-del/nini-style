@@ -872,23 +872,16 @@ footer{
     <a href="pesarane.html">لباس پسرانه</a>
     <a href="nozad.html">لباس نوزاد</a>
     <a href="accessory.html">اکسسوری</a>
-    <a href="#discount">تخفیف‌خورده‌ها</a>
+    <a href="takhfif.html">تخفیف‌خورده‌ها</a>
     <a href="#contact">تماس با ما</a>
   </nav>
 
   <div class="header-actions">
 
-    <button class="icon-btn" aria-label="جستجو">
+    <button class="icon-btn" aria-label="جستجو" onclick="searchProducts()">
       <svg viewBox="0 0 24 24">
         <circle cx="10.8" cy="10.8" r="6.7"></circle>
         <path d="m16 16 5 5"></path>
-      </svg>
-    </button>
-
-    <button class="icon-btn" aria-label="حساب کاربری">
-      <svg viewBox="0 0 24 24">
-        <circle cx="12" cy="7.5" r="3.5"></circle>
-        <path d="M5 21c.6-4.1 3-6 7-6s6.4 1.9 7 6"></path>
       </svg>
     </button>
 
@@ -1108,7 +1101,8 @@ footer{
   </p>
 
   <button
-    onclick="location.hash='products'"
+    type="button"
+    onclick="window.location.href='takhfif.html';"
   >
     مشاهده محصولات
   </button>
@@ -1543,6 +1537,74 @@ function escapeHtml(value){
         '"':'&quot;'
       }[m])
     );
+
+}
+
+
+function searchProducts(){
+
+  const keyword = prompt('نام محصول را وارد کنید:');
+
+  const grid = document.getElementById('product-grid');
+
+  if(!grid){
+    return;
+  }
+
+  // خالی گذاشتن جستجو = نمایش دوباره همه محصولات
+  if(keyword === null){
+    return;
+  }
+
+  const searchText = keyword.trim().toLowerCase();
+
+  if(!searchText){
+    loadProducts();
+    return;
+  }
+
+  const cards = Array.from(
+    grid.querySelectorAll('.product-card')
+  );
+
+  let found = 0;
+
+  cards.forEach(card => {
+
+    const name =
+      card.querySelector('.product-info h3')?.textContent
+      .trim()
+      .toLowerCase() || '';
+
+    const match = name.includes(searchText);
+
+    card.style.display = match ? '' : 'none';
+
+    if(match){
+      found++;
+    }
+
+  });
+
+  let oldMessage =
+    document.getElementById('search-empty-message');
+
+  if(oldMessage){
+    oldMessage.remove();
+  }
+
+  if(found === 0){
+
+    const message = document.createElement('div');
+
+    message.id = 'search-empty-message';
+    message.className = 'empty-products';
+    message.textContent =
+      'محصولی با این نام پیدا نشد.';
+
+    grid.appendChild(message);
+
+  }
 
 }
 
