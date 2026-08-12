@@ -1655,9 +1655,17 @@ async function loadDiscountProducts(){
 
 }
 
-function searchProducts(){
+<script>
+
+async function searchProducts(){
 
   const keyword = prompt('نام محصول را وارد کنید:');
+
+  if(keyword === null){
+    return;
+  }
+
+  const searchText = keyword.trim();
 
   const grid = document.getElementById('product-grid');
 
@@ -1665,69 +1673,185 @@ function searchProducts(){
     return;
   }
 
-  // خالی گذاشتن جستجو = نمایش دوباره همه محصولات
-  if(keyword === null){
-    return;
-  }
-
-  const searchText = keyword.trim().toLowerCase();
-
   if(!searchText){
-    loadProducts();
+
+    await loadProducts();
+    await loadDiscountProducts();
+
     return;
   }
 
-  const cards = Array.from(
-    grid.querySelectorAll('.product-card')
-  );
+  grid.innerHTML =
+    '<div class="empty-products">🔎 در حال جستجوی محصولات...</div>';
 
-  let found = 0;
+  try{
 
-  cards.forEach(card => {
+    const response = await fetch('/api/products');
 
-    const name =
-      card.querySelector('.product-info h3')?.textContent
-      .trim()
-      .toLowerCase() || '';
-
-    const match = name.includes(searchText);
-
-    card.style.display = match ? '' : 'none';
-
-    if(match){
-      found++;
+    if(!response.ok){
+      throw new Error('خطا در دریافت محصولات');
     }
 
-  });
+    const data = await response.json();
 
-  let oldMessage =
-    document.getElementById('search-empty-message');
+    if(!Array.isArray(data)){
+      throw new Error('اطلاعات محصولات نامعتبر است');
+    }
 
-  if(oldMessage){
-    oldMessage.remove();
-  }
+    function normalizePersian(text){
 
-  if(found === 0){
+      return String(text ?? '')
+        .toLowerCase()
+        .replace(/ي/g,'ی')
+        .replace(/ى/g,'ی')
+        .replace(/ك/g,'ک')
+        .replace(/ة/g,'ه')
+        .replace(/ۀ/g,'ه')
+        .replace(/\u200c/g,' ')
+        .replace(/\s+/g,' ')
+        .trim();
 
-    const message = document.createElement('div');
+    }
 
-    message.id = 'search-empty-message';
-    message.className = 'empty-products';
-    message.textContent =
-      'محصولی با این نام پیدا نشد.';
+    const normalizedSearch =
+      normalizePersian(searchText);
 
-    grid.appendChild(message);
+    const words =
+      normalizedSearch
+        .split(' ')
+        .filter(Boolean);
+
+    const results = data.filter(product => {
+
+      const searchableText =
+        normalizePersian(
+          [
+            product.name,
+            product.title,
+            product.category,
+            product.type
+          ]
+          .filter(Boolean)
+          .join(' ')
+        );
+
+      return words.every(word =>
+        searchableText.includes(word)
+      );
+
+    });
+
+    if(!results.length){
+
+      grid.innerHTML = `
+        <div class="empty-products">
+          😔 محصولی با این مشخصات پیدا نشد.
+          <br>
+          <small>
+            نام محصول یا عبارت دیگری را امتحان کنید.
+          </small>
+        </div>
+      `;
+
+      return;
+    }
+
+    grid.innerHTML =
+      results.map(p => {
+
+        const discount =
+          p.discount
+          ? `<div class="discount">
+               ${escapeHtml(p.discount)}٪ تخفیف
+             </div>`
+          : '';
+
+        return `
+          <article class="product-card">
+
+            <div class="product-image-wrap">
+
+              <img
+                class="product-image ${p.image ? '' : 'placeholder'}"
+                src="${escapeHtml(
+                  safeImage(p.image)
+                )}"
+                alt="${escapeHtml(
+                  p.name || 'محصول'
+                )}"
+                onerror="
+                  this.src='dokhtarane.png';
+                  this.classList.add('placeholder');
+                "
+              >
+
+              ${discount}
+
+              <button
+                class="heart"
+                aria-label="افزودن به علاقه‌مندی"
+              >
+                ♡
+              </button>
+
+            </div>
+
+            <div class="product-info">
+
+              <h3>
+                ${escapeHtml(
+                  p.name || 'محصول'
+                )}
+              </h3>
+
+              <div class="old-price">
+                ${
+                  p.oldPrice
+                  ? formatPrice(p.oldPrice) + ' تومان'
+                  : ''
+                }
+              </div>
+
+              <div class="price">
+                ${formatPrice(p.price)}
+                تومان
+              </div>
+
+              <button
+                class="buy-btn"
+                onclick='addTocart(${JSON.stringify(p).replace(/</g, "\\u003c")})'
+              >
+                🛒 افزودن به سبد
+              </button>
+
+            </div>
+
+          </article>
+        `;
+
+      }).join('');
+
+  }catch(error){
+
+    console.error(error);
+
+    grid.innerHTML = `
+      <div class="empty-products">
+        ⚠️ در جستجوی محصولات مشکلی پیش آمد.
+        <br>
+        لطفاً دوباره امتحان کنید.
+      </div>
+    `;
 
   }
 
 }
 
+
 async function loadProducts(){
 
   const grid =
-    document.getElementById(
-      'product-grid'
-    );
+    document.getElementById('product-grid');
 
   try{
 
@@ -1802,20 +1926,16 @@ async function loadProducts(){
               </h3>
 
               <div class="old-price">
-
                 ${
                   p.oldPrice
                   ? formatPrice(p.oldPrice) + ' تومان'
                   : ''
                 }
-
               </div>
 
               <div class="price">
-
                 ${formatPrice(p.price)}
                 تومان
-
               </div>
 
               <button
@@ -1844,9 +1964,11 @@ async function loadProducts(){
 
 }
 
+
 updateCartCount();
 
 loadProducts();
+
 loadDiscountProducts();
 
 </script>
