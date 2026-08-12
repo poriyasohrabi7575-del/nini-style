@@ -1666,163 +1666,574 @@ async function searchProducts(){
   const searchText = keyword.trim();
 
   if(!searchText){
-    await loadProducts();
     return;
   }
 
-  const grid = document.getElementById('product-grid');
+  function normalizeText(text){
 
-  if(!grid){
-    return;
+    return String(text || '')
+      .toLowerCase()
+      .replace(/ي/g,'ی')
+      .replace(/ى/g,'ی')
+      .replace(/ك/g,'ک')
+      .replace(/\u200c/g,' ')
+      .replace(/\s+/g,' ')
+      .trim();
+
   }
 
-  try{
-
-    const response = await fetch('/api/products');
-
-    if(!response.ok){
-      throw new Error('خطا در دریافت محصولات');
-    }
-
-    const products = await response.json();
-
-    if(!Array.isArray(products)){
-      throw new Error('اطلاعات محصولات نامعتبر است');
-    }
-
-    function normalizeText(text){
-
-      return String(text || '')
-        .toLowerCase()
-        .replace(/ي/g,'ی')
-        .replace(/ى/g,'ی')
-        .replace(/ك/g,'ک')
-        .replace(/\u200c/g,' ')
-        .replace(/\s+/g,' ')
-        .trim();
-
-    }
-
-    const words = normalizeText(searchText)
+  const words =
+    normalizeText(searchText)
       .split(' ')
       .filter(Boolean);
 
-    const results = products.filter(product => {
+  /*
+   * محصولات اصلی Firebase
+   */
+  let products = [];
 
-      const text = normalizeText(
-        [
-          product.name,
-          product.category,
-          product.title,
-          product.type
-        ]
-        .filter(Boolean)
-        .join(' ')
+  try{
+
+    const response =
+      await fetch('/api/products');
+
+    if(response.ok){
+
+      const data =
+        await response.json();
+
+      if(Array.isArray(data)){
+        products = data.map(p => ({
+          id: p.id || p._id || p.name,
+          name: p.name || 'محصول',
+          price: p.price || 0,
+          oldPrice: p.oldPrice || '',
+          image: p.image || 'dokhtarane.png',
+          discount: p.discount || '',
+          category: p.category || '',
+          title: p.title || '',
+          type: p.type || ''
+        }));
+      }
+
+    }
+
+  }catch(error){
+
+    console.error(
+      'خطا در دریافت محصولات اصلی:',
+      error
+    );
+
+  }
+
+  /*
+   * صفحات دسته‌بندی ثابت سایت
+   */
+  const categoryPages = [
+    'dokhtarane.html',
+    'pesarane.html',
+    'nozad.html',
+    'accessory.html'
+  ];
+
+  try{
+
+    const pages =
+      await Promise.all(
+        categoryPages.map(async page => {
+
+          try{
+
+            const response =
+              await fetch(page);
+
+            if(!response.ok){
+              return [];
+            }
+
+            const html =
+              await response.text();
+
+            const doc =
+              new DOMParser().parseFromString(
+                html,
+                'text/html'
+              );
+
+            const cards =
+              Array.from(
+                doc.querySelectorAll('.card')
+              );
+
+            return cards.map(card => {
+
+              const name =
+                card.querySelector('h2')
+                  ?.textContent
+                  ?.trim() || '';
+
+              const priceText =
+                card.querySelector('.price')
+                  ?.textContent
+                  ?.trim() || '';
+
+              const oldPrice =
+                card.querySelector('.old')
+                  ?.textContent
+                  ?.trim() || '';
+
+              const image =
+                card.querySelector('img')
+                  ?.getAttribute('src') ||
+                'dokhtarane.png';
+
+              const discount =
+                card.querySelector('.discount')
+                  ?.textContent
+                  ?.trim() || '';
+
+              const button =
+                card.querySelector('.buy-btn');
+
+              const onclick =
+                button
+                  ?.getAttribute('onclick') || '';
+
+              let id =
+                name;
+
+              let price =
+                Number(
+                  priceText
+                    .replace(/[^\d.]/g,'')
+                ) || 0;
+
+              let productImage =
+                image;
+
+              /*
+               * اطلاعات واقعی محصول از onclick
+               */
+              const idMatch =
+                onclick.match(
+                  /id\s*:\s*['"]([^'"]+)['"]/
+                );
+
+              const nameMatch =
+                onclick.match(
+                  /name\s*:\s*['"]([^'"]+)['"]/
+                );
+
+              const priceMatch =
+                onclick.match(
+                  /price\s*:\s*([0-9.]+)/
+                );
+
+              const imageMatch =
+                onclick.match(
+                  /image\s*:\s*['"]([^'"]+)['"]/
+                );
+
+              if(idMatch){
+                id = idMatch[1];
+              }
+
+              if(nameMatch){
+                name = nameMatch[1];
+              }
+
+              if(priceMatch){
+                price =
+                  Number(priceMatch[1]) || price;
+              }
+
+              if(imageMatch){
+                productImage =
+                  imageMatch[1];
+              }
+
+              return {
+                id,
+                name,
+                price,
+                oldPrice,
+                image: productImage,
+                discount,
+                category: page,
+                title: name,
+                type: page
+              };
+
+            });
+
+          }catch(error){
+
+            console.error(
+              'خطا در خواندن ' + page,
+              error
+            );
+
+            return [];
+
+          }
+
+        })
       );
 
+    pages.forEach(list => {
+
+      products =
+        products.concat(list);
+
+    });
+
+  }catch(error){
+
+    console.error(
+      'خطا در صفحات دسته‌بندی:',
+      error
+    );
+
+  }
+
+  /*
+   * جستجوی فارسی
+   */
+  const results =
+    products.filter(product => {
+
+      const searchableText =
+        normalizeText(
+          [
+            product.name,
+            product.category,
+            product.title,
+            product.type
+          ]
+          .filter(Boolean)
+          .join(' ')
+        );
+
       return words.every(word =>
-        text.includes(word)
+        searchableText.includes(word)
       );
 
     });
 
-    if(!results.length){
+  /*
+   * حذف محصولات تکراری
+   */
+  const uniqueResults = [];
 
-      grid.innerHTML = `
-        <div class="empty-products">
-          😔 محصولی با این مشخصات پیدا نشد.
-          <br>
-          <small>
-            نام محصول یا عبارت دیگری را امتحان کنید.
-          </small>
-        </div>
-      `;
+  const seen =
+    new Set();
 
-      return;
+  results.forEach(product => {
+
+    const key =
+      normalizeText(
+        product.id ||
+        product.name
+      );
+
+    if(!seen.has(key)){
+
+      seen.add(key);
+
+      uniqueResults.push(product);
+
     }
 
-    grid.innerHTML = results.map(p => {
+  });
 
-      const discount = p.discount
-        ? `
-          <div class="discount">
-            ${escapeHtml(p.discount)}٪ تخفیف
-          </div>
-        `
-        : '';
+  /*
+   * پنجره نتایج سرچ
+   */
+  const oldModal =
+    document.getElementById(
+      'search-results-modal'
+    );
 
-      return `
-        <article class="product-card">
+  if(oldModal){
+    oldModal.remove();
+  }
 
-          <div class="product-image-wrap">
+  const modal =
+    document.createElement('div');
 
-            <img
-              class="product-image ${p.image ? '' : 'placeholder'}"
-              src="${escapeHtml(safeImage(p.image))}"
-              alt="${escapeHtml(p.name || 'محصول')}"
-              onerror="
-                this.src='dokhtarane.png';
-                this.classList.add('placeholder');
-              "
-            >
+  modal.id =
+    'search-results-modal';
 
-            ${discount}
+  modal.style.cssText = `
+    position:fixed;
+    inset:0;
+    z-index:99999;
+    background:rgba(0,0,0,.45);
+    display:flex;
+    align-items:flex-start;
+    justify-content:center;
+    padding:70px 15px 25px;
+    overflow-y:auto;
+  `;
 
-            <button
-              class="heart"
-              aria-label="افزودن به علاقه‌مندی"
-            >
-              ♡
-            </button>
+  const box =
+    document.createElement('div');
 
-          </div>
+  box.style.cssText = `
+    width:100%;
+    max-width:1000px;
+    background:#fff;
+    border-radius:22px;
+    padding:22px;
+    direction:rtl;
+    position:relative;
+    box-shadow:0 20px 60px rgba(0,0,0,.25);
+  `;
 
-          <div class="product-info">
+  box.innerHTML = `
+    <button
+      id="close-search-results"
+      type="button"
+      style="
+        position:absolute;
+        left:15px;
+        top:15px;
+        width:40px;
+        height:40px;
+        border:0;
+        border-radius:50%;
+        background:#fff0f5;
+        color:#e76b96;
+        font-size:25px;
+        cursor:pointer;
+      "
+    >
+      ×
+    </button>
 
-            <h3>
-              ${escapeHtml(p.name || 'محصول')}
-            </h3>
+    <h2
+      style="
+        margin:0 0 20px;
+        padding-left:50px;
+        font-size:21px;
+      "
+    >
+      🔍 نتایج جستجو
+    </h2>
 
-            <div class="old-price">
-              ${
-                p.oldPrice
-                ? formatPrice(p.oldPrice) + ' تومان'
-                : ''
-              }
-            </div>
+    <div
+      id="search-results-grid"
+      style="
+        display:grid;
+        grid-template-columns:
+          repeat(auto-fill,minmax(220px,1fr));
+        gap:18px;
+      "
+    ></div>
+  `;
 
-            <div class="price">
-              ${formatPrice(p.price)}
-              تومان
-            </div>
+  modal.appendChild(box);
 
-            <button
-              class="buy-btn"
-              onclick='addTocart(${JSON.stringify(p).replace(/</g, "\\u003c")})'
-            >
-              🛒 افزودن به سبد
-            </button>
+  document.body.appendChild(modal);
 
-          </div>
+  const resultsGrid =
+    document.getElementById(
+      'search-results-grid'
+    );
 
-        </article>
-      `;
+  /*
+   * هیچ محصولی پیدا نشد
+   */
+  if(!uniqueResults.length){
 
-    }).join('');
-
-  }catch(error){
-
-    console.error(error);
-
-    grid.innerHTML = `
-      <div class="empty-products">
-        ⚠️ در جستجوی محصولات مشکلی پیش آمد.
-        <br>
-        لطفاً دوباره امتحان کنید.
+    resultsGrid.innerHTML = `
+      <div
+        class="empty-products"
+        style="
+          grid-column:1/-1;
+          text-align:center;
+          padding:50px 15px;
+        "
+      >
+        😔 محصولی با این نام پیدا نشد.
+        <br><br>
+        <small>
+          نام محصول یا عبارت دیگری را امتحان کنید.
+        </small>
       </div>
     `;
 
+  }else{
+
+    /*
+     * نمایش نتایج
+     */
+    resultsGrid.innerHTML =
+      uniqueResults.map(product => {
+
+        const discount =
+          product.discount
+          ? `
+            <div class="discount">
+              ${escapeHtml(product.discount)}
+            </div>
+          `
+          : '';
+
+        return `
+          <article
+            class="product-card"
+            style="
+              background:#fff;
+              border-radius:18px;
+              overflow:hidden;
+              box-shadow:0 5px 20px rgba(0,0,0,.08);
+            "
+          >
+
+            <div
+              class="product-image-wrap"
+              style="position:relative;"
+            >
+
+              <img
+                class="product-image"
+                src="${escapeHtml(
+                  safeImage(product.image)
+                )}"
+                alt="${escapeHtml(
+                  product.name
+                )}"
+                style="
+                  width:100%;
+                  height:240px;
+                  object-fit:cover;
+                  display:block;
+                "
+                onerror="
+                  this.src='dokhtarane.png';
+                "
+              >
+
+              ${discount}
+
+            </div>
+
+            <div
+              class="product-info"
+              style="padding:15px;"
+            >
+
+              <h3>
+                ${escapeHtml(product.name)}
+              </h3>
+
+              ${
+                product.oldPrice
+                ? `
+                  <div class="old-price">
+                    ${escapeHtml(
+                      product.oldPrice
+                    )}
+                  </div>
+                `
+                : ''
+              }
+
+              <div class="price">
+                ${
+                  formatPrice(
+                    product.price
+                  )
+                }
+                تومان
+              </div>
+
+              <button
+                class="buy-btn"
+                type="button"
+                style="
+                  width:100%;
+                  margin-top:10px;
+                "
+                data-search-product-id="${escapeHtml(
+                  String(product.id)
+                )}"
+              >
+                🛒 افزودن به سبد
+              </button>
+
+            </div>
+
+          </article>
+        `;
+
+      }).join('');
+
+    /*
+     * اتصال دکمه‌های سبد
+     */
+    const buttons =
+      resultsGrid.querySelectorAll(
+        '[data-search-product-id]'
+      );
+
+    buttons.forEach(button => {
+
+      const productId =
+        button.getAttribute(
+          'data-search-product-id'
+        );
+
+      const product =
+        uniqueResults.find(
+          item =>
+            String(item.id) ===
+            String(productId)
+        );
+
+      if(product){
+
+        button.addEventListener(
+          'click',
+          () => {
+
+            addTocart(product);
+
+          }
+        );
+
+      }
+
+    });
+
   }
+
+  /*
+   * بستن پنجره
+   */
+  document
+    .getElementById(
+      'close-search-results'
+    )
+    .addEventListener(
+      'click',
+      () => {
+        modal.remove();
+      }
+    );
+
+  modal.addEventListener(
+    'click',
+    event => {
+
+      if(event.target === modal){
+        modal.remove();
+      }
+
+    }
+  );
 
 }
 async function loadProducts(){
