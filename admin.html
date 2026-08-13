@@ -7,8 +7,13 @@
 <title>پنل مدیریت نی نی استایل</title>
 
 <style>
+
+*{
+    box-sizing:border-box;
+}
+
 body{
-    font-family:tahoma;
+    font-family:tahoma,Arial,sans-serif;
     background:#f8f8f8;
     padding:20px;
     margin:0;
@@ -29,17 +34,21 @@ h2{
     margin-top:0;
 }
 
-input,select,button{
+input,
+select,
+button{
     width:100%;
     padding:12px;
     margin-top:10px;
-    box-sizing:border-box;
     border-radius:8px;
     font-family:tahoma;
+    font-size:14px;
 }
 
-input,select{
+input,
+select{
     border:1px solid #ddd;
+    background:#fff;
 }
 
 button{
@@ -49,10 +58,25 @@ button{
     background:#ff5ca8;
 }
 
-.secondary{background:#777}
-.danger{background:#e74c3c}
-.edit{background:#6c8cff}
-.tracking-button{background:#35a853}
+button:hover{
+    opacity:.92;
+}
+
+.secondary{
+    background:#777;
+}
+
+.danger{
+    background:#e74c3c;
+}
+
+.edit{
+    background:#6c8cff;
+}
+
+.tracking-button{
+    background:#35a853;
+}
 
 .stats{
     display:grid;
@@ -95,6 +119,7 @@ button{
     height:180px;
     object-fit:cover;
     border-radius:9px;
+    background:#f5f5f5;
 }
 
 .product-actions{
@@ -136,6 +161,7 @@ button{
 .order-info{
     line-height:2;
     margin-top:10px;
+    word-break:break-word;
 }
 
 .order-products{
@@ -149,6 +175,7 @@ button{
     color:#e88aaa;
     font-weight:bold;
     margin-top:10px;
+    line-height:2;
 }
 
 .status{
@@ -211,8 +238,6 @@ button{
     padding:12px;
     border:1px solid #ddd;
     border-radius:8px;
-    box-sizing:border-box;
-    font-family:tahoma;
     margin:0;
     background:#fff;
 }
@@ -299,14 +324,15 @@ button{
     font-size:13px;
 }
 
-.loading,.empty{
+.loading,
+.empty{
     text-align:center;
     padding:25px;
     color:#888;
 }
 
 /* =========================
-   صفحه ورود
+   ورود
    ========================= */
 
 #loginScreen{
@@ -318,7 +344,6 @@ button{
     justify-content:center;
     z-index:99999;
     padding:20px;
-    box-sizing:border-box;
 }
 
 .login-box{
@@ -340,10 +365,8 @@ button{
     width:100%;
     padding:13px;
     margin-top:10px;
-    box-sizing:border-box;
     border:1px solid #ddd;
     border-radius:9px;
-    font-family:tahoma;
 }
 
 .login-box button{
@@ -354,9 +377,7 @@ button{
     border-radius:9px;
     background:#ff5ca8;
     color:white;
-    font-family:tahoma;
     font-size:15px;
-    cursor:pointer;
 }
 
 #loginError{
@@ -369,14 +390,8 @@ button{
     display:none;
 }
 
-@media(max-width:700px){
-    body{padding:10px}
-    .stats{grid-template-columns:1fr}
-    .order-stats{grid-template-columns:repeat(2,1fr)}
-    .order-filter{min-width:100%}
-}
-    /* =========================
-   رنگ، سایز و موجودی
+/* =========================
+   رنگ سایز موجودی
    ========================= */
 
 .variants-box{
@@ -415,7 +430,41 @@ button{
     color:#999;
 }
 
+.variant-summary{
+    margin-top:10px;
+    padding:10px;
+    background:#fff;
+    border-radius:8px;
+    border:1px solid #eee;
+    color:#777;
+    text-align:center;
+}
+
+/* =========================
+   موبایل
+   ========================= */
+
 @media(max-width:700px){
+
+    body{
+        padding:10px;
+    }
+
+    .box{
+        padding:14px;
+    }
+
+    .stats{
+        grid-template-columns:1fr;
+    }
+
+    .order-stats{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .order-filter{
+        min-width:100%;
+    }
 
     .variant-row{
         grid-template-columns:1fr 1fr;
@@ -429,7 +478,12 @@ button{
         grid-column:2;
     }
 
+    .product-actions{
+        flex-direction:column;
+    }
+
 }
+
 </style>
 </head>
 
@@ -445,7 +499,9 @@ button{
 
         <h2>🔐 ورود به پنل نی نی استایل</h2>
 
-        <p>لطفاً نام کاربری و رمز عبور را وارد کنید.</p>
+        <p>
+            لطفاً نام کاربری و رمز عبور را وارد کنید.
+        </p>
 
         <input
             id="loginUsername"
@@ -473,10 +529,14 @@ button{
 
 
 <!-- =========================
-     محتوای پنل
+     پنل مدیریت
      ========================= -->
 
 <div id="adminContent">
+
+    <!-- =========================
+         آمار
+         ========================= -->
 
     <div class="box">
 
@@ -486,17 +546,32 @@ button{
 
             <div class="stat">
                 📦 سفارش‌ها
-                <div class="stat-number" id="ordersCount">۰</div>
+                <div
+                    class="stat-number"
+                    id="ordersCount"
+                >
+                    ۰
+                </div>
             </div>
 
             <div class="stat">
                 🛍️ محصولات
-                <div class="stat-number" id="productsCount">۰</div>
+                <div
+                    class="stat-number"
+                    id="productsCount"
+                >
+                    ۰
+                </div>
             </div>
 
             <div class="stat">
                 💰 فروش
-                <div class="stat-number" id="salesTotal">۰ تومان</div>
+                <div
+                    class="stat-number"
+                    id="salesTotal"
+                >
+                    ۰ تومان
+                </div>
             </div>
 
         </div>
@@ -504,35 +579,63 @@ button{
     </div>
 
 
+    <!-- =========================
+         مدیریت محصولات
+         ========================= -->
+
     <div class="box">
 
         <h2>🎀 مدیریت محصولات</h2>
 
-        <input type="hidden" id="productId">
+        <input
+            type="hidden"
+            id="productId"
+        >
 
-        <input id="name" placeholder="نام محصول">
+        <input
+            id="name"
+            placeholder="نام محصول"
+        >
 
         <input
             id="price"
             type="number"
+            min="0"
             placeholder="قیمت"
         >
 
         <input
             id="oldPrice"
             type="number"
+            min="0"
             placeholder="قیمت قبلی"
         >
 
         <select id="category">
 
-            <option value="">انتخاب دسته‌بندی</option>
+            <option value="">
+                انتخاب دسته‌بندی
+            </option>
 
-            <option value="لباس دخترانه">لباس دخترانه</option>
-            <option value="لباس پسرانه">لباس پسرانه</option>
-            <option value="لباس نوزاد">لباس نوزاد</option>
-            <option value="اکسسوری">اکسسوری</option>
-            <option value="تخفیف خورده">تخفیف خورده</option>
+            <option value="لباس دخترانه">
+                لباس دخترانه
+            </option>
+
+            <option value="لباس پسرانه">
+                لباس پسرانه
+            </option>
+
+            <option value="لباس نوزاد">
+                لباس نوزاد
+            </option>
+
+            <option value="اکسسوری">
+                اکسسوری
+            </option>
+
+            <option value="تخفیف خورده">
+                تخفیف خورده
+            </option>
 
         </select>
 
@@ -542,77 +645,97 @@ button{
             accept="image/*"
         >
 
-       <input
-    id="image"
-    placeholder="یا آدرس عکس"
->
+        <input
+            id="image"
+            placeholder="یا آدرس عکس"
+        >
 
-<!-- =========================
-     رنگ، سایز و موجودی
-     ========================= -->
 
-<div class="variants-box">
+        <!-- =========================
+             رنگ سایز موجودی
+             ========================= -->
 
-    <h3 style="color:#e88aaa;margin-top:0;">
-        🎨 رنگ، سایز و موجودی
-    </h3>
+        <div class="variants-box">
 
-    <p style="font-size:13px;color:#777;">
-        برای هر ترکیب رنگ و سایز، موجودی جداگانه تعیین کن.
-    </p>
+            <h3
+                style="
+                    color:#e88aaa;
+                    margin-top:0;
+                "
+            >
+                🎨 رنگ، سایز و موجودی
+            </h3>
 
-    <input
-        id="variantColor"
-        placeholder="🎨 رنگ — مثال: صورتی"
-    >
+            <p
+                style="
+                    font-size:13px;
+                    color:#777;
+                "
+            >
+                برای هر ترکیب رنگ و سایز،
+                موجودی جداگانه تعیین کن.
+            </p>
 
-    <input
-        id="variantSize"
-        placeholder="📏 سایز — مثال: ۲ سال"
-    >
+            <input
+                id="variantColor"
+                placeholder="🎨 رنگ — مثال: صورتی"
+            >
 
-    <input
-        id="variantStock"
-        type="number"
-        min="0"
-        step="1"
-        placeholder="📦 موجودی — مثال: 5"
-    >
+            <input
+                id="variantSize"
+                placeholder="📏 سایز — مثال: ۲ سال"
+            >
 
-    <button
-        type="button"
-        onclick="addVariant()"
-    >
-        ➕ افزودن رنگ + سایز
-    </button>
+            <input
+                id="variantStock"
+                type="number"
+                min="0"
+                step="1"
+                placeholder="📦 موجودی — مثال: 5"
+            >
 
-    <div id="variantsList"></div>
+            <button
+                type="button"
+                onclick="addVariant()"
+            >
+                ➕ افزودن رنگ + سایز
+            </button>
 
-    <div
-        id="variantSummary"
-        style="
-            margin-top:10px;
-            padding:10px;
-            background:#fff;
-            border-radius:8px;
-            border:1px solid #eee;
-            color:#777;
-            text-align:center;
-        "
-    >
-        هنوز ترکیبی اضافه نشده است.
-    </div>
+            <div id="variantsList"></div>
 
-</div>
+            <div
+                id="variantSummary"
+                class="variant-summary"
+            >
+                هنوز ترکیبی اضافه نشده است.
+            </div>
 
-<button onclick="saveProduct()">
+        </div>
+
+
+        <button
+            id="saveProductButton"
+            type="button"
+            onclick="saveProduct()"
+        >
             💾 ذخیره محصول
         </button>
 
-        <div id="result"></div>
+        <div
+            id="result"
+            style="
+                margin-top:12px;
+                text-align:center;
+                line-height:1.8;
+            "
+        ></div>
 
     </div>
 
+
+    <!-- =========================
+         محصولات
+         ========================= -->
 
     <div class="box">
 
@@ -620,6 +743,7 @@ button{
 
         <button
             class="secondary"
+            type="button"
             onclick="loadProducts()"
         >
             🔄 بروزرسانی محصولات
@@ -633,12 +757,17 @@ button{
     </div>
 
 
+    <!-- =========================
+         سفارش‌ها
+         ========================= -->
+
     <div class="box">
 
         <h2>📦 مدیریت سفارش‌ها</h2>
 
         <button
             class="secondary"
+            type="button"
             onclick="loadOrders()"
         >
             🔄 بروزرسانی سفارش‌ها
@@ -659,6 +788,7 @@ button{
                 <button
                     id="filter-all"
                     class="order-filter active"
+                    type="button"
                     onclick="setOrderFilter('all')"
                 >
                     همه
@@ -667,6 +797,7 @@ button{
                 <button
                     id="filter-new"
                     class="order-filter"
+                    type="button"
                     onclick="setOrderFilter('new')"
                 >
                     🟡 جدید
@@ -675,6 +806,7 @@ button{
                 <button
                     id="filter-preparing"
                     class="order-filter"
+                    type="button"
                     onclick="setOrderFilter('preparing')"
                 >
                     🔵 آماده‌سازی
@@ -683,6 +815,7 @@ button{
                 <button
                     id="filter-shipped"
                     class="order-filter"
+                    type="button"
                     onclick="setOrderFilter('shipped')"
                 >
                     🚚 ارسال شد
@@ -691,6 +824,7 @@ button{
                 <button
                     id="filter-delivered"
                     class="order-filter"
+                    type="button"
                     onclick="setOrderFilter('delivered')"
                 >
                     🟢 تحویل شد
@@ -746,16 +880,37 @@ button{
 <script>
 
 /* =====================================================
-   سیستم ورود جدید
+   متغیرهای اصلی
+   ===================================================== */
+
+let productVariants = [];
+
+let allOrders = [];
+let filteredOrders = [];
+
+let currentOrderPage = 1;
+
+const ordersPerPage = 10;
+
+let currentOrderFilter = "all";
+
+
+/* =====================================================
+   ورود ادمین
    ===================================================== */
 
 async function adminLogin(){
 
     const username =
-        document.getElementById("loginUsername").value.trim();
+        document
+            .getElementById("loginUsername")
+            .value
+            .trim();
 
     const password =
-        document.getElementById("loginPassword").value;
+        document
+            .getElementById("loginPassword")
+            .value;
 
     const errorBox =
         document.getElementById("loginError");
@@ -772,37 +927,48 @@ async function adminLogin(){
 
     try{
 
-        const res = await fetch("/api/login",{
+        const res =
+            await fetch("/api/login",{
 
-            method:"POST",
+                method:"POST",
 
-            credentials:"include",
+                credentials:"include",
 
-            cache:"no-store",
+                cache:"no-store",
 
-            headers:{
-                "Content-Type":"application/json"
-            },
+                headers:{
+                    "Content-Type":"application/json"
+                },
 
-            body:JSON.stringify({
-                username:username,
-                password:password
-            })
+                body:JSON.stringify({
+                    username,
+                    password
+                })
 
-        });
+            });
 
-        const text = await res.text();
+
+        const text =
+            await res.text();
 
         let data = {};
 
         try{
-            data = text ? JSON.parse(text) : {};
+
+            data =
+                text
+                    ? JSON.parse(text)
+                    : {};
+
         }
         catch(e){
+
             throw new Error(
                 "پاسخ نامعتبر از سرور دریافت شد."
             );
+
         }
+
 
         if(
             !res.ok ||
@@ -813,7 +979,9 @@ async function adminLogin(){
                 data.error ||
                 "نام کاربری یا رمز عبور اشتباه است."
             );
+
         }
+
 
         showAdminPanel();
 
@@ -822,7 +990,9 @@ async function adminLogin(){
 
         errorBox.textContent =
             "❌ " + error.message;
+
     }
+
 }
 
 
@@ -842,6 +1012,9 @@ function showAdminPanel(){
 
     loadProducts();
     loadOrders();
+
+    renderVariants();
+
 }
 
 
@@ -857,44 +1030,50 @@ async function checkLogin(){
     const adminContent =
         document.getElementById("adminContent");
 
-    /*
-      هیچ چیزی در localStorage یا sessionStorage
-      ذخیره نمی‌شود.
-
-      فقط پاسخ API تعیین می‌کند که کاربر وارد شده
-      یا نه.
-    */
 
     loginScreen.style.display = "flex";
+
     adminContent.style.display = "none";
+
 
     try{
 
-        const res = await fetch("/api/login",{
+        const res =
+            await fetch("/api/login",{
 
-            method:"GET",
+                method:"GET",
 
-            credentials:"include",
+                credentials:"include",
 
-            cache:"no-store",
+                cache:"no-store",
 
-            headers:{
-                "Cache-Control":"no-cache",
-                "Pragma":"no-cache"
-            }
+                headers:{
+                    "Cache-Control":"no-cache",
+                    "Pragma":"no-cache"
+                }
 
-        });
+            });
 
-        const text = await res.text();
+
+        const text =
+            await res.text();
 
         let data = {};
 
         try{
-            data = text ? JSON.parse(text) : {};
+
+            data =
+                text
+                    ? JSON.parse(text)
+                    : {};
+
         }
         catch(e){
+
             data = {};
+
         }
+
 
         if(
             res.ok &&
@@ -908,6 +1087,7 @@ async function checkLogin(){
 
             loginScreen.style.display = "flex";
             adminContent.style.display = "none";
+
         }
 
     }
@@ -920,19 +1100,10 @@ async function checkLogin(){
 
         loginScreen.style.display = "flex";
         adminContent.style.display = "none";
+
     }
+
 }
-
-
-/* =====================================================
-   سفارش‌ها
-   ===================================================== */
-
-let allOrders = [];
-let filteredOrders = [];
-let currentOrderPage = 1;
-const ordersPerPage = 10;
-let currentOrderFilter = "all";
 
 
 /* =====================================================
@@ -945,20 +1116,28 @@ async function loadProducts(){
         document.getElementById("products");
 
     box.innerHTML =
-        `<div class="loading">
+        `
+        <div class="loading">
             در حال دریافت محصولات...
-        </div>`;
+        </div>
+        `;
+
 
     try{
 
         const res =
-            await fetch("/api/products",{
-                credentials:"include",
-                cache:"no-store"
-            });
+            await fetch(
+                "/api/products",
+                {
+                    credentials:"include",
+                    cache:"no-store"
+                }
+            );
+
 
         const data =
             await res.json();
+
 
         if(!res.ok){
 
@@ -966,97 +1145,155 @@ async function loadProducts(){
                 data.error ||
                 "خطا در دریافت محصولات"
             );
+
         }
+
 
         const products =
             Array.isArray(data)
                 ? data
                 : data.products || [];
 
+
         document.getElementById(
             "productsCount"
         ).textContent =
             products.length.toLocaleString("fa-IR");
 
+
         if(!products.length){
 
             box.innerHTML =
-                `<div class="empty">
+                `
+                <div class="empty">
                     محصولی وجود ندارد.
-                </div>`;
+                </div>
+                `;
 
             return;
         }
 
+
         box.innerHTML =
-            products.map(product => `
+            products
+            .map(
+                product => {
 
-                <div class="product-card">
+                    const productJson =
+                        JSON.stringify(product)
+                            .replace(/</g,"\\u003c")
+                            .replace(/>/g,"\\u003e")
+                            .replace(/&/g,"\\u0026")
+                            .replace(/'/g,"\\u0027");
 
-                    <img
-                        src="${escapeHtml(product.image || "")}"
-                        onerror="this.style.display='none'"
-                    >
 
-                    <strong>
-                        ${escapeHtml(product.name || "-")}
-                    </strong>
+                    return `
 
-                    <p>
-                        💰
-                        ${Number(
-                            product.price || 0
-                        ).toLocaleString("fa-IR")}
-                        تومان
-                    </p>
+                    <div class="product-card">
 
-                    <small>
-                        📂
-                        ${escapeHtml(
-                            product.category || "-"
-                        )}
-                    </small>
+                        ${
+                            product.image
+                            ?
+                            `
+                            <img
+                                src="${escapeHtml(product.image)}"
+                                onerror="this.style.display='none'"
+                                alt=""
+                            >
+                            `
+                            :
+                            ""
+                        }
 
-                    <div class="product-actions">
+                        <strong>
+                            ${escapeHtml(
+                                product.name || "-"
+                            )}
+                        </strong>
 
-                        <button
-                            class="edit"
-                            onclick='editProduct(${JSON.stringify(product)})'
-                        >
-                            ✏️ ویرایش
-                        </button>
+                        <p>
+                            💰
+                            ${Number(
+                                product.price || 0
+                            ).toLocaleString("fa-IR")}
+                            تومان
+                        </p>
 
-                        <button
-                            class="danger"
-                            onclick="deleteProduct('${escapeHtml(product.id)}')"
-                        >
-                            🗑️ حذف
-                        </button>
+                        <small>
+                            📂
+                            ${escapeHtml(
+                                product.category || "-"
+                            )}
+                        </small>
+
+                        ${
+                            Array.isArray(product.variants)
+                            &&
+                            product.variants.length
+                            ?
+                            `
+                            <p
+                                style="
+                                    font-size:12px;
+                                    color:#777;
+                                "
+                            >
+                                🎨
+                                ${product.variants.length
+                                    .toLocaleString("fa-IR")}
+                                ترکیب رنگ و سایز
+                            </p>
+                            `
+                            :
+                            ""
+                        }
+
+                        <div class="product-actions">
+
+                            <button
+                                class="edit"
+                                type="button"
+                                onclick='editProduct(${productJson})'
+                            >
+                                ✏️ ویرایش
+                            </button>
+
+                            <button
+                                class="danger"
+                                type="button"
+                                onclick="deleteProduct('${escapeJs(product.id || "")}')"
+                            >
+                                🗑️ حذف
+                            </button>
+
+                        </div>
 
                     </div>
 
-                </div>
+                    `;
 
-            `).join("");
+                }
+            )
+            .join("");
 
     }
     catch(error){
 
         box.innerHTML =
-            `<div class="empty">
+            `
+            <div class="empty">
                 ❌ ${escapeHtml(error.message)}
-            </div>`;
+            </div>
+            `;
+
     }
+
 }
 
+
 /* =====================================================
-   مدیریت رنگ، سایز و موجودی
+   نرمال‌سازی واریانت‌ها
    ===================================================== */
-
-let productVariants = [];
-
-
-/* تبدیل واریانت‌های قبلی */
 
 function normalizeVariants(variants){
 
@@ -1064,37 +1301,43 @@ function normalizeVariants(variants){
         return [];
     }
 
+
     return variants
-        .map(v => ({
+        .map(
+            v => ({
 
-            color:
-                String(
-                    v.color || ""
-                ).trim(),
+                color:
+                    String(
+                        v.color || ""
+                    ).trim(),
 
-            size:
-                String(
-                    v.size || ""
-                ).trim(),
+                size:
+                    String(
+                        v.size || ""
+                    ).trim(),
 
-            stock:
-                Math.max(
-                    0,
-                    Number(
-                        v.stock || 0
+                stock:
+                    Math.max(
+                        0,
+                        Number(
+                            v.stock || 0
+                        )
                     )
-                )
 
-        }))
+            })
+        )
         .filter(
             v =>
                 v.color &&
                 v.size
         );
+
 }
 
 
-/* اضافه کردن رنگ + سایز */
+/* =====================================================
+   افزودن رنگ + سایز
+   ===================================================== */
 
 function addVariant(){
 
@@ -1112,6 +1355,7 @@ function addVariant(){
         document.getElementById(
             "variantStock"
         );
+
 
     const color =
         colorInput.value.trim();
@@ -1152,11 +1396,6 @@ function addVariant(){
     }
 
 
-    /*
-       اگر همین رنگ + سایز قبلاً وجود داشته،
-       موجودی آن را به‌روزرسانی می‌کنیم.
-    */
-
     const existingIndex =
         productVariants.findIndex(
             variant =>
@@ -1176,11 +1415,11 @@ function addVariant(){
 
         productVariants.push({
 
-            color: color,
+            color:color,
 
-            size: size,
+            size:size,
 
-            stock: stock
+            stock:stock
 
         });
 
@@ -1197,7 +1436,9 @@ function addVariant(){
 }
 
 
-/* نمایش واریانت‌ها */
+/* =====================================================
+   نمایش واریانت‌ها
+   ===================================================== */
 
 function renderVariants(){
 
@@ -1242,9 +1483,7 @@ function renderVariants(){
 
                 <input
                     type="text"
-                    value="${escapeHtml(
-                        variant.color
-                    )}"
+                    value="${escapeHtml(variant.color)}"
                     placeholder="رنگ"
                     onchange="
                         updateVariant(
@@ -1257,9 +1496,7 @@ function renderVariants(){
 
                 <input
                     type="text"
-                    value="${escapeHtml(
-                        variant.size
-                    )}"
+                    value="${escapeHtml(variant.size)}"
                     placeholder="سایز"
                     onchange="
                         updateVariant(
@@ -1299,7 +1536,7 @@ function renderVariants(){
 
             </div>
 
-        `
+            `
         )
         .join("");
 
@@ -1361,7 +1598,9 @@ function renderVariants(){
 }
 
 
-/* ویرایش یک واریانت */
+/* =====================================================
+   ویرایش واریانت
+   ===================================================== */
 
 function updateVariant(
     index,
@@ -1369,9 +1608,7 @@ function updateVariant(
     value
 ){
 
-    if(
-        !productVariants[index]
-    ){
+    if(!productVariants[index]){
         return;
     }
 
@@ -1400,13 +1637,13 @@ function updateVariant(
 }
 
 
-/* حذف واریانت */
+/* =====================================================
+   حذف واریانت
+   ===================================================== */
 
 function removeVariant(index){
 
-    if(
-        !productVariants[index]
-    ){
+    if(!productVariants[index]){
         return;
     }
 
@@ -1420,133 +1657,166 @@ function removeVariant(index){
     renderVariants();
 
 }
+
+
 /* =====================================================
    ذخیره محصول
    ===================================================== */
 
 async function saveProduct(){
 
+    const result =
+        document.getElementById("result");
+
+    const saveButton =
+        document.getElementById(
+            "saveProductButton"
+        );
+
+
     const file =
-        document.getElementById("imageFile").files[0];
+        document
+            .getElementById("imageFile")
+            .files[0];
+
 
     let image =
-        document.getElementById("image").value.trim();
+        document
+            .getElementById("image")
+            .value
+            .trim();
 
 
-    /* =========================
-       عکس
-       ========================= */
+    /* عکس فایل */
 
     if(file){
 
-        const reader =
-            new FileReader();
-
         image =
-            await new Promise(resolve => {
+            await new Promise(
+                (resolve,reject) => {
 
-                reader.onload =
-                    () => resolve(
-                        reader.result
+                    const reader =
+                        new FileReader();
+
+                    reader.onload =
+                        () =>
+                            resolve(
+                                reader.result
+                            );
+
+                    reader.onerror =
+                        () =>
+                            reject(
+                                new Error(
+                                    "خطا در خواندن عکس"
+                                )
+                            );
+
+                    reader.readAsDataURL(
+                        file
                     );
 
-                reader.readAsDataURL(
-                    file
-                );
-
-            });
-
-    }
-
-
-    /* =========================
-       اطلاعات محصول
-       ========================= */
-
-    const product = {
-
-        name:
-            document
-                .getElementById("name")
-                .value
-                .trim(),
-
-        price:
-            Number(
-                document
-                    .getElementById("price")
-                    .value || 0
-            ),
-
-        oldPrice:
-            Number(
-                document
-                    .getElementById("oldPrice")
-                    .value || 0
-            ),
-
-        image:image,
-
-        category:
-            document
-                .getElementById("category")
-                .value
-
-    };
-
-
-    /* =========================
-       واریانت‌ها
-       ========================= */
-
-    if(
-        Array.isArray(productVariants) &&
-        productVariants.length
-    ){
-
-        product.variants =
-            productVariants.map(
-                variant => ({
-
-                    color:
-                        String(
-                            variant.color || ""
-                        ).trim(),
-
-                    size:
-                        String(
-                            variant.size || ""
-                        ).trim(),
-
-                    stock:
-                        Math.max(
-                            0,
-                            Number(
-                                variant.stock || 0
-                            )
-                        )
-
-                })
-            )
-            .filter(
-                variant =>
-                    variant.color &&
-                    variant.size
+                }
             );
 
     }
 
 
-    /* =========================
-       شناسه محصول
-       ========================= */
+    const name =
+        document
+            .getElementById("name")
+            .value
+            .trim();
+
+
+    const category =
+        document
+            .getElementById("category")
+            .value;
+
+
+    const price =
+        Number(
+            document
+                .getElementById("price")
+                .value || 0
+        );
+
+
+    const oldPrice =
+        Number(
+            document
+                .getElementById("oldPrice")
+                .value || 0
+        );
+
+
+    /* بررسی اطلاعات اصلی */
+
+    if(!name){
+
+        result.textContent =
+            "⚠️ لطفاً نام محصول را وارد کن.";
+
+        document
+            .getElementById("name")
+            .focus();
+
+        return;
+    }
+
+
+    if(!category){
+
+        result.textContent =
+            "⚠️ لطفاً دسته‌بندی محصول را انتخاب کن.";
+
+        document
+            .getElementById("category")
+            .focus();
+
+        return;
+    }
+
+
+    if(price < 0){
+
+        result.textContent =
+            "⚠️ قیمت نمی‌تواند منفی باشد.";
+
+        return;
+    }
+
+
+    /* ساخت محصول */
+
+    const product = {
+
+        name:name,
+
+        price:Math.max(0,price),
+
+        oldPrice:Math.max(0,oldPrice),
+
+        image:image,
+
+        category:category,
+
+        variants:
+            normalizeVariants(
+                productVariants
+            )
+
+    };
+
+
+    /* شناسه */
 
     const id =
         document
-            .getElementById(
-                "productId"
-            )
-            .value;
+            .getElementById("productId")
+            .value
+            .trim();
 
 
     if(id){
@@ -1556,11 +1826,16 @@ async function saveProduct(){
     }
 
 
-    /* =========================
-       ارسال به API
-       ========================= */
-
     try{
+
+        saveButton.disabled = true;
+
+        saveButton.textContent =
+            "⏳ در حال ذخیره...";
+
+        result.textContent =
+            "⏳ لطفاً صبر کن...";
+
 
         const res =
             await fetch(
@@ -1572,8 +1847,9 @@ async function saveProduct(){
                             ? "PUT"
                             : "POST",
 
-                    credentials:
-                        "include",
+                    credentials:"include",
+
+                    cache:"no-store",
 
                     headers:{
                         "Content-Type":
@@ -1589,8 +1865,27 @@ async function saveProduct(){
             );
 
 
-        const data =
-            await res.json();
+        const text =
+            await res.text();
+
+
+        let data = {};
+
+        try{
+
+            data =
+                text
+                    ? JSON.parse(text)
+                    : {};
+
+        }
+        catch(e){
+
+            throw new Error(
+                "پاسخ نامعتبر از سرور دریافت شد."
+            );
+
+        }
 
 
         if(!res.ok){
@@ -1603,31 +1898,39 @@ async function saveProduct(){
         }
 
 
-        document.getElementById(
-            "result"
-        ).textContent =
-
+        result.textContent =
             id
-                ? "✅ محصول واریانت‌ها و اطلاعاتش با موفقیت ویرایش شد"
-                : "✅ محصول با رنگ، سایز و موجودی ذخیره شد";
+                ?
+                "✅ محصول و رنگ و سایز و موجودی با موفقیت ویرایش شد."
+                :
+                "✅ محصول و رنگ و سایز و موجودی با موفقیت ذخیره شد.";
 
 
         clearForm();
 
+
         await loadProducts();
+
 
     }
     catch(error){
 
-        document.getElementById(
-            "result"
-        ).textContent =
+        result.textContent =
             "❌ " +
             error.message;
 
     }
+    finally{
+
+        saveButton.disabled = false;
+
+        saveButton.textContent =
+            "💾 ذخیره محصول";
+
+    }
 
 }
+
 
 /* =====================================================
    ویرایش محصول
@@ -1635,35 +1938,52 @@ async function saveProduct(){
 
 function editProduct(product){
 
-    document.getElementById("productId").value =
+    document.getElementById(
+        "productId"
+    ).value =
         product.id || "";
 
-    document.getElementById("name").value =
+
+    document.getElementById(
+        "name"
+    ).value =
         product.name || "";
 
-    document.getElementById("price").value =
-        product.price || "";
 
-    document.getElementById("oldPrice").value =
-        product.oldPrice || "";
+    document.getElementById(
+        "price"
+    ).value =
+        product.price ?? "";
 
-    document.getElementById("category").value =
+
+    document.getElementById(
+        "oldPrice"
+    ).value =
+        product.oldPrice ?? "";
+
+
+    document.getElementById(
+        "category"
+    ).value =
         product.category || "";
 
-    document.getElementById("image").value =
+
+    document.getElementById(
+        "image"
+    ).value =
         product.image || "";
 
-    document.getElementById("imageFile").value = "";
 
+    document.getElementById(
+        "imageFile"
+    ).value = "";
 
-    /* =========================
-       بارگذاری رنگ، سایز و موجودی
-       ========================= */
 
     productVariants =
         normalizeVariants(
             product.variants
         );
+
 
     renderVariants();
 
@@ -1672,6 +1992,12 @@ function editProduct(product){
         "result"
     ).textContent =
         "✏️ محصول برای ویرایش آماده است.";
+
+
+    document.getElementById(
+        "saveProductButton"
+    ).textContent =
+        "💾 ذخیره تغییرات";
 
 
     window.scrollTo({
@@ -1688,53 +2014,98 @@ function editProduct(product){
 
 async function deleteProduct(id){
 
+    if(!id){
+        alert("❌ شناسه محصول پیدا نشد.");
+        return;
+    }
+
+
     if(!confirm(
         "مطمئنی می‌خواهی این محصول حذف شود؟"
     )){
         return;
     }
 
+
     try{
 
         const res =
-            await fetch("/api/products",{
+            await fetch(
+                "/api/products",
+                {
 
-                method:"DELETE",
+                    method:"DELETE",
 
-                credentials:"include",
+                    credentials:"include",
 
-                headers:{
-                    "Content-Type":"application/json"
-                },
+                    cache:"no-store",
 
-                body:JSON.stringify({id})
+                    headers:{
+                        "Content-Type":
+                            "application/json"
+                    },
 
-            });
+                    body:
+                        JSON.stringify({
+                            id:id
+                        })
 
-        const data =
-            await res.json();
+                }
+            );
+
+
+        const text =
+            await res.text();
+
+        let data = {};
+
+        try{
+
+            data =
+                text
+                    ? JSON.parse(text)
+                    : {};
+
+        }
+        catch(e){
+
+            data = {};
+
+        }
+
 
         if(!res.ok){
 
             throw new Error(
-                data.error || "خطا"
+                data.error ||
+                "خطا در حذف محصول"
             );
+
         }
 
-        loadProducts();
+
+        alert(
+            "✅ محصول با موفقیت حذف شد."
+        );
+
+
+        await loadProducts();
 
     }
     catch(error){
 
         alert(
-            "❌ " + error.message
+            "❌ " +
+            error.message
         );
+
     }
+
 }
 
 
 /* =====================================================
-   دریافت سفارش‌ها
+   سفارش‌ها
    ===================================================== */
 
 async function loadOrders(){
@@ -1742,42 +2113,58 @@ async function loadOrders(){
     const box =
         document.getElementById("orders");
 
+
     box.innerHTML =
-        `<div class="loading">
+        `
+        <div class="loading">
             در حال دریافت سفارش‌ها...
-        </div>`;
+        </div>
+        `;
+
 
     document.getElementById(
         "pagination"
     ).innerHTML = "";
 
+
     try{
 
         const res =
-            await fetch("/api/orders",{
-                credentials:"include",
-                cache:"no-store"
-            });
+            await fetch(
+                "/api/orders",
+                {
+                    credentials:"include",
+                    cache:"no-store"
+                }
+            );
+
 
         const data =
             await res.json();
 
+
         if(!res.ok){
 
             throw new Error(
-                data.error || "خطا"
+                data.error ||
+                "خطا در دریافت سفارش‌ها"
             );
+
         }
+
 
         allOrders =
             Array.isArray(data.orders)
                 ? data.orders
                 : [];
 
+
         document.getElementById(
             "ordersCount"
         ).textContent =
-            allOrders.length.toLocaleString("fa-IR");
+            allOrders.length
+                .toLocaleString("fa-IR");
+
 
         const totalSales =
             allOrders.reduce(
@@ -1789,15 +2176,21 @@ async function loadOrders(){
                 0
             );
 
+
         document.getElementById(
             "salesTotal"
         ).textContent =
-            totalSales.toLocaleString("fa-IR")
-            + " تومان";
+            totalSales
+                .toLocaleString("fa-IR")
+            +
+            " تومان";
+
 
         updateOrderStats();
 
+
         currentOrderPage = 1;
+
 
         filterOrders();
 
@@ -1805,15 +2198,19 @@ async function loadOrders(){
     catch(error){
 
         box.innerHTML =
-            `<div class="empty">
+            `
+            <div class="empty">
                 ❌ ${escapeHtml(error.message)}
-            </div>`;
+            </div>
+            `;
+
     }
+
 }
 
 
 /* =====================================================
-   آمار سفارش‌ها
+   آمار سفارش
    ===================================================== */
 
 function updateOrderStats(){
@@ -1822,33 +2219,45 @@ function updateOrderStats(){
         status =>
             allOrders.filter(
                 order =>
-                    (order.status || "new") === status
+                    (order.status || "new")
+                    === status
             ).length;
+
 
     document.getElementById(
         "allOrdersCount"
     ).textContent =
-        allOrders.length.toLocaleString("fa-IR");
+        allOrders.length
+            .toLocaleString("fa-IR");
+
 
     document.getElementById(
         "newOrdersCount"
     ).textContent =
-        countStatus("new").toLocaleString("fa-IR");
+        countStatus("new")
+            .toLocaleString("fa-IR");
+
 
     document.getElementById(
         "preparingOrdersCount"
     ).textContent =
-        countStatus("preparing").toLocaleString("fa-IR");
+        countStatus("preparing")
+            .toLocaleString("fa-IR");
+
 
     document.getElementById(
         "shippedOrdersCount"
     ).textContent =
-        countStatus("shipped").toLocaleString("fa-IR");
+        countStatus("shipped")
+            .toLocaleString("fa-IR");
+
 
     document.getElementById(
         "deliveredOrdersCount"
     ).textContent =
-        countStatus("delivered").toLocaleString("fa-IR");
+        countStatus("delivered")
+            .toLocaleString("fa-IR");
+
 }
 
 
@@ -1859,24 +2268,33 @@ function updateOrderStats(){
 function setOrderFilter(status){
 
     currentOrderFilter = status;
+
     currentOrderPage = 1;
+
 
     document
         .querySelectorAll(".order-filter")
-        .forEach(button =>
-            button.classList.remove("active")
+        .forEach(
+            button =>
+                button.classList.remove("active")
         );
+
 
     const activeButton =
         document.getElementById(
             "filter-" + status
         );
 
+
     if(activeButton){
+
         activeButton.classList.add("active");
+
     }
 
+
     filterOrders();
+
 }
 
 
@@ -1887,7 +2305,10 @@ function setOrderFilter(status){
 function filterOrders(){
 
     const searchInput =
-        document.getElementById("orderSearch");
+        document.getElementById(
+            "orderSearch"
+        );
+
 
     const search =
         (
@@ -1898,52 +2319,78 @@ function filterOrders(){
         .trim()
         .toLowerCase();
 
+
     filteredOrders =
-        allOrders.filter(order => {
+        allOrders.filter(
+            order => {
 
-            const status =
-                order.status || "new";
+                const status =
+                    order.status || "new";
 
-            if(
-                currentOrderFilter !== "all" &&
-                status !== currentOrderFilter
-            ){
-                return false;
+
+                if(
+                    currentOrderFilter !== "all" &&
+                    status !== currentOrderFilter
+                ){
+
+                    return false;
+
+                }
+
+
+                if(!search){
+
+                    return true;
+
+                }
+
+
+                const name =
+                    String(
+                        order.name || ""
+                    )
+                    .toLowerCase();
+
+
+                const mobile =
+                    String(
+                        order.mobile || ""
+                    )
+                    .toLowerCase();
+
+
+                const trackingCode =
+                    String(
+                        order.trackingCode || ""
+                    )
+                    .toLowerCase();
+
+
+                const orderId =
+                    String(
+                        order.id || ""
+                    )
+                    .toLowerCase();
+
+
+                return (
+
+                    name.includes(search) ||
+
+                    mobile.includes(search) ||
+
+                    trackingCode.includes(search) ||
+
+                    orderId.includes(search)
+
+                );
+
             }
+        );
 
-            if(!search){
-                return true;
-            }
-
-            const name =
-                String(
-                    order.name || ""
-                ).toLowerCase();
-
-            const mobile =
-                String(
-                    order.mobile || ""
-                ).toLowerCase();
-
-            const trackingCode =
-                String(
-                    order.trackingCode || ""
-                ).toLowerCase();
-
-            const orderId =
-                String(
-                    order.id || ""
-                ).toLowerCase();
-
-            return (
-                name.includes(search) ||
-                mobile.includes(search) ||
-                trackingCode.includes(search) ||
-                orderId.includes(search)
-            );
-        });
 
     renderOrders();
+
 }
 
 
@@ -1954,28 +2401,41 @@ function filterOrders(){
 function renderOrders(){
 
     const box =
-        document.getElementById("orders");
+        document.getElementById(
+            "orders"
+        );
+
 
     const pagination =
-        document.getElementById("pagination");
+        document.getElementById(
+            "pagination"
+        );
+
 
     const info =
         document.getElementById(
             "searchResultInfo"
         );
 
+
     if(!filteredOrders.length){
 
         box.innerHTML =
-            `<div class="empty">
+            `
+            <div class="empty">
                 🔍 سفارشی با این مشخصات پیدا نشد.
-            </div>`;
+            </div>
+            `;
+
 
         pagination.innerHTML = "";
+
         info.textContent = "";
 
         return;
+
     }
+
 
     const totalPages =
         Math.ceil(
@@ -1983,41 +2443,67 @@ function renderOrders(){
             ordersPerPage
         );
 
+
     if(currentOrderPage > totalPages){
-        currentOrderPage = totalPages;
+
+        currentOrderPage =
+            totalPages;
+
     }
+
 
     const start =
         (currentOrderPage - 1) *
         ordersPerPage;
 
+
     const end =
         start + ordersPerPage;
 
+
     const pageOrders =
-        filteredOrders.slice(start,end);
+        filteredOrders.slice(
+            start,
+            end
+        );
+
 
     info.textContent =
         `نمایش ${
-            (start + 1).toLocaleString("fa-IR")
+            (start + 1)
+                .toLocaleString("fa-IR")
         } تا ${
             Math.min(
                 end,
                 filteredOrders.length
-            ).toLocaleString("fa-IR")
+            )
+            .toLocaleString("fa-IR")
         } از ${
-            filteredOrders.length.toLocaleString("fa-IR")
+            filteredOrders.length
+                .toLocaleString("fa-IR")
         } سفارش`;
 
+
     box.innerHTML =
-        pageOrders.map(
+        pageOrders
+        .map(
             (order,index) => {
 
                 const realIndex =
                     start + index;
 
+
                 const safeId =
-                    escapeHtml(order.id || "");
+                    escapeHtml(
+                        order.id || ""
+                    );
+
+
+                const jsId =
+                    escapeJs(
+                        order.id || ""
+                    );
+
 
                 return `
 
@@ -2028,6 +2514,7 @@ function renderOrders(){
                         <div class="order-title">
 
                             📦 سفارش شماره
+
                             ${(realIndex + 1)
                                 .toLocaleString("fa-IR")}
 
@@ -2039,15 +2526,20 @@ function renderOrders(){
                                     font-weight:normal;
                                 "
                             >
+
                                 کد سفارش:
+
                                 ${safeId}
+
                             </small>
 
                         </div>
 
+
                         <div class="order-date">
 
                             🕐
+
                             ${formatDate(
                                 order.createdAt
                             )}
@@ -2061,6 +2553,7 @@ function renderOrders(){
 
                         👤
                         <strong>نام:</strong>
+
                         ${escapeHtml(
                             order.name || "-"
                         )}
@@ -2069,6 +2562,7 @@ function renderOrders(){
 
                         📱
                         <strong>موبایل:</strong>
+
                         ${escapeHtml(
                             order.mobile || "-"
                         )}
@@ -2077,6 +2571,7 @@ function renderOrders(){
 
                         📮
                         <strong>کد پستی:</strong>
+
                         ${escapeHtml(
                             order.postalCode || "-"
                         )}
@@ -2085,6 +2580,7 @@ function renderOrders(){
 
                         🏠
                         <strong>آدرس:</strong>
+
                         ${escapeHtml(
                             order.address || "-"
                         )}
@@ -2112,7 +2608,8 @@ function renderOrders(){
 
                         ${Number(
                             order.totalAmount || 0
-                        ).toLocaleString("fa-IR")}
+                        )
+                        .toLocaleString("fa-IR")}
 
                         تومان
 
@@ -2122,7 +2619,8 @@ function renderOrders(){
 
                         ${Number(
                             order.quantity || 0
-                        ).toLocaleString("fa-IR")}
+                        )
+                        .toLocaleString("fa-IR")}
 
                     </div>
 
@@ -2133,6 +2631,7 @@ function renderOrders(){
                             📮 کد رهگیری مرسوله
                         </div>
 
+
                         <input
                             id="tracking-${safeId}"
                             type="text"
@@ -2142,12 +2641,15 @@ function renderOrders(){
                             placeholder="کد رهگیری مرسوله را وارد کنید"
                         >
 
+
                         <button
                             class="tracking-button"
-                            onclick="saveTrackingCode('${safeId}')"
+                            type="button"
+                            onclick="saveTrackingCode('${jsId}')"
                         >
                             💾 ثبت کد رهگیری
                         </button>
+
 
                         <div
                             id="tracking-result-${safeId}"
@@ -2166,11 +2668,14 @@ function renderOrders(){
                             وضعیت سفارش:
                         </strong>
 
+
                         <select
-                            onchange="changeStatus(
-                                '${safeId}',
-                                this.value
-                            )"
+                            onchange="
+                                changeStatus(
+                                    '${jsId}',
+                                    this.value
+                                )
+                            "
                         >
 
                             <option
@@ -2185,6 +2690,7 @@ function renderOrders(){
                                 🟡 جدید
                             </option>
 
+
                             <option
                                 value="preparing"
                                 ${
@@ -2196,6 +2702,7 @@ function renderOrders(){
                                 🔵 آماده‌سازی
                             </option>
 
+
                             <option
                                 value="shipped"
                                 ${
@@ -2206,6 +2713,7 @@ function renderOrders(){
                             >
                                 🚚 ارسال شد
                             </option>
+
 
                             <option
                                 value="delivered"
@@ -2225,17 +2733,23 @@ function renderOrders(){
 
                     <button
                         class="danger"
-                        onclick="deleteOrder('${safeId}')"
+                        type="button"
+                        onclick="deleteOrder('${jsId}')"
                     >
                         ❌ حذف این سفارش
                     </button>
 
                 </div>
+
                 `;
+
             }
-        ).join("");
+        )
+        .join("");
+
 
     renderPagination(totalPages);
+
 }
 
 
@@ -2247,13 +2761,16 @@ async function deleteOrder(id){
 
     const order =
         allOrders.find(
-            item => item.id === id
+            item =>
+                item.id === id
         );
+
 
     const customerName =
         order && order.name
             ? order.name
             : "این سفارش";
+
 
     const confirmed =
         confirm(
@@ -2262,29 +2779,40 @@ async function deleteOrder(id){
 این کار سفارش را برای همیشه از دیتابیس حذف می‌کند و قابل برگشت نیست.`
         );
 
+
     if(!confirmed){
         return;
     }
 
+
     try{
 
         const res =
-            await fetch("/api/orders",{
+            await fetch(
+                "/api/orders",
+                {
 
-                method:"DELETE",
+                    method:"DELETE",
 
-                credentials:"include",
+                    credentials:"include",
 
-                headers:{
-                    "Content-Type":"application/json"
-                },
+                    headers:{
+                        "Content-Type":
+                            "application/json"
+                    },
 
-                body:JSON.stringify({id})
+                    body:
+                        JSON.stringify({
+                            id:id
+                        })
 
-            });
+                }
+            );
+
 
         const data =
             await res.json();
+
 
         if(!res.ok){
 
@@ -2292,15 +2820,21 @@ async function deleteOrder(id){
                 data.error ||
                 "خطا در حذف سفارش"
             );
+
         }
+
 
         allOrders =
             allOrders.filter(
-                order => order.id !== id
+                order =>
+                    order.id !== id
             );
 
+
         updateOrderStats();
+
         filterOrders();
+
 
         alert(
             "✅ سفارش با موفقیت حذف شد."
@@ -2313,7 +2847,9 @@ async function deleteOrder(id){
             "❌ خطا در حذف سفارش:\n" +
             error.message
         );
+
     }
+
 }
 
 
@@ -2324,26 +2860,45 @@ async function deleteOrder(id){
 function renderPagination(totalPages){
 
     const box =
-        document.getElementById("pagination");
+        document.getElementById(
+            "pagination"
+        );
+
 
     if(totalPages <= 1){
 
         box.innerHTML = "";
+
         return;
+
     }
 
+
     let html = `
+
         <div class="pagination">
 
             <button
-                onclick="changeOrderPage(${currentOrderPage - 1})"
-                ${currentOrderPage === 1 ? "disabled" : ""}
+                type="button"
+                onclick="
+                    changeOrderPage(
+                        ${currentOrderPage - 1}
+                    )
+                "
+                ${
+                    currentOrderPage === 1
+                        ? "disabled"
+                        : ""
+                }
             >
                 ◀️ قبلی
             </button>
+
     `;
 
+
     const maxButtons = 7;
+
 
     let startPage =
         Math.max(
@@ -2351,11 +2906,13 @@ function renderPagination(totalPages){
             currentOrderPage - 3
         );
 
+
     let endPage =
         Math.min(
             totalPages,
             startPage + maxButtons - 1
         );
+
 
     if(
         endPage - startPage + 1 <
@@ -2367,7 +2924,9 @@ function renderPagination(totalPages){
                 1,
                 endPage - maxButtons + 1
             );
+
     }
+
 
     for(
         let page = startPage;
@@ -2376,37 +2935,66 @@ function renderPagination(totalPages){
     ){
 
         html += `
+
             <button
-                class="${page === currentOrderPage ? "active" : ""}"
-                onclick="changeOrderPage(${page})"
+                type="button"
+                class="${
+                    page === currentOrderPage
+                        ? "active"
+                        : ""
+                }"
+                onclick="
+                    changeOrderPage(${page})
+                "
             >
                 ${page.toLocaleString("fa-IR")}
             </button>
+
         `;
+
     }
+
 
     html += `
 
             <button
-                onclick="changeOrderPage(${currentOrderPage + 1})"
-                ${currentOrderPage === totalPages ? "disabled" : ""}
+                type="button"
+                onclick="
+                    changeOrderPage(
+                        ${currentOrderPage + 1}
+                    )
+                "
+                ${
+                    currentOrderPage === totalPages
+                        ? "disabled"
+                        : ""
+                }
             >
                 بعدی ▶️
             </button>
 
+
             <div class="page-info">
 
                 صفحه
-                ${currentOrderPage.toLocaleString("fa-IR")}
+
+                ${currentOrderPage
+                    .toLocaleString("fa-IR")}
+
                 از
-                ${totalPages.toLocaleString("fa-IR")}
+
+                ${totalPages
+                    .toLocaleString("fa-IR")}
 
             </div>
 
         </div>
+
     `;
 
+
     box.innerHTML = html;
+
 }
 
 
@@ -2418,28 +3006,35 @@ function changeOrderPage(page){
             ordersPerPage
         );
 
+
     if(
         page < 1 ||
         page > totalPages
     ){
+
         return;
+
     }
+
 
     currentOrderPage = page;
 
+
     renderOrders();
 
-    document.getElementById(
-        "orders"
-    ).scrollIntoView({
-        behavior:"smooth",
-        block:"start"
-    });
+
+    document
+        .getElementById("orders")
+        .scrollIntoView({
+            behavior:"smooth",
+            block:"start"
+        });
+
 }
 
 
 /* =====================================================
-   ثبت کد رهگیری
+   کد رهگیری
    ===================================================== */
 
 async function saveTrackingCode(id){
@@ -2449,17 +3044,21 @@ async function saveTrackingCode(id){
             "tracking-" + id
         );
 
+
     const result =
         document.getElementById(
             "tracking-result-" + id
         );
 
-    if(!input){
+
+    if(!input || !result){
         return;
     }
 
+
     const trackingCode =
         input.value.trim();
+
 
     if(!trackingCode){
 
@@ -2467,33 +3066,44 @@ async function saveTrackingCode(id){
             "⚠️ لطفاً کد رهگیری را وارد کنید.";
 
         return;
+
     }
+
 
     result.textContent =
         "⏳ در حال ثبت کد رهگیری...";
 
+
     try{
 
         const res =
-            await fetch("/api/orders",{
+            await fetch(
+                "/api/orders",
+                {
 
-                method:"PATCH",
+                    method:"PATCH",
 
-                credentials:"include",
+                    credentials:"include",
 
-                headers:{
-                    "Content-Type":"application/json"
-                },
+                    headers:{
+                        "Content-Type":
+                            "application/json"
+                    },
 
-                body:JSON.stringify({
-                    id,
-                    trackingCode
-                })
+                    body:
+                        JSON.stringify({
+                            id:id,
+                            trackingCode:
+                                trackingCode
+                        })
 
-            });
+                }
+            );
+
 
         const data =
             await res.json();
+
 
         if(!res.ok){
 
@@ -2501,17 +3111,24 @@ async function saveTrackingCode(id){
                 data.error ||
                 "خطا در ثبت کد رهگیری"
             );
+
         }
+
 
         const order =
             allOrders.find(
-                item => item.id === id
+                item =>
+                    item.id === id
             );
 
+
         if(order){
+
             order.trackingCode =
                 trackingCode;
+
         }
+
 
         result.textContent =
             "✅ کد رهگیری با موفقیت ثبت شد";
@@ -2520,8 +3137,11 @@ async function saveTrackingCode(id){
     catch(error){
 
         result.textContent =
-            "❌ " + error.message;
+            "❌ " +
+            error.message;
+
     }
+
 }
 
 
@@ -2531,9 +3151,12 @@ async function saveTrackingCode(id){
 
 function renderCustomerReceived(order){
 
-    if(order.customerReceived === true){
+    if(
+        order.customerReceived === true
+    ){
 
         return `
+
             <div class="customer-received">
 
                 <strong>
@@ -2549,10 +3172,14 @@ function renderCustomerReceived(order){
                 )}
 
             </div>
+
         `;
+
     }
 
+
     return `
+
         <div class="customer-not-received">
 
             <strong>
@@ -2560,7 +3187,9 @@ function renderCustomerReceived(order){
             </strong>
 
         </div>
+
     `;
+
 }
 
 
@@ -2573,54 +3202,75 @@ async function changeStatus(id,status){
     try{
 
         const res =
-            await fetch("/api/orders",{
+            await fetch(
+                "/api/orders",
+                {
 
-                method:"PATCH",
+                    method:"PATCH",
 
-                credentials:"include",
+                    credentials:"include",
 
-                headers:{
-                    "Content-Type":"application/json"
-                },
+                    headers:{
+                        "Content-Type":
+                            "application/json"
+                    },
 
-                body:JSON.stringify({
-                    id,
-                    status
-                })
+                    body:
+                        JSON.stringify({
+                            id:id,
+                            status:status
+                        })
 
-            });
+                }
+            );
+
 
         const data =
             await res.json();
 
+
         if(!res.ok){
 
             throw new Error(
-                data.error || "خطا"
+                data.error ||
+                "خطا در تغییر وضعیت سفارش"
             );
+
         }
+
 
         const order =
             allOrders.find(
-                item => item.id === id
+                item =>
+                    item.id === id
             );
 
+
         if(order){
-            order.status = status;
+
+            order.status =
+                status;
+
         }
 
+
         updateOrderStats();
+
         filterOrders();
 
     }
     catch(error){
 
         alert(
-            "❌ " + error.message
+            "❌ " +
+            error.message
         );
 
+
         loadOrders();
+
     }
+
 }
 
 
@@ -2634,43 +3284,56 @@ function renderProducts(products){
         !Array.isArray(products) ||
         !products.length
     ){
+
         return "محصولی ثبت نشده";
+
     }
 
-    return products.map(product => `
 
-        <div style="
-            padding:7px 0;
-            border-bottom:1px solid #eee;
-        ">
+    return products
+        .map(
+            product => `
 
-            🛍️
+            <div
+                style="
+                    padding:7px 0;
+                    border-bottom:1px solid #eee;
+                "
+            >
 
-            ${escapeHtml(
-                product.name || "محصول"
-            )}
+                🛍️
 
-            <br>
+                ${escapeHtml(
+                    product.name ||
+                    "محصول"
+                )}
 
-            🔢 تعداد:
+                <br>
 
-            ${Number(
-                product.quantity || 1
-            ).toLocaleString("fa-IR")}
+                🔢 تعداد:
 
-            <br>
+                ${Number(
+                    product.quantity || 1
+                )
+                .toLocaleString("fa-IR")}
 
-            💰
+                <br>
 
-            ${Number(
-                product.price || 0
-            ).toLocaleString("fa-IR")}
+                💰
 
-            تومان
+                ${Number(
+                    product.price || 0
+                )
+                .toLocaleString("fa-IR")}
 
-        </div>
+                تومان
 
-    `).join("");
+            </div>
+
+            `
+        )
+        .join("");
+
 }
 
 
@@ -2684,12 +3347,36 @@ function formatDate(value){
         return "-";
     }
 
-    const date =
-        new Date(value);
+
+    let date;
+
+
+    if(
+        value &&
+        typeof value === "object" &&
+        value.seconds
+    ){
+
+        date =
+            new Date(
+                Number(value.seconds) * 1000
+            );
+
+    }
+    else{
+
+        date =
+            new Date(value);
+
+    }
+
 
     if(isNaN(date.getTime())){
+
         return "-";
+
     }
+
 
     return date.toLocaleString(
         "fa-IR",
@@ -2701,60 +3388,90 @@ function formatDate(value){
             minute:"2-digit"
         }
     );
+
 }
 
 
 /* =====================================================
-   پاک کردن فرم
+   پاک کردن کامل فرم
    ===================================================== */
 
 function clearForm(){
 
-    /* =========================
-       پاک کردن اطلاعات اصلی
-       ========================= */
-
-    document.getElementById("productId").value = "";
-
-    document.getElementById("name").value = "";
-
-    document.getElementById("price").value = "";
-
-    document.getElementById("oldPrice").value = "";
-
-    document.getElementById("category").value = "";
-
-    document.getElementById("image").value = "";
-
-    document.getElementById("imageFile").value = "";
+    document.getElementById(
+        "productId"
+    ).value = "";
 
 
-    /* =========================
-       پاک کردن واریانت‌ها
-       ========================= */
+    document.getElementById(
+        "name"
+    ).value = "";
+
+
+    document.getElementById(
+        "price"
+    ).value = "";
+
+
+    document.getElementById(
+        "oldPrice"
+    ).value = "";
+
+
+    document.getElementById(
+        "category"
+    ).value = "";
+
+
+    document.getElementById(
+        "image"
+    ).value = "";
+
+
+    document.getElementById(
+        "imageFile"
+    ).value = "";
+
+
+    document.getElementById(
+        "variantColor"
+    ).value = "";
+
+
+    document.getElementById(
+        "variantSize"
+    ).value = "";
+
+
+    document.getElementById(
+        "variantStock"
+    ).value = "";
+
 
     productVariants = [];
+
 
     renderVariants();
 
 
-    /* =========================
-       پیام
-       ========================= */
+    const saveButton =
+        document.getElementById(
+            "saveProductButton"
+        );
 
-    const result =
-        document.getElementById("result");
 
-    if(result){
+    if(saveButton){
 
-        result.textContent = "";
+        saveButton.textContent =
+            "💾 ذخیره محصول";
 
     }
 
 }
 
+
 /* =====================================================
-   جلوگیری از HTML ناخواسته
+   جلوگیری از HTML
    ===================================================== */
 
 function escapeHtml(value){
@@ -2762,15 +3479,36 @@ function escapeHtml(value){
     return String(value)
 
         .replace(/&/g,"&amp;")
+
         .replace(/</g,"&lt;")
+
         .replace(/>/g,"&gt;")
+
         .replace(/"/g,"&quot;")
+
         .replace(/'/g,"&#039;");
+
 }
 
 
 /* =====================================================
-   شروع برنامه
+   جلوگیری از خراب شدن onclick
+   ===================================================== */
+
+function escapeJs(value){
+
+    return String(value)
+
+        .replace(/\\/g,"\\\\")
+        .replace(/'/g,"\\'")
+        .replace(/\r/g,"\\r")
+        .replace(/\n/g,"\\n");
+
+}
+
+
+/* =====================================================
+   شروع
    ===================================================== */
 
 checkLogin();
