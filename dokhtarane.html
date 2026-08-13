@@ -145,6 +145,44 @@ header{
   margin:8px 0 14px;
 }
 
+/* انتخاب رنگ و سایز */
+
+.option-title{
+  font-size:13px;
+  font-weight:bold;
+  margin:14px 0 8px;
+  color:#555;
+}
+
+.options{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+
+.option-btn{
+  border:1px solid #ead8df;
+  background:#fff;
+  color:#555;
+  padding:8px 12px;
+  border-radius:9px;
+  cursor:pointer;
+  font-family:inherit;
+  font-size:12px;
+  transition:.2s;
+}
+
+.option-btn:hover{
+  border-color:#ef77a2;
+}
+
+.option-btn.selected{
+  background:#fff0f5;
+  border-color:#ef77a2;
+  color:#e76591;
+  font-weight:bold;
+}
+
 .buy-btn{
   width:100%;
   border:0;
@@ -156,10 +194,16 @@ header{
   font-family:inherit;
   font-weight:bold;
   font-size:14px;
+  margin-top:16px;
 }
 
 .buy-btn:hover{
   background:#e96d98;
+}
+
+.buy-btn.disabled{
+  background:#ccc;
+  cursor:not-allowed;
 }
 
 /* CART */
@@ -262,6 +306,12 @@ header{
   color:#e76898;
   font-size:13px;
   font-weight:800;
+}
+
+.cart-item-options{
+  color:#777;
+  font-size:12px;
+  margin-top:5px;
 }
 
 .cart-controls{
@@ -393,6 +443,8 @@ header{
 
 <div class="products">
 
+  <!-- محصول ۱ -->
+
   <div class="card">
 
     <img
@@ -416,20 +468,83 @@ header{
       ۱٬۴۹۰٬۰۰۰ تومان
     </p>
 
+    <div class="option-title">
+      🎨 انتخاب رنگ
+    </div>
+
+    <div class="options">
+
+      <button
+        class="option-btn"
+        onclick="selectOption(this,'color','صورتی')"
+      >
+        صورتی
+      </button>
+
+      <button
+        class="option-btn"
+        onclick="selectOption(this,'color','سفید')"
+      >
+        سفید
+      </button>
+
+      <button
+        class="option-btn"
+        onclick="selectOption(this,'color','بنفش')"
+      >
+        بنفش
+      </button>
+
+    </div>
+
+    <div class="option-title">
+      📏 انتخاب سایز
+    </div>
+
+    <div class="options">
+
+      <button
+        class="option-btn"
+        onclick="selectOption(this,'size','۱ تا ۲ سال')"
+      >
+        ۱ تا ۲ سال
+      </button>
+
+      <button
+        class="option-btn"
+        onclick="selectOption(this,'size','۲ تا ۳ سال')"
+      >
+        ۲ تا ۳ سال
+      </button>
+
+      <button
+        class="option-btn"
+        onclick="selectOption(this,'size','۳ تا ۴ سال')"
+      >
+        ۳ تا ۴ سال
+      </button>
+
+      <button
+        class="option-btn"
+        onclick="selectOption(this,'size','۴ تا ۵ سال')"
+      >
+        ۴ تا ۵ سال
+      </button>
+
+    </div>
+
     <button
-      class="buy-btn"
-      onclick="addTocart({
-        id:'girl-1',
-        name:'ست دخترانه مجلسی',
-        price:1490000,
-        image:'https://placehold.co/500x600/f8bbd9/ffffff?text=لباس+دخترانه'
-      })"
+      class="buy-btn disabled"
+      data-product="girl-1"
+      onclick="addProduct(1)"
     >
-      🛒 افزودن به سبد خرید
+      🛒 انتخاب رنگ و سایز
     </button>
 
   </div>
 
+
+  <!-- محصول ۲ -->
 
   <div class="card">
 
@@ -454,20 +569,83 @@ header{
       ۱٬۲۰۰٬۰۰۰ تومان
     </p>
 
+    <div class="option-title">
+      🎨 انتخاب رنگ
+    </div>
+
+    <div class="options">
+
+      <button
+        class="option-btn"
+        onclick="selectOption(this,'color','صورتی')"
+      >
+        صورتی
+      </button>
+
+      <button
+        class="option-btn"
+        onclick="selectOption(this,'color','سفید')"
+      >
+        سفید
+      </button>
+
+      <button
+        class="option-btn"
+        onclick="selectOption(this,'color','قرمز')"
+      >
+        قرمز
+      </button>
+
+    </div>
+
+    <div class="option-title">
+      📏 انتخاب سایز
+    </div>
+
+    <div class="options">
+
+      <button
+        class="option-btn"
+        onclick="selectOption(this,'size','۱ تا ۲ سال')"
+      >
+        ۱ تا ۲ سال
+      </button>
+
+      <button
+        class="option-btn"
+        onclick="selectOption(this,'size','۲ تا ۳ سال')"
+      >
+        ۲ تا ۳ سال
+      </button>
+
+      <button
+        class="option-btn"
+        onclick="selectOption(this,'size','۳ تا ۴ سال')"
+      >
+        ۳ تا ۴ سال
+      </button>
+
+      <button
+        class="option-btn"
+        onclick="selectOption(this,'size','۴ تا ۵ سال')"
+      >
+        ۴ تا ۵ سال
+      </button>
+
+    </div>
+
     <button
-      class="buy-btn"
-      onclick="addTocart({
-        id:'girl-2',
-        name:'پیراهن دخترانه شیک',
-        price:1200000,
-        image:'https://placehold.co/500x600/ffe8f3/ffffff?text=پیراهن+دخترانه'
-      })"
+      class="buy-btn disabled"
+      data-product="girl-2"
+      onclick="addProduct(2)"
     >
-      🛒 افزودن به سبد خرید
+      🛒 انتخاب رنگ و سایز
     </button>
 
   </div>
 
+
+  <!-- محصول ۳ -->
 
   <div class="card">
 
@@ -484,16 +662,77 @@ header{
       ۹۹۰٬۰۰۰ تومان
     </div>
 
+    <div class="option-title">
+      🎨 انتخاب رنگ
+    </div>
+
+    <div class="options">
+
+      <button
+        class="option-btn"
+        onclick="selectOption(this,'color','صورتی')"
+      >
+        صورتی
+      </button>
+
+      <button
+        class="option-btn"
+        onclick="selectOption(this,'color','سفید')"
+      >
+        سفید
+      </button>
+
+      <button
+        class="option-btn"
+        onclick="selectOption(this,'color','بنفش')"
+      >
+        بنفش
+      </button>
+
+    </div>
+
+    <div class="option-title">
+      📏 انتخاب سایز
+    </div>
+
+    <div class="options">
+
+      <button
+        class="option-btn"
+        onclick="selectOption(this,'size','۱ تا ۲ سال')"
+      >
+        ۱ تا ۲ سال
+      </button>
+
+      <button
+        class="option-btn"
+        onclick="selectOption(this,'size','۲ تا ۳ سال')"
+      >
+        ۲ تا ۳ سال
+      </button>
+
+      <button
+        class="option-btn"
+        onclick="selectOption(this,'size','۳ تا ۴ سال')"
+      >
+        ۳ تا ۴ سال
+      </button>
+
+      <button
+        class="option-btn"
+        onclick="selectOption(this,'size','۴ تا ۵ سال')"
+      >
+        ۴ تا ۵ سال
+      </button>
+
+    </div>
+
     <button
-      class="buy-btn"
-      onclick="addTocart({
-        id:'girl-3',
-        name:'پیراهن کودک',
-        price:990000,
-        image:'https://placehold.co/400x400/ffe8f3/ffffff?text=پیراهن+کودک'
-      })"
+      class="buy-btn disabled"
+      data-product="girl-3"
+      onclick="addProduct(3)"
     >
-      🛒 افزودن به سبد خرید
+      🛒 انتخاب رنگ و سایز
     </button>
 
   </div>
@@ -508,42 +747,173 @@ let cartItems = JSON.parse(
 );
 
 
-function updateCartCount(){
+/* انتخاب‌های هر محصول */
 
-  const count =
-    cartItems.reduce(
-      (total,item) =>
-        total + item.quantity,
-      0
+let selections = {
+
+  1:{
+    color:null,
+    size:null
+  },
+
+  2:{
+    color:null,
+    size:null
+  },
+
+  3:{
+    color:null,
+    size:null
+  }
+
+};
+
+
+/* انتخاب رنگ یا سایز */
+
+function selectOption(button,type,value){
+
+  const card =
+    button.closest('.card');
+
+  const buttons =
+    card.querySelectorAll(
+      `.option-btn`
     );
 
-  document.getElementById(
-    'cart-count'
-  ).textContent = count;
+  const group =
+    button.parentElement;
+
+  group
+    .querySelectorAll('.option-btn')
+    .forEach(btn =>
+      btn.classList.remove('selected')
+    );
+
+  button.classList.add('selected');
+
+
+  const productButton =
+    card.querySelector('.buy-btn');
+
+  const productId =
+    productButton.dataset.product;
+
+
+  const number =
+    productId.split('-')[1];
+
+
+  selections[number][type] =
+    value;
+
+
+  updateBuyButton(number);
 
 }
 
 
-function saveCart(){
+/* فعال کردن دکمه */
 
-  localStorage.setItem(
-    'niniCart',
-    JSON.stringify(cartItems)
-  );
+function updateBuyButton(number){
 
-  updateCartCount();
+  const selection =
+    selections[number];
+
+  const button =
+    document.querySelector(
+      `[data-product="girl-${number}"]`
+    );
+
+  if(
+    selection.color &&
+    selection.size
+  ){
+
+    button.classList.remove(
+      'disabled'
+    );
+
+    button.textContent =
+      '🛒 افزودن به سبد خرید';
+
+  }else{
+
+    button.classList.add(
+      'disabled'
+    );
+
+    button.textContent =
+      '🛒 انتخاب رنگ و سایز';
+
+  }
 
 }
 
 
-function addTocart(product){
+/* اضافه کردن محصول */
+
+function addProduct(number){
+
+  const selection =
+    selections[number];
+
+  if(
+    !selection.color ||
+    !selection.size
+  ){
+
+    alert(
+      'لطفاً رنگ و سایز را انتخاب کنید 🎀'
+    );
+
+    return;
+
+  }
+
+
+  const products = {
+
+    1:{
+      id:'girl-1',
+      name:'ست دخترانه مجلسی',
+      price:1490000,
+      image:'https://placehold.co/500x600/f8bbd9/ffffff?text=لباس+دخترانه'
+    },
+
+    2:{
+      id:'girl-2',
+      name:'پیراهن دخترانه شیک',
+      price:1200000,
+      image:'https://placehold.co/500x600/ffe8f3/ffffff?text=پیراهن+دخترانه'
+    },
+
+    3:{
+      id:'girl-3',
+      name:'پیراهن کودک',
+      price:990000,
+      image:'https://placehold.co/400x400/ffe8f3/ffffff?text=پیراهن+کودک'
+    }
+
+  };
+
+
+  const product =
+    products[number];
+
+
+  /*
+   هر ترکیب رنگ و سایز
+   یک آیتم جدا در سبد محسوب می‌شود
+  */
 
   const existing =
-    cartItems.find(
-      item =>
-        String(item.id) ===
-        String(product.id)
+    cartItems.find(item =>
+      String(item.id) === String(product.id) &&
+      item.color === selection.color &&
+      item.size === selection.size
     );
+
 
   if(existing){
 
@@ -561,20 +931,60 @@ function addTocart(product){
 
       image:product.image,
 
+      color:selection.color,
+
+      size:selection.size,
+
       quantity:1
 
     });
 
   }
 
+
   saveCart();
 
+
   alert(
-    'محصول به سبد خرید اضافه شد 🛒'
+    `محصول با رنگ ${selection.color} و سایز ${selection.size} به سبد خرید اضافه شد 🛒`
   );
 
 }
 
+
+/* تعداد سبد */
+
+function updateCartCount(){
+
+  const count =
+    cartItems.reduce(
+      (total,item) =>
+        total + Number(item.quantity || 0),
+      0
+    );
+
+  document.getElementById(
+    'cart-count'
+  ).textContent = count;
+
+}
+
+
+/* ذخیره سبد */
+
+function saveCart(){
+
+  localStorage.setItem(
+    'niniCart',
+    JSON.stringify(cartItems)
+  );
+
+  updateCartCount();
+
+}
+
+
+/* قیمت */
 
 function formatPrice(value){
 
@@ -583,6 +993,8 @@ function formatPrice(value){
 
 }
 
+
+/* باز کردن سبد */
 
 function openCart(){
 
@@ -595,11 +1007,13 @@ function openCart(){
     old.remove();
   }
 
+
   const panel =
     document.createElement('div');
 
   panel.id =
     'cart-panel';
+
 
   panel.innerHTML = `
 
@@ -659,12 +1073,15 @@ function openCart(){
 
   `;
 
+
   document.body.appendChild(panel);
 
   renderCart();
 
 }
 
+
+/* بستن سبد */
 
 function closeCart(){
 
@@ -680,6 +1097,8 @@ function closeCart(){
 }
 
 
+/* نمایش سبد */
+
 function renderCart(){
 
   const container =
@@ -690,6 +1109,7 @@ function renderCart(){
   if(!container){
     return;
   }
+
 
   if(cartItems.length === 0){
 
@@ -712,6 +1132,7 @@ function renderCart(){
       </div>
 
     `;
+
 
     document.getElementById(
       'cart-total-price'
@@ -739,6 +1160,18 @@ function renderCart(){
             ${item.name}
           </h3>
 
+          <div class="cart-item-options">
+
+            🎨 رنگ:
+            ${item.color || 'انتخاب نشده'}
+
+            <br>
+
+            📏 سایز:
+            ${item.size || 'انتخاب نشده'}
+
+          </div>
+
           <div class="cart-item-price">
 
             ${formatPrice(item.price)}
@@ -749,7 +1182,7 @@ function renderCart(){
           <div class="cart-controls">
 
             <button
-              onclick="increaseCartItem('${item.id}')"
+              onclick="increaseCartItem('${item.id}','${item.color}','${item.size}')"
             >
               +
             </button>
@@ -759,7 +1192,7 @@ function renderCart(){
             </span>
 
             <button
-              onclick="decreaseCartItem('${item.id}')"
+              onclick="decreaseCartItem('${item.id}','${item.color}','${item.size}')"
             >
               −
             </button>
@@ -770,7 +1203,7 @@ function renderCart(){
 
         <button
           class="cart-remove"
-          onclick="removeCartItem('${item.id}')"
+          onclick="removeCartItem('${item.id}','${item.color}','${item.size}')"
         >
           🗑️
         </button>
@@ -784,10 +1217,11 @@ function renderCart(){
     cartItems.reduce(
       (sum,item) =>
         sum +
-        item.price *
-        item.quantity,
+        Number(item.price || 0) *
+        Number(item.quantity || 0),
       0
     );
+
 
   document.getElementById(
     'cart-total-price'
@@ -798,14 +1232,21 @@ function renderCart(){
 }
 
 
-function increaseCartItem(id){
+/* افزایش */
+
+function increaseCartItem(
+  id,
+  color,
+  size
+){
 
   const item =
-    cartItems.find(
-      item =>
-        String(item.id) ===
-        String(id)
+    cartItems.find(item =>
+      String(item.id) === String(id) &&
+      item.color === color &&
+      item.size === size
     );
+
 
   if(item){
 
@@ -820,18 +1261,26 @@ function increaseCartItem(id){
 }
 
 
-function decreaseCartItem(id){
+/* کاهش */
+
+function decreaseCartItem(
+  id,
+  color,
+  size
+){
 
   const item =
-    cartItems.find(
-      item =>
-        String(item.id) ===
-        String(id)
+    cartItems.find(item =>
+      String(item.id) === String(id) &&
+      item.color === color &&
+      item.size === size
     );
+
 
   if(!item){
     return;
   }
+
 
   if(item.quantity > 1){
 
@@ -840,14 +1289,17 @@ function decreaseCartItem(id){
   }else{
 
     cartItems =
-      cartItems.filter(
-        item =>
-          String(item.id) !==
-          String(id)
+      cartItems.filter(item =>
+        !(
+          String(item.id) === String(id) &&
+          item.color === color &&
+          item.size === size
+        )
       );
 
   }
 
+
   saveCart();
 
   renderCart();
@@ -855,14 +1307,23 @@ function decreaseCartItem(id){
 }
 
 
-function removeCartItem(id){
+/* حذف */
+
+function removeCartItem(
+  id,
+  color,
+  size
+){
 
   cartItems =
-    cartItems.filter(
-      item =>
-        String(item.id) !==
-        String(id)
+    cartItems.filter(item =>
+      !(
+        String(item.id) === String(id) &&
+        item.color === color &&
+        item.size === size
+      )
     );
+
 
   saveCart();
 
@@ -870,6 +1331,8 @@ function removeCartItem(id){
 
 }
 
+
+/* ثبت سفارش */
 
 function checkoutCart(){
 
@@ -883,7 +1346,9 @@ function checkoutCart(){
 
   }
 
-  window.location.href = 'checkout.html';
+
+  window.location.href =
+    'checkout.html';
 
 }
 
