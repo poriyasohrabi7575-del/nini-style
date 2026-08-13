@@ -870,7 +870,6 @@ function removeCartItem(id){
 
 }
 
-
 function checkoutCart(){
 
   if(cartItems.length === 0){
@@ -883,11 +882,10 @@ function checkoutCart(){
 
   }
 
-  alert(
-    'سبد خرید آماده ثبت سفارش است 🛍️'
-  );
+  window.location.href = "checkout.html";
 
 }
+
 
 
 updateCartCount();
