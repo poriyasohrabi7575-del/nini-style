@@ -375,6 +375,61 @@ button{
     .order-stats{grid-template-columns:repeat(2,1fr)}
     .order-filter{min-width:100%}
 }
+    /* =========================
+   رنگ، سایز و موجودی
+   ========================= */
+
+.variants-box{
+    margin-top:15px;
+    padding:15px;
+    background:#fff7fb;
+    border:1px solid #f0dce5;
+    border-radius:12px;
+}
+
+.variant-row{
+    display:grid;
+    grid-template-columns:1fr 1fr 120px 80px;
+    gap:8px;
+    align-items:center;
+    margin-top:10px;
+    padding:10px;
+    background:#fff;
+    border:1px solid #eee;
+    border-radius:10px;
+}
+
+.variant-row input{
+    margin-top:0;
+}
+
+.variant-row button{
+    width:100%;
+    margin-top:0;
+    padding:10px;
+}
+
+.variant-empty{
+    text-align:center;
+    padding:15px;
+    color:#999;
+}
+
+@media(max-width:700px){
+
+    .variant-row{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .variant-row input[type="number"]{
+        grid-column:1;
+    }
+
+    .variant-row button{
+        grid-column:2;
+    }
+
+}
 </style>
 </head>
 
@@ -487,12 +542,70 @@ button{
             accept="image/*"
         >
 
-        <input
-            id="image"
-            placeholder="یا آدرس عکس"
-        >
+       <input
+    id="image"
+    placeholder="یا آدرس عکس"
+>
 
-        <button onclick="saveProduct()">
+<!-- =========================
+     رنگ، سایز و موجودی
+     ========================= -->
+
+<div class="variants-box">
+
+    <h3 style="color:#e88aaa;margin-top:0;">
+        🎨 رنگ، سایز و موجودی
+    </h3>
+
+    <p style="font-size:13px;color:#777;">
+        برای هر ترکیب رنگ و سایز، موجودی جداگانه تعیین کن.
+    </p>
+
+    <input
+        id="variantColor"
+        placeholder="🎨 رنگ — مثال: صورتی"
+    >
+
+    <input
+        id="variantSize"
+        placeholder="📏 سایز — مثال: ۲ سال"
+    >
+
+    <input
+        id="variantStock"
+        type="number"
+        min="0"
+        step="1"
+        placeholder="📦 موجودی — مثال: 5"
+    >
+
+    <button
+        type="button"
+        onclick="addVariant()"
+    >
+        ➕ افزودن رنگ + سایز
+    </button>
+
+    <div id="variantsList"></div>
+
+    <div
+        id="variantSummary"
+        style="
+            margin-top:10px;
+            padding:10px;
+            background:#fff;
+            border-radius:8px;
+            border:1px solid #eee;
+            color:#777;
+            text-align:center;
+        "
+    >
+        هنوز ترکیبی اضافه نشده است.
+    </div>
+
+</div>
+
+<button onclick="saveProduct()">
             💾 ذخیره محصول
         </button>
 
@@ -936,7 +1049,377 @@ async function loadProducts(){
     }
 }
 
+/* =====================================================
+   مدیریت رنگ، سایز و موجودی
+   ===================================================== */
 
+let productVariants = [];
+
+
+/* تبدیل واریانت‌های قبلی */
+
+function normalizeVariants(variants){
+
+    if(!Array.isArray(variants)){
+        return [];
+    }
+
+    return variants
+        .map(v => ({
+
+            color:
+                String(
+                    v.color || ""
+                ).trim(),
+
+            size:
+                String(
+                    v.size || ""
+                ).trim(),
+
+            stock:
+                Math.max(
+                    0,
+                    Number(
+                        v.stock || 0
+                    )
+                )
+
+        }))
+        .filter(
+            v =>
+                v.color &&
+                v.size
+        );
+}
+
+
+/* اضافه کردن رنگ + سایز */
+
+function addVariant(){
+
+    const colorInput =
+        document.getElementById(
+            "variantColor"
+        );
+
+    const sizeInput =
+        document.getElementById(
+            "variantSize"
+        );
+
+    const stockInput =
+        document.getElementById(
+            "variantStock"
+        );
+
+    const color =
+        colorInput.value.trim();
+
+    const size =
+        sizeInput.value.trim();
+
+    const stock =
+        Math.max(
+            0,
+            Number(
+                stockInput.value || 0
+            )
+        );
+
+
+    if(!color){
+
+        alert(
+            "⚠️ لطفاً رنگ را وارد کن."
+        );
+
+        colorInput.focus();
+
+        return;
+    }
+
+
+    if(!size){
+
+        alert(
+            "⚠️ لطفاً سایز را وارد کن."
+        );
+
+        sizeInput.focus();
+
+        return;
+    }
+
+
+    /*
+       اگر همین رنگ + سایز قبلاً وجود داشته،
+       موجودی آن را به‌روزرسانی می‌کنیم.
+    */
+
+    const existingIndex =
+        productVariants.findIndex(
+            variant =>
+                variant.color === color &&
+                variant.size === size
+        );
+
+
+    if(existingIndex !== -1){
+
+        productVariants[
+            existingIndex
+        ].stock = stock;
+
+    }
+    else{
+
+        productVariants.push({
+
+            color: color,
+
+            size: size,
+
+            stock: stock
+
+        });
+
+    }
+
+
+    colorInput.value = "";
+    sizeInput.value = "";
+    stockInput.value = "";
+
+
+    renderVariants();
+
+}
+
+
+/* نمایش واریانت‌ها */
+
+function renderVariants(){
+
+    const list =
+        document.getElementById(
+            "variantsList"
+        );
+
+    const summary =
+        document.getElementById(
+            "variantSummary"
+        );
+
+
+    if(!list || !summary){
+        return;
+    }
+
+
+    if(!productVariants.length){
+
+        list.innerHTML =
+            `
+            <div class="variant-empty">
+                هنوز ترکیبی اضافه نشده است.
+            </div>
+            `;
+
+        summary.textContent =
+            "هنوز ترکیبی اضافه نشده است.";
+
+        return;
+    }
+
+
+    list.innerHTML =
+        productVariants
+        .map(
+            (variant,index) => `
+
+            <div class="variant-row">
+
+                <input
+                    type="text"
+                    value="${escapeHtml(
+                        variant.color
+                    )}"
+                    placeholder="رنگ"
+                    onchange="
+                        updateVariant(
+                            ${index},
+                            'color',
+                            this.value
+                        )
+                    "
+                >
+
+                <input
+                    type="text"
+                    value="${escapeHtml(
+                        variant.size
+                    )}"
+                    placeholder="سایز"
+                    onchange="
+                        updateVariant(
+                            ${index},
+                            'size',
+                            this.value
+                        )
+                    "
+                >
+
+                <input
+                    type="number"
+                    min="0"
+                    value="${Number(
+                        variant.stock || 0
+                    )}"
+                    onchange="
+                        updateVariant(
+                            ${index},
+                            'stock',
+                            this.value
+                        )
+                    "
+                >
+
+                <button
+                    type="button"
+                    class="danger"
+                    onclick="
+                        removeVariant(
+                            ${index}
+                        )
+                    "
+                >
+                    🗑️ حذف
+                </button>
+
+            </div>
+
+        `
+        )
+        .join("");
+
+
+    const totalStock =
+        productVariants.reduce(
+            (sum,variant) =>
+                sum +
+                Math.max(
+                    0,
+                    Number(
+                        variant.stock || 0
+                    )
+                ),
+            0
+        );
+
+
+    const colors =
+        new Set(
+            productVariants.map(
+                variant =>
+                    variant.color
+            )
+        ).size;
+
+
+    const sizes =
+        new Set(
+            productVariants.map(
+                variant =>
+                    variant.size
+            )
+        ).size;
+
+
+    summary.innerHTML = `
+
+        🎨
+        ${colors.toLocaleString("fa-IR")}
+        رنگ
+
+        &nbsp; | &nbsp;
+
+        📏
+        ${sizes.toLocaleString("fa-IR")}
+        سایز
+
+        &nbsp; | &nbsp;
+
+        📦 موجودی کل:
+
+        <strong>
+            ${totalStock.toLocaleString("fa-IR")}
+        </strong>
+
+    `;
+
+}
+
+
+/* ویرایش یک واریانت */
+
+function updateVariant(
+    index,
+    field,
+    value
+){
+
+    if(
+        !productVariants[index]
+    ){
+        return;
+    }
+
+
+    if(field === "stock"){
+
+        productVariants[index].stock =
+            Math.max(
+                0,
+                Number(value || 0)
+            );
+
+    }
+    else{
+
+        productVariants[index][field] =
+            String(
+                value || ""
+            ).trim();
+
+    }
+
+
+    renderVariants();
+
+}
+
+
+/* حذف واریانت */
+
+function removeVariant(index){
+
+    if(
+        !productVariants[index]
+    ){
+        return;
+    }
+
+
+    productVariants.splice(
+        index,
+        1
+    );
+
+
+    renderVariants();
+
+}
 /* =====================================================
    ذخیره محصول
    ===================================================== */
@@ -949,6 +1432,11 @@ async function saveProduct(){
     let image =
         document.getElementById("image").value.trim();
 
+
+    /* =========================
+       عکس
+       ========================= */
+
     if(file){
 
         const reader =
@@ -958,78 +1446,175 @@ async function saveProduct(){
             await new Promise(resolve => {
 
                 reader.onload =
-                    () => resolve(reader.result);
+                    () => resolve(
+                        reader.result
+                    );
 
-                reader.readAsDataURL(file);
+                reader.readAsDataURL(
+                    file
+                );
 
             });
+
     }
+
+
+    /* =========================
+       اطلاعات محصول
+       ========================= */
 
     const product = {
 
         name:
-            document.getElementById("name").value,
+            document
+                .getElementById("name")
+                .value
+                .trim(),
 
         price:
             Number(
-                document.getElementById("price").value || 0
+                document
+                    .getElementById("price")
+                    .value || 0
             ),
 
         oldPrice:
             Number(
-                document.getElementById("oldPrice").value || 0
+                document
+                    .getElementById("oldPrice")
+                    .value || 0
             ),
 
         image:image,
 
         category:
-            document.getElementById("category").value
+            document
+                .getElementById("category")
+                .value
+
     };
 
+
+    /* =========================
+       واریانت‌ها
+       ========================= */
+
+    if(
+        Array.isArray(productVariants) &&
+        productVariants.length
+    ){
+
+        product.variants =
+            productVariants.map(
+                variant => ({
+
+                    color:
+                        String(
+                            variant.color || ""
+                        ).trim(),
+
+                    size:
+                        String(
+                            variant.size || ""
+                        ).trim(),
+
+                    stock:
+                        Math.max(
+                            0,
+                            Number(
+                                variant.stock || 0
+                            )
+                        )
+
+                })
+            )
+            .filter(
+                variant =>
+                    variant.color &&
+                    variant.size
+            );
+
+    }
+
+
+    /* =========================
+       شناسه محصول
+       ========================= */
+
     const id =
-        document.getElementById("productId").value;
+        document
+            .getElementById(
+                "productId"
+            )
+            .value;
+
 
     if(id){
+
         product.id = id;
+
     }
+
+
+    /* =========================
+       ارسال به API
+       ========================= */
 
     try{
 
         const res =
-            await fetch("/api/products",{
+            await fetch(
+                "/api/products",
+                {
 
-                method:id ? "PUT" : "POST",
+                    method:
+                        id
+                            ? "PUT"
+                            : "POST",
 
-                credentials:"include",
+                    credentials:
+                        "include",
 
-                headers:{
-                    "Content-Type":"application/json"
-                },
+                    headers:{
+                        "Content-Type":
+                            "application/json"
+                    },
 
-                body:JSON.stringify(product)
+                    body:
+                        JSON.stringify(
+                            product
+                        )
 
-            });
+                }
+            );
+
 
         const data =
             await res.json();
 
+
         if(!res.ok){
 
             throw new Error(
-                data.error || "خطا"
+                data.error ||
+                "خطا در ذخیره محصول"
             );
+
         }
+
 
         document.getElementById(
             "result"
         ).textContent =
+
             id
-                ? "✅ محصول ویرایش شد"
-                : "✅ محصول ذخیره شد";
+                ? "✅ محصول واریانت‌ها و اطلاعاتش با موفقیت ویرایش شد"
+                : "✅ محصول با رنگ، سایز و موجودی ذخیره شد";
+
 
         clearForm();
 
-        loadProducts();
+        await loadProducts();
 
     }
     catch(error){
@@ -1037,10 +1622,12 @@ async function saveProduct(){
         document.getElementById(
             "result"
         ).textContent =
-            "❌ " + error.message;
-    }
-}
+            "❌ " +
+            error.message;
 
+    }
+
+}
 
 /* =====================================================
    ویرایش محصول
@@ -1066,10 +1653,32 @@ function editProduct(product){
     document.getElementById("image").value =
         product.image || "";
 
+    document.getElementById("imageFile").value = "";
+
+
+    /* =========================
+       بارگذاری رنگ، سایز و موجودی
+       ========================= */
+
+    productVariants =
+        normalizeVariants(
+            product.variants
+        );
+
+    renderVariants();
+
+
+    document.getElementById(
+        "result"
+    ).textContent =
+        "✏️ محصول برای ویرایش آماده است.";
+
+
     window.scrollTo({
         top:0,
         behavior:"smooth"
     });
+
 }
 
 
@@ -2101,35 +2710,48 @@ function formatDate(value){
 
 function clearForm(){
 
-    document.getElementById(
-        "productId"
-    ).value = "";
+    /* =========================
+       پاک کردن اطلاعات اصلی
+       ========================= */
 
-    document.getElementById(
-        "name"
-    ).value = "";
+    document.getElementById("productId").value = "";
 
-    document.getElementById(
-        "price"
-    ).value = "";
+    document.getElementById("name").value = "";
 
-    document.getElementById(
-        "oldPrice"
-    ).value = "";
+    document.getElementById("price").value = "";
 
-    document.getElementById(
-        "category"
-    ).value = "";
+    document.getElementById("oldPrice").value = "";
 
-    document.getElementById(
-        "image"
-    ).value = "";
+    document.getElementById("category").value = "";
 
-    document.getElementById(
-        "imageFile"
-    ).value = "";
+    document.getElementById("image").value = "";
+
+    document.getElementById("imageFile").value = "";
+
+
+    /* =========================
+       پاک کردن واریانت‌ها
+       ========================= */
+
+    productVariants = [];
+
+    renderVariants();
+
+
+    /* =========================
+       پیام
+       ========================= */
+
+    const result =
+        document.getElementById("result");
+
+    if(result){
+
+        result.textContent = "";
+
+    }
+
 }
-
 
 /* =====================================================
    جلوگیری از HTML ناخواسته
