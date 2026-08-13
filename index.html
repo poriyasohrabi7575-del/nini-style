@@ -854,9 +854,7 @@ footer{
 <body>
 
 <div class="topbar">
-🚚 ارسال رایگان برای خرید بالای ۲ میلیون تومان
-&nbsp; • &nbsp;
-💗 کیفیت و رضایت شما اولویت ماست
+  💗 کیفیت و رضایت شما اولویت ماست
 </div>
 
 <header>
@@ -878,12 +876,7 @@ footer{
 
   <div class="header-actions">
 
-    <button class="icon-btn" aria-label="جستجو" onclick="searchProducts()">
-      <svg viewBox="0 0 24 24">
-        <circle cx="10.8" cy="10.8" r="6.7"></circle>
-        <path d="m16 16 5 5"></path>
-      </svg>
-    </button>
+
 
     <button class="icon-btn" aria-label="سبد خرید" onclick="openCart()">
       <svg viewBox="0 0 24 24">
@@ -1270,9 +1263,11 @@ function openCart(){
 
         </div>
 
-      <button class="checkout-btn"
+     <button
+  class="checkout-btn"
   type="button"
-  onclick="window.location.href='checkout.html';">
+  onclick="window.location.href='/checkout.html';"
+>
   ادامه ثبت سفارش
 </button>
 
@@ -1470,7 +1465,7 @@ function removeCartItem(id){
 
 function checkoutCart(){
 
-  if(cartItems.length === 0){
+  if(!cart || cart.length === 0){
 
     alert('سبد خرید شما خالی است.');
 
@@ -1478,15 +1473,9 @@ function checkoutCart(){
 
   }
 
- if (!cart.length) {
-  alert('سبد خرید خالی است!');
-  return;
-}
-
-window.location.href = "checkout.html";
+  window.location.href = "checkout.html";
 
 }
-
 function safeImage(src){
 
   if(!src || !String(src).trim()){
@@ -1655,378 +1644,6 @@ async function loadDiscountProducts(){
 
 }
 
-async function searchProducts(){
-
-  const keyword = prompt('نام محصول را وارد کنید:');
-
-  if(keyword === null){
-    return;
-  }
-
-  const searchText = keyword.trim();
-
-  if(!searchText){
-    return;
-  }
-
-  try{
-
-    const response = await fetch('/api/products');
-
-    if(!response.ok){
-      throw new Error('خطا در دریافت محصولات');
-    }
-
-    const data = await response.json();
-
-    if(!Array.isArray(data)){
-      throw new Error('اطلاعات محصولات نامعتبر است');
-    }
-
-    function normalizePersian(text){
-
-      return String(text ?? '')
-        .toLowerCase()
-        .replace(/ي/g,'ی')
-        .replace(/ى/g,'ی')
-        .replace(/ك/g,'ک')
-        .replace(/ة/g,'ه')
-        .replace(/ۀ/g,'ه')
-        .replace(/\u200c/g,' ')
-        .replace(/\u064B|\u064C|\u064D|\u064E|\u064F|\u0650|\u0651|\u0652/g,'')
-        .replace(/\s+/g,' ')
-        .trim();
-
-    }
-
-    const words =
-      normalizePersian(searchText)
-        .split(' ')
-        .filter(Boolean);
-
-    const results =
-      data.filter(product => {
-
-        const searchableText =
-          normalizePersian(
-
-            [
-              product.name,
-              product.category,
-              product.title,
-              product.type
-            ]
-
-            .filter(Boolean)
-            .join(' ')
-
-          );
-
-        return words.every(word =>
-          searchableText.includes(word)
-        );
-
-      });
-
-    const oldModal =
-      document.getElementById('search-results-modal');
-
-    if(oldModal){
-      oldModal.remove();
-    }
-
-    const modal =
-      document.createElement('div');
-
-    modal.id = 'search-results-modal';
-
-    modal.style.cssText = `
-      position:fixed;
-      inset:0;
-      background:rgba(0,0,0,.45);
-      z-index:99999;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:20px;
-      direction:rtl;
-    `;
-
-    const box =
-      document.createElement('div');
-
-    box.style.cssText = `
-      width:min(900px,100%);
-      max-height:90vh;
-      overflow:auto;
-      background:#fff;
-      border-radius:20px;
-      padding:22px;
-      box-shadow:0 20px 60px rgba(0,0,0,.25);
-      position:relative;
-    `;
-
-    box.innerHTML = `
-
-      <button
-        id="close-search-results"
-        style="
-          position:absolute;
-          top:12px;
-          left:12px;
-          width:38px;
-          height:38px;
-          border:none;
-          border-radius:50%;
-          background:#f8dce7;
-          color:#333;
-          font-size:22px;
-          cursor:pointer;
-        "
-      >
-        ×
-      </button>
-
-      <h2
-        style="
-          text-align:center;
-          margin:5px 40px 20px;
-          font-size:20px;
-        "
-      >
-        🔎 نتیجه جستجو
-      </h2>
-
-      <div
-        id="search-results-grid"
-        style="
-          display:grid;
-          grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
-          gap:15px;
-        "
-      ></div>
-
-    `;
-
-    modal.appendChild(box);
-
-    document.body.appendChild(modal);
-
-    const resultGrid =
-      document.getElementById('search-results-grid');
-
-    if(!results.length){
-
-      resultGrid.innerHTML = `
-
-        <div
-          style="
-            grid-column:1/-1;
-            text-align:center;
-            padding:40px 15px;
-            color:#777;
-          "
-        >
-
-          😔 محصولی با این مشخصات پیدا نشد.
-
-          <br><br>
-
-          <small>
-            نام محصول یا عبارت دیگری را امتحان کنید.
-          </small>
-
-        </div>
-
-      `;
-
-    }else{
-
-      resultGrid.innerHTML =
-        results.map((p,index) => {
-
-          const discount =
-            p.discount
-            ? `
-              <div
-                style="
-                  position:absolute;
-                  top:8px;
-                  right:8px;
-                  background:#f06b9a;
-                  color:white;
-                  padding:4px 8px;
-                  border-radius:8px;
-                  font-size:11px;
-                "
-              >
-                ${escapeHtml(p.discount)}٪ تخفیف
-              </div>
-            `
-            : '';
-
-          return `
-
-            <article
-              style="
-                background:#fff;
-                border:1px solid #eee;
-                border-radius:15px;
-                overflow:hidden;
-                box-shadow:0 5px 18px rgba(0,0,0,.08);
-              "
-            >
-
-              <div
-                style="
-                  position:relative;
-                  background:#fafafa;
-                "
-              >
-
-                <img
-                  src="${escapeHtml(safeImage(p.image))}"
-                  alt="${escapeHtml(p.name || 'محصول')}"
-                  style="
-                    width:100%;
-                    height:180px;
-                    object-fit:cover;
-                    display:block;
-                  "
-                  onerror="
-                    this.src='dokhtarane.png';
-                  "
-                >
-
-                ${discount}
-
-              </div>
-
-              <div
-                style="
-                  padding:12px;
-                  text-align:center;
-                "
-              >
-
-                <h3
-                  style="
-                    font-size:15px;
-                    margin:0 0 8px;
-                  "
-                >
-                  ${escapeHtml(p.name || 'محصول')}
-                </h3>
-
-                ${
-                  p.oldPrice
-                  ? `
-                    <div
-                      style="
-                        color:#999;
-                        text-decoration:line-through;
-                        font-size:12px;
-                        margin-bottom:4px;
-                      "
-                    >
-                      ${formatPrice(p.oldPrice)} تومان
-                    </div>
-                  `
-                  : ''
-                }
-
-                <div
-                  style="
-                    font-weight:bold;
-                    margin-bottom:10px;
-                  "
-                >
-                  ${formatPrice(p.price)} تومان
-                </div>
-
-                <button
-                  class="search-add-cart"
-                  data-index="${index}"
-                  style="
-                    width:100%;
-                    border:none;
-                    border-radius:10px;
-                    padding:9px;
-                    background:#f06b9a;
-                    color:white;
-                    cursor:pointer;
-                    font-family:inherit;
-                  "
-                >
-                  🛒 افزودن به سبد
-                </button>
-
-              </div>
-
-            </article>
-
-          `;
-
-        }).join('');
-
-      resultGrid
-        .querySelectorAll('.search-add-cart')
-        .forEach(button => {
-
-          button.addEventListener(
-            'click',
-            () => {
-
-              const index =
-                Number(button.dataset.index);
-
-              const product =
-                results[index];
-
-              if(product){
-
-                addTocart(product);
-
-              }
-
-            }
-          );
-
-        });
-
-    }
-
-    document
-      .getElementById('close-search-results')
-      .addEventListener(
-        'click',
-        () => modal.remove()
-      );
-
-    modal.addEventListener(
-      'click',
-      event => {
-
-        if(event.target === modal){
-
-          modal.remove();
-
-        }
-
-      }
-    );
-
-  }catch(error){
-
-    console.error(error);
-
-    alert(
-      'در جستجوی محصولات مشکلی پیش آمد. لطفاً دوباره امتحان کنید.'
-    );
-
-  }
-
-}
   
 async function loadProducts(){
 
