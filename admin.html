@@ -720,10 +720,6 @@ button:hover{
                 اکسسوری
             </option>
 
-            <option value="تخفیف خورده">
-                تخفیف خورده
-            </option>
-
         </select>
 
         <input
@@ -737,66 +733,223 @@ button:hover{
             placeholder="یا آدرس عکس"
         >
 
-        <div class="promotion-box" style="margin-top:12px;padding:14px;border:1px solid #f4d9e4;border-radius:12px;background:#fff8fb;">
-            <h3 style="color:#e88aaa;margin:0 0 10px;">⭐ نحوه نمایش محصول</h3>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-                <label style="display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #eee;border-radius:10px;padding:11px;cursor:pointer;">
-                    <input id="isBestSeller" type="checkbox">
-                    <span>🔥 نمایش در محصولات پرفروش</span>
+        <!-- =========================
+             نمایش محصول
+             ========================= -->
+
+        <div
+            class="promotion-box"
+            style="
+                margin-top:12px;
+                padding:14px;
+                border:1px solid #f4d9e4;
+                border-radius:12px;
+                background:#fff8fb;
+            "
+        >
+
+            <h3
+                style="
+                    color:#e88aaa;
+                    margin:0 0 10px;
+                "
+            >
+                ⭐ نحوه نمایش محصول
+            </h3>
+
+            <div
+                style="
+                    display:grid;
+                    grid-template-columns:1fr 1fr;
+                    gap:10px;
+                "
+            >
+
+                <label
+                    style="
+                        display:flex;
+                        align-items:center;
+                        gap:8px;
+                        background:#fff;
+                        border:1px solid #eee;
+                        border-radius:10px;
+                        padding:11px;
+                        cursor:pointer;
+                    "
+                >
+
+                    <input
+                        id="isBestSeller"
+                        type="checkbox"
+                    >
+
+                    <span>
+                        🔥 نمایش در محصولات پرفروش
+                    </span>
+
                 </label>
-                <label style="display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #eee;border-radius:10px;padding:11px;cursor:pointer;">
-                    <input id="isWeeklyDiscount" type="checkbox">
-                    <span>🎉 نمایش در تخفیف ویژه این هفته</span>
+
+
+                <label
+                    style="
+                        display:flex;
+                        align-items:center;
+                        gap:8px;
+                        background:#fff;
+                        border:1px solid #eee;
+                        border-radius:10px;
+                        padding:11px;
+                        cursor:pointer;
+                    "
+                >
+
+                    <input
+                        id="isWeeklyDiscount"
+                        type="checkbox"
+                    >
+
+                    <span>
+                        🎉 نمایش در تخفیف ویژه این هفته
+                    </span>
+
                 </label>
+
             </div>
-            <div style="margin-top:8px;color:#777;font-size:12px;line-height:1.8;">دسته‌بندی «تخفیف خورده» فقط دسته‌بندی محصول است و جدا از این دو گزینه عمل می‌کند.</div>
+
+            <div
+                style="
+                    margin-top:8px;
+                    color:#777;
+                    font-size:12px;
+                    line-height:1.8;
+                "
+            >
+                💡 این دو گزینه مستقل از دسته‌بندی محصول هستند.
+                یک محصول می‌تواند هم‌زمان در پرفروش‌ها و تخفیف ویژه نمایش داده شود.
+            </div>
+
         </div>
 
 
         <!-- =========================
-             مدیریت جداگانه رنگ + سایز + موجودی
+             مدیریت رنگ + سایز + موجودی
              ========================= -->
 
         <div class="variants-box">
 
-            <h3 style="color:#e88aaa;margin-top:0;">
+            <h3
+                style="
+                    color:#e88aaa;
+                    margin-top:0;
+                "
+            >
                 🎨 مدیریت رنگ، سایز و موجودی
             </h3>
 
-            <p style="font-size:13px;color:#777;line-height:1.9;">
-                رنگ‌ها و سایزها را جداگانه خودت ثبت کن. بعد برای هر ترکیب، موجودی همان ترکیب را در جدول وارد کن.
+            <p
+                style="
+                    font-size:13px;
+                    color:#777;
+                    line-height:1.9;
+                "
+            >
+                رنگ‌ها و سایزها را جداگانه خودت ثبت کن.
+                بعد برای هر ترکیب، موجودی همان ترکیب را در جدول وارد کن.
             </p>
 
             <div class="variant-manager-grid">
 
                 <div class="variant-manager-card">
-                    <h4>🎨 رنگ‌ها</h4>
+
+                    <h4>
+                        🎨 رنگ‌ها
+                    </h4>
+
                     <div class="variant-add-row">
-                        <input id="newVariantColor" placeholder="مثلاً صورتی">
-                        <button type="button" onclick="addVariantColor()">➕ افزودن رنگ</button>
+
+                        <input
+                            id="newVariantColor"
+                            placeholder="مثلاً صورتی"
+                        >
+
+                        <button
+                            type="button"
+                            onclick="addVariantColor()"
+                        >
+                            ➕ افزودن رنگ
+                        </button>
+
                     </div>
-                    <div id="variantColorChips" class="variant-chips"></div>
+
+                    <div
+                        id="variantColorChips"
+                        class="variant-chips"
+                    ></div>
+
                 </div>
 
+
                 <div class="variant-manager-card">
-                    <h4>📏 سایزها</h4>
+
+                    <h4>
+                        📏 سایزها
+                    </h4>
+
                     <div class="variant-add-row">
-                        <input id="newVariantSize" placeholder="مثلاً ۳ سال یا XL">
-                        <button type="button" onclick="addVariantSize()">➕ افزودن سایز</button>
+
+                        <input
+                            id="newVariantSize"
+                            placeholder="مثلاً ۳ سال یا XL"
+                        >
+
+                        <button
+                            type="button"
+                            onclick="addVariantSize()"
+                        >
+                            ➕ افزودن سایز
+                        </button>
+
                     </div>
-                    <div id="variantSizeChips" class="variant-chips"></div>
+
+                    <div
+                        id="variantSizeChips"
+                        class="variant-chips"
+                    ></div>
+
                 </div>
 
             </div>
 
-            <div id="variantMatrix" class="variant-matrix-wrap"></div>
 
-            <div id="variantSummary" class="variant-summary">
+            <div
+                id="variantMatrix"
+                class="variant-matrix-wrap"
+            ></div>
+
+
+            <div
+                id="variantSummary"
+                class="variant-summary"
+            >
                 هنوز رنگ یا سایزی اضافه نشده است.
             </div>
 
-            <div style="margin-top:10px;padding:10px;background:#fff;border-radius:8px;color:#777;font-size:12px;line-height:1.9;text-align:center;">
-                💡 مثال: رنگ‌های «صورتی، سفید» و سایزهای «۱ سال، ۲ سال، ۳ سال» را اضافه کن؛ سپس موجودی هر خانه را جدا وارد کن.
+
+            <div
+                style="
+                    margin-top:10px;
+                    padding:10px;
+                    background:#fff;
+                    border-radius:8px;
+                    color:#777;
+                    font-size:12px;
+                    line-height:1.9;
+                    text-align:center;
+                "
+            >
+                💡 مثال: رنگ‌های «صورتی، سفید» و سایزهای
+                «۱ سال، ۲ سال، ۳ سال» را اضافه کن؛
+                سپس موجودی هر خانه را جدا وارد کن.
             </div>
 
         </div>
@@ -809,6 +962,7 @@ button:hover{
         >
             💾 ذخیره محصول
         </button>
+
 
         <div
             id="result"
@@ -828,7 +982,9 @@ button:hover{
 
     <div class="box">
 
-        <h2>🛍️ محصولات فروشگاه</h2>
+        <h2>
+            🛍️ محصولات فروشگاه
+        </h2>
 
         <button
             class="secondary"
@@ -852,7 +1008,9 @@ button:hover{
 
     <div class="box">
 
-        <h2>📦 مدیریت سفارش‌ها</h2>
+        <h2>
+            📦 مدیریت سفارش‌ها
+        </h2>
 
         <button
             class="secondary"
@@ -921,6 +1079,7 @@ button:hover{
 
             </div>
 
+
             <div class="order-stats">
 
                 <div class="order-stat">
@@ -952,12 +1111,15 @@ button:hover{
 
         </div>
 
+
         <div
             id="searchResultInfo"
             class="search-result-info"
         ></div>
 
+
         <div id="orders"></div>
+
 
         <div id="pagination"></div>
 
@@ -1318,6 +1480,48 @@ async function loadProducts(){
                         </small>
 
                         ${
+                            product.isBestSeller
+                            ?
+                            `
+                            <div
+                                style="
+                                    margin-top:8px;
+                                    padding:6px;
+                                    background:#fff3d9;
+                                    border-radius:7px;
+                                    color:#a66a00;
+                                    font-size:12px;
+                                "
+                            >
+                                🔥 پرفروش
+                            </div>
+                            `
+                            :
+                            ""
+                        }
+
+                        ${
+                            product.isWeeklyDiscount
+                            ?
+                            `
+                            <div
+                                style="
+                                    margin-top:6px;
+                                    padding:6px;
+                                    background:#ffe8f1;
+                                    border-radius:7px;
+                                    color:#d35b86;
+                                    font-size:12px;
+                                "
+                            >
+                                🎉 تخفیف ویژه این هفته
+                            </div>
+                            `
+                            :
+                            ""
+                        }
+
+                        ${
                             Array.isArray(product.variants)
                             &&
                             product.variants.length
@@ -1401,214 +1605,560 @@ function normalizeVariants(variants){
         .filter(v => v.color && v.size);
 }
 
+
 function uniqueValues(values){
 
     const seen = new Set();
     const result = [];
 
     (Array.isArray(values) ? values : []).forEach(value => {
-        const clean = String(value || "").trim();
-        const key = clean.toLowerCase();
+
+        const clean =
+            String(value || "").trim();
+
+        const key =
+            clean.toLowerCase();
+
         if(clean && !seen.has(key)){
+
             seen.add(key);
             result.push(clean);
+
         }
+
     });
 
     return result;
 }
 
+
 function findVariant(color,size){
 
     return productVariants.find(v =>
-        String(v.color).trim().toLowerCase() === String(color).trim().toLowerCase() &&
-        String(v.size).trim().toLowerCase() === String(size).trim().toLowerCase()
+        String(v.color).trim().toLowerCase()
+        ===
+        String(color).trim().toLowerCase()
+
+        &&
+
+        String(v.size).trim().toLowerCase()
+        ===
+        String(size).trim().toLowerCase()
     );
+
 }
+
 
 function rebuildVariantsFromMatrix(){
 
     const existing = new Map();
 
     productVariants.forEach(v => {
+
         existing.set(
             `${String(v.color).trim().toLowerCase()}|||${String(v.size).trim().toLowerCase()}`,
             Math.max(0,Number(v.stock || 0))
         );
+
     });
+
 
     const next = [];
 
     productColors.forEach(color => {
+
         productSizes.forEach(size => {
-            const key = `${color.trim().toLowerCase()}|||${size.trim().toLowerCase()}`;
+
+            const key =
+                `${color.trim().toLowerCase()}|||${size.trim().toLowerCase()}`;
+
             next.push({
+
                 color,
                 size,
-                stock:existing.has(key) ? existing.get(key) : 0
+
+                stock:
+                    existing.has(key)
+                    ?
+                    existing.get(key)
+                    :
+                    0
+
             });
+
         });
+
     });
 
+
     productVariants = next;
+
 }
+
 
 function addVariantColor(){
 
-    const input = document.getElementById("newVariantColor");
-    const color = input.value.trim();
+    const input =
+        document.getElementById(
+            "newVariantColor"
+        );
+
+    const color =
+        input.value.trim();
+
 
     if(!color){
-        alert("⚠️ لطفاً نام رنگ را وارد کن.");
+
+        alert(
+            "⚠️ لطفاً نام رنگ را وارد کن."
+        );
+
         input.focus();
+
         return;
     }
 
-    if(productColors.some(c => c.toLowerCase() === color.toLowerCase())){
-        alert("⚠️ این رنگ قبلاً ثبت شده است.");
+
+    if(
+        productColors.some(
+            c =>
+                c.toLowerCase()
+                ===
+                color.toLowerCase()
+        )
+    ){
+
+        alert(
+            "⚠️ این رنگ قبلاً ثبت شده است."
+        );
+
         return;
     }
+
 
     productColors.push(color);
+
     input.value = "";
+
     rebuildVariantsFromMatrix();
+
     renderVariantManager();
+
 }
+
 
 function addVariantSize(){
 
-    const input = document.getElementById("newVariantSize");
-    const size = input.value.trim();
+    const input =
+        document.getElementById(
+            "newVariantSize"
+        );
+
+    const size =
+        input.value.trim();
+
 
     if(!size){
-        alert("⚠️ لطفاً سایز را وارد کن.");
+
+        alert(
+            "⚠️ لطفاً سایز را وارد کن."
+        );
+
         input.focus();
+
         return;
     }
 
-    if(productSizes.some(s => s.toLowerCase() === size.toLowerCase())){
-        alert("⚠️ این سایز قبلاً ثبت شده است.");
+
+    if(
+        productSizes.some(
+            s =>
+                s.toLowerCase()
+                ===
+                size.toLowerCase()
+        )
+    ){
+
+        alert(
+            "⚠️ این سایز قبلاً ثبت شده است."
+        );
+
         return;
     }
+
 
     productSizes.push(size);
+
     input.value = "";
+
     rebuildVariantsFromMatrix();
+
     renderVariantManager();
+
 }
+
 
 function removeVariantColor(index){
 
     if(!productColors[index]) return;
 
-    if(!confirm(`رنگ «${productColors[index]}» حذف شود؟ موجودی ترکیب‌های این رنگ هم از جدول حذف می‌شود.`)) return;
+
+    if(
+        !confirm(
+            `رنگ «${productColors[index]}» حذف شود؟ موجودی ترکیب‌های این رنگ هم از جدول حذف می‌شود.`
+        )
+    ){
+
+        return;
+
+    }
+
 
     productColors.splice(index,1);
+
     rebuildVariantsFromMatrix();
+
     renderVariantManager();
+
 }
+
 
 function removeVariantSize(index){
 
     if(!productSizes[index]) return;
 
-    if(!confirm(`سایز «${productSizes[index]}» حذف شود؟ موجودی ترکیب‌های این سایز هم از جدول حذف می‌شود.`)) return;
+
+    if(
+        !confirm(
+            `سایز «${productSizes[index]}» حذف شود؟ موجودی ترکیب‌های این سایز هم از جدول حذف می‌شود.`
+        )
+    ){
+
+        return;
+
+    }
+
 
     productSizes.splice(index,1);
+
     rebuildVariantsFromMatrix();
+
     renderVariantManager();
+
 }
+
 
 function updateMatrixStock(color,size,value){
 
-    const variant = findVariant(color,size);
+    const variant =
+        findVariant(
+            color,
+            size
+        );
+
     if(!variant) return;
 
-    const raw = String(value ?? "").trim();
-    const parsed = raw === "" ? 0 : Number(raw);
-    variant.stock = Number.isFinite(parsed) ? Math.max(0,Math.floor(parsed)) : 0;
+
+    const raw =
+        String(
+            value ?? ""
+        ).trim();
+
+
+    const parsed =
+        raw === ""
+        ?
+        0
+        :
+        Number(raw);
+
+
+    variant.stock =
+        Number.isFinite(parsed)
+        ?
+        Math.max(
+            0,
+            Math.floor(parsed)
+        )
+        :
+        0;
+
+
     renderVariantSummary();
+
 }
+
 
 function collectVariantsFromMatrix(){
 
-    const matrix = document.getElementById("variantMatrix");
+    const matrix =
+        document.getElementById(
+            "variantMatrix"
+        );
+
     if(!matrix) return;
 
-    matrix.querySelectorAll("input.variant-stock-input").forEach(input => {
 
-        const color = input.dataset.color || "";
-        const size = input.dataset.size || "";
-        if(!color || !size) return;
+    matrix
+        .querySelectorAll(
+            "input.variant-stock-input"
+        )
+        .forEach(
+            input => {
 
-        let variant = findVariant(color,size);
-        if(!variant){
-            variant = {color,size,stock:0};
-            productVariants.push(variant);
-        }
+                const color =
+                    input.dataset.color || "";
 
-        const raw = String(input.value ?? "").trim();
-        const parsed = raw === "" ? 0 : Number(raw);
-        variant.stock = Number.isFinite(parsed) ? Math.max(0,Math.floor(parsed)) : 0;
-    });
+                const size =
+                    input.dataset.size || "";
+
+
+                if(!color || !size) return;
+
+
+                let variant =
+                    findVariant(
+                        color,
+                        size
+                    );
+
+
+                if(!variant){
+
+                    variant = {
+                        color,
+                        size,
+                        stock:0
+                    };
+
+                    productVariants.push(
+                        variant
+                    );
+
+                }
+
+
+                const raw =
+                    String(
+                        input.value ?? ""
+                    ).trim();
+
+
+                const parsed =
+                    raw === ""
+                    ?
+                    0
+                    :
+                    Number(raw);
+
+
+                variant.stock =
+                    Number.isFinite(parsed)
+                    ?
+                    Math.max(
+                        0,
+                        Math.floor(parsed)
+                    )
+                    :
+                    0;
+
+            }
+        );
+
 }
+
 
 function renderVariantManager(){
 
-    const colorChips = document.getElementById("variantColorChips");
-    const sizeChips = document.getElementById("variantSizeChips");
-    const matrix = document.getElementById("variantMatrix");
+    const colorChips =
+        document.getElementById(
+            "variantColorChips"
+        );
 
-    if(!colorChips || !sizeChips || !matrix) return;
+    const sizeChips =
+        document.getElementById(
+            "variantSizeChips"
+        );
 
-    colorChips.innerHTML = productColors.length
-        ? productColors.map((color,index) => `
-            <span class="variant-chip">
-                ${escapeHtml(color)}
-                <button type="button" onclick="removeVariantColor(${index})">×</button>
-            </span>
-        `).join("")
-        : `<div class="variant-empty">هنوز رنگی ثبت نشده است.</div>`;
+    const matrix =
+        document.getElementById(
+            "variantMatrix"
+        );
 
-    sizeChips.innerHTML = productSizes.length
-        ? productSizes.map((size,index) => `
-            <span class="variant-chip">
-                ${escapeHtml(size)}
-                <button type="button" onclick="removeVariantSize(${index})">×</button>
-            </span>
-        `).join("")
-        : `<div class="variant-empty">هنوز سایزی ثبت نشده است.</div>`;
+
+    if(
+        !colorChips ||
+        !sizeChips ||
+        !matrix
+    ){
+
+        return;
+
+    }
+
+
+    colorChips.innerHTML =
+        productColors.length
+        ?
+        productColors
+            .map(
+                (color,index) => `
+
+                    <span class="variant-chip">
+
+                        ${escapeHtml(color)}
+
+                        <button
+                            type="button"
+                            onclick="removeVariantColor(${index})"
+                        >
+                            ×
+                        </button>
+
+                    </span>
+
+                `
+            )
+            .join("")
+
+        :
+
+        `
+        <div class="variant-empty">
+            هنوز رنگی ثبت نشده است.
+        </div>
+        `;
+
+
+    sizeChips.innerHTML =
+        productSizes.length
+        ?
+        productSizes
+            .map(
+                (size,index) => `
+
+                    <span class="variant-chip">
+
+                        ${escapeHtml(size)}
+
+                        <button
+                            type="button"
+                            onclick="removeVariantSize(${index})"
+                        >
+                            ×
+                        </button>
+
+                    </span>
+
+                `
+            )
+            .join("")
+
+        :
+
+        `
+        <div class="variant-empty">
+            هنوز سایزی ثبت نشده است.
+        </div>
+        `;
+
 
     rebuildVariantsFromMatrix();
 
-    if(!productColors.length || !productSizes.length){
-        matrix.innerHTML = `
+
+    if(
+        !productColors.length ||
+        !productSizes.length
+    ){
+
+        matrix.innerHTML =
+            `
             <div class="variant-empty">
-                🎨 حداقل یک رنگ و 📏 حداقل یک سایز اضافه کن تا جدول موجودی ساخته شود.
+
+                🎨 حداقل یک رنگ و
+                📏 حداقل یک سایز اضافه کن
+                تا جدول موجودی ساخته شود.
+
             </div>
-        `;
+            `;
+
         renderVariantSummary();
+
         return;
+
     }
 
+
     let html = `
+
         <table class="variant-matrix">
+
             <thead>
+
                 <tr>
-                    <th>🎨 رنگ \ 📏 سایز</th>
-                    ${productSizes.map(size => `<th>${escapeHtml(size)}</th>`).join("")}
+
+                    <th>
+                        🎨 رنگ \ 📏 سایز
+                    </th>
+
+                    ${
+                        productSizes
+                            .map(
+                                size =>
+                                    `<th>${escapeHtml(size)}</th>`
+                            )
+                            .join("")
+                    }
+
                 </tr>
+
             </thead>
+
             <tbody>
+
     `;
 
+
     productColors.forEach(color => {
-        html += `<tr><td>${escapeHtml(color)}</td>`;
+
+        html +=
+            `<tr>
+                <td>
+                    ${escapeHtml(color)}
+                </td>`;
+
+
         productSizes.forEach(size => {
-            const variant = findVariant(color,size);
-            const stock = variant ? Number(variant.stock || 0) : 0;
+
+            const variant =
+                findVariant(
+                    color,
+                    size
+                );
+
+
+            const stock =
+                variant
+                ?
+                Number(
+                    variant.stock || 0
+                )
+                :
+                0;
+
+
             html += `
-                <td class="${stock === 0 ? 'variant-zero' : ''}">
+
+                <td
+                    class="${
+                        stock === 0
+                        ?
+                        "variant-zero"
+                        :
+                        ""
+                    }"
+                >
+
                     <input
                         class="variant-stock-input"
                         type="number"
@@ -1620,47 +2170,122 @@ function renderVariantManager(){
                         aria-label="موجودی ${escapeHtml(color)} ${escapeHtml(size)}"
                         oninput="updateMatrixStock(${JSON.stringify(color)},${JSON.stringify(size)},this.value)"
                     >
+
                 </td>
+
             `;
+
         });
+
+
         html += `</tr>`;
+
     });
 
-    html += `</tbody></table>`;
-    matrix.innerHTML = html;
+
+    html += `
+            </tbody>
+        </table>
+    `;
+
+
+    matrix.innerHTML =
+        html;
+
+
     renderVariantSummary();
+
 }
+
 
 function renderVariantSummary(){
 
-    const summary = document.getElementById("variantSummary");
+    const summary =
+        document.getElementById(
+            "variantSummary"
+        );
+
+
     if(!summary) return;
 
-    if(!productColors.length || !productSizes.length){
-        summary.textContent = "هنوز رنگ یا سایزی اضافه نشده است.";
+
+    if(
+        !productColors.length ||
+        !productSizes.length
+    ){
+
+        summary.textContent =
+            "هنوز رنگ یا سایزی اضافه نشده است.";
+
         return;
+
     }
 
-    const totalStock = productVariants.reduce(
-        (sum,v) => sum + Math.max(0,Number(v.stock || 0)),
-        0
-    );
 
-    const combinations = productColors.length * productSizes.length;
-    const available = productVariants.filter(v => Number(v.stock || 0) > 0).length;
+    const totalStock =
+        productVariants.reduce(
+            (sum,v) =>
+                sum +
+                Math.max(
+                    0,
+                    Number(
+                        v.stock || 0
+                    )
+                ),
+            0
+        );
+
+
+    const combinations =
+        productColors.length *
+        productSizes.length;
+
+
+    const available =
+        productVariants.filter(
+            v =>
+                Number(
+                    v.stock || 0
+                ) > 0
+        ).length;
+
 
     summary.innerHTML = `
-        🎨 ${productColors.length.toLocaleString("fa-IR")} رنگ
+
+        🎨
+        ${productColors.length.toLocaleString("fa-IR")}
+        رنگ
+
         &nbsp; | &nbsp;
-        📏 ${productSizes.length.toLocaleString("fa-IR")} سایز
+
+        📏
+        ${productSizes.length.toLocaleString("fa-IR")}
+        سایز
+
         &nbsp; | &nbsp;
-        🔢 ${combinations.toLocaleString("fa-IR")} ترکیب
+
+        🔢
+        ${combinations.toLocaleString("fa-IR")}
+        ترکیب
+
         &nbsp; | &nbsp;
-        📦 موجودی کل: <strong>${totalStock.toLocaleString("fa-IR")}</strong>
+
+        📦 موجودی کل:
+        <strong>
+            ${totalStock.toLocaleString("fa-IR")}
+        </strong>
+
         &nbsp; | &nbsp;
-        ✅ ترکیب موجود: <strong>${available.toLocaleString("fa-IR")}</strong>
+
+        ✅ ترکیب موجود:
+        <strong>
+            ${available.toLocaleString("fa-IR")}
+        </strong>
+
     `;
+
 }
+
 
 /* =====================================================
    ذخیره محصول
@@ -1669,7 +2294,10 @@ function renderVariantSummary(){
 async function saveProduct(){
 
     const result =
-        document.getElementById("result");
+        document.getElementById(
+            "result"
+        );
+
 
     const saveButton =
         document.getElementById(
@@ -1690,8 +2318,6 @@ async function saveProduct(){
             .trim();
 
 
-    /* عکس فایل */
-
     if(file){
 
         image =
@@ -1701,11 +2327,13 @@ async function saveProduct(){
                     const reader =
                         new FileReader();
 
+
                     reader.onload =
                         () =>
                             resolve(
                                 reader.result
                             );
+
 
                     reader.onerror =
                         () =>
@@ -1714,6 +2342,7 @@ async function saveProduct(){
                                     "خطا در خواندن عکس"
                                 )
                             );
+
 
                     reader.readAsDataURL(
                         file
@@ -1754,8 +2383,6 @@ async function saveProduct(){
         );
 
 
-    /* بررسی اطلاعات اصلی */
-
     if(!name){
 
         result.textContent =
@@ -1766,19 +2393,21 @@ async function saveProduct(){
             .focus();
 
         return;
+
     }
 
 
     if(!category){
 
         result.textContent =
-            "⚠️ لطفاً دسته‌بندی محصول را انتخاب کن.";
+            "⚠️ لطفاً یکی از دسته‌بندی‌های اصلی محصول را انتخاب کن.";
 
         document
             .getElementById("category")
             .focus();
 
         return;
+
     }
 
 
@@ -1788,52 +2417,74 @@ async function saveProduct(){
             "⚠️ قیمت نمی‌تواند منفی باشد.";
 
         return;
+
     }
 
 
-    /* ساخت واریانت‌ها از جدول رنگ × سایز */
-
     collectVariantsFromMatrix();
+
     rebuildVariantsFromMatrix();
 
-    const cleanedVariants =
-        normalizeVariants(productVariants);
 
-    if(cleanedVariants.length !== productVariants.length){
+    const cleanedVariants =
+        normalizeVariants(
+            productVariants
+        );
+
+
+    if(
+        cleanedVariants.length
+        !==
+        productVariants.length
+    ){
 
         result.textContent =
             "⚠️ یکی از ترکیب‌های رنگ/سایز ناقص است. لطفاً آن را کامل یا حذف کن.";
 
         return;
+
     }
 
-
-    /* ساخت محصول */
 
     const product = {
 
         name:name,
 
-        price:Math.max(0,price),
+        price:
+            Math.max(
+                0,
+                price
+            ),
 
-        oldPrice:Math.max(0,oldPrice),
+        oldPrice:
+            Math.max(
+                0,
+                oldPrice
+            ),
 
         image:image,
 
         category:category,
 
         isBestSeller:
-            document.getElementById("isBestSeller").checked,
+            document
+                .getElementById(
+                    "isBestSeller"
+                )
+                .checked,
 
         isWeeklyDiscount:
-            document.getElementById("isWeeklyDiscount").checked,
+            document
+                .getElementById(
+                    "isWeeklyDiscount"
+                )
+                .checked,
 
-        variants:cleanedVariants
+        variants:
+            cleanedVariants
 
     };
 
-
-    /* شناسه */
 
     const id =
         document
@@ -1844,17 +2495,21 @@ async function saveProduct(){
 
     if(id){
 
-        product.id = id;
+        product.id =
+            id;
 
     }
 
 
     try{
 
-        saveButton.disabled = true;
+        saveButton.disabled =
+            true;
+
 
         saveButton.textContent =
             "⏳ در حال ذخیره...";
+
 
         result.textContent =
             "⏳ لطفاً صبر کن...";
@@ -1867,8 +2522,10 @@ async function saveProduct(){
 
                     method:
                         id
-                            ? "PUT"
-                            : "POST",
+                        ?
+                        "PUT"
+                        :
+                        "POST",
 
                     credentials:"include",
 
@@ -1894,12 +2551,15 @@ async function saveProduct(){
 
         let data = {};
 
+
         try{
 
             data =
                 text
-                    ? JSON.parse(text)
-                    : {};
+                ?
+                JSON.parse(text)
+                :
+                {};
 
         }
         catch(e){
@@ -1923,10 +2583,10 @@ async function saveProduct(){
 
         result.textContent =
             id
-                ?
-                "✅ محصول و رنگ و سایز و موجودی با موفقیت ویرایش شد."
-                :
-                "✅ محصول و رنگ و سایز و موجودی با موفقیت ذخیره شد.";
+            ?
+            "✅ محصول و تنظیمات نمایش با موفقیت ویرایش شد."
+            :
+            "✅ محصول و تنظیمات نمایش با موفقیت ذخیره شد.";
 
 
         clearForm();
@@ -1945,7 +2605,9 @@ async function saveProduct(){
     }
     finally{
 
-        saveButton.disabled = false;
+        saveButton.disabled =
+            false;
+
 
         saveButton.textContent =
             "💾 ذخیره محصول";
@@ -1985,10 +2647,32 @@ function editProduct(product){
         product.oldPrice ?? "";
 
 
-    document.getElementById(
-        "category"
-    ).value =
-        product.category || "";
+    /*
+       دسته «تخفیف خورده» دیگر وجود ندارد.
+       اگر محصول قدیمی هنوز این دسته را داشته باشد،
+       کاربر باید یک دسته اصلی انتخاب کند.
+    */
+
+    const categorySelect =
+        document.getElementById(
+            "category"
+        );
+
+
+    if(
+        product.category ===
+        "تخفیف خورده"
+    ){
+
+        categorySelect.value = "";
+
+    }
+    else{
+
+        categorySelect.value =
+            product.category || "";
+
+    }
 
 
     document.getElementById(
@@ -2001,8 +2685,17 @@ function editProduct(product){
         "imageFile"
     ).value = "";
 
-    document.getElementById("isBestSeller").checked = !!product.isBestSeller;
-    document.getElementById("isWeeklyDiscount").checked = !!product.isWeeklyDiscount;
+
+    document.getElementById(
+        "isBestSeller"
+    ).checked =
+        !!product.isBestSeller;
+
+
+    document.getElementById(
+        "isWeeklyDiscount"
+    ).checked =
+        !!product.isWeeklyDiscount;
 
 
     productVariants =
@@ -2010,13 +2703,24 @@ function editProduct(product){
             product.variants
         );
 
-    productColors = uniqueValues(
-        productVariants.map(v => v.color)
-    );
 
-    productSizes = uniqueValues(
-        productVariants.map(v => v.size)
-    );
+    productColors =
+        uniqueValues(
+            productVariants.map(
+                v =>
+                    v.color
+            )
+        );
+
+
+    productSizes =
+        uniqueValues(
+            productVariants.map(
+                v =>
+                    v.size
+            )
+        );
+
 
     renderVariantManager();
 
@@ -2024,6 +2728,10 @@ function editProduct(product){
     document.getElementById(
         "result"
     ).textContent =
+        product.category === "تخفیف خورده"
+        ?
+        "✏️ محصول برای ویرایش آماده است. لطفاً دسته‌بندی اصلی محصول را انتخاب کن."
+        :
         "✏️ محصول برای ویرایش آماده است.";
 
 
@@ -2048,15 +2756,24 @@ function editProduct(product){
 async function deleteProduct(id){
 
     if(!id){
-        alert("❌ شناسه محصول پیدا نشد.");
+
+        alert(
+            "❌ شناسه محصول پیدا نشد."
+        );
+
         return;
+
     }
 
 
-    if(!confirm(
-        "مطمئنی می‌خواهی این محصول حذف شود؟"
-    )){
+    if(
+        !confirm(
+            "مطمئنی می‌خواهی این محصول حذف شود؟"
+        )
+    ){
+
         return;
+
     }
 
 
@@ -2090,14 +2807,18 @@ async function deleteProduct(id){
         const text =
             await res.text();
 
+
         let data = {};
+
 
         try{
 
             data =
                 text
-                    ? JSON.parse(text)
-                    : {};
+                ?
+                JSON.parse(text)
+                :
+                {};
 
         }
         catch(e){
@@ -2124,6 +2845,7 @@ async function deleteProduct(id){
 
         await loadProducts();
 
+
     }
     catch(error){
 
@@ -2144,7 +2866,9 @@ async function deleteProduct(id){
 async function loadOrders(){
 
     const box =
-        document.getElementById("orders");
+        document.getElementById(
+            "orders"
+        );
 
 
     box.innerHTML =
@@ -2187,9 +2911,13 @@ async function loadOrders(){
 
 
         allOrders =
-            Array.isArray(data.orders)
-                ? data.orders
-                : [];
+            Array.isArray(
+                data.orders
+            )
+            ?
+            data.orders
+            :
+            [];
 
 
         document.getElementById(
@@ -2222,7 +2950,8 @@ async function loadOrders(){
         updateOrderStats();
 
 
-        currentOrderPage = 1;
+        currentOrderPage =
+            1;
 
 
         filterOrders();
@@ -2253,7 +2982,8 @@ function updateOrderStats(){
             allOrders.filter(
                 order =>
                     (order.status || "new")
-                    === status
+                    ===
+                    status
             ).length;
 
 
@@ -2300,16 +3030,23 @@ function updateOrderStats(){
 
 function setOrderFilter(status){
 
-    currentOrderFilter = status;
+    currentOrderFilter =
+        status;
 
-    currentOrderPage = 1;
+
+    currentOrderPage =
+        1;
 
 
     document
-        .querySelectorAll(".order-filter")
+        .querySelectorAll(
+            ".order-filter"
+        )
         .forEach(
             button =>
-                button.classList.remove("active")
+                button.classList.remove(
+                    "active"
+                )
         );
 
 
@@ -2321,7 +3058,9 @@ function setOrderFilter(status){
 
     if(activeButton){
 
-        activeButton.classList.add("active");
+        activeButton.classList.add(
+            "active"
+        );
 
     }
 
@@ -2346,8 +3085,10 @@ function filterOrders(){
     const search =
         (
             searchInput
-                ? searchInput.value
-                : ""
+            ?
+            searchInput.value
+            :
+            ""
         )
         .trim()
         .toLowerCase();
@@ -2358,12 +3099,16 @@ function filterOrders(){
             order => {
 
                 const status =
-                    order.status || "new";
+                    order.status ||
+                    "new";
 
 
                 if(
-                    currentOrderFilter !== "all" &&
-                    status !== currentOrderFilter
+                    currentOrderFilter !==
+                    "all"
+                    &&
+                    status !==
+                    currentOrderFilter
                 ){
 
                     return false;
@@ -2408,11 +3153,14 @@ function filterOrders(){
 
                 return (
 
-                    name.includes(search) ||
+                    name.includes(search)
+                    ||
 
-                    mobile.includes(search) ||
+                    mobile.includes(search)
+                    ||
 
-                    trackingCode.includes(search) ||
+                    trackingCode.includes(search)
+                    ||
 
                     orderId.includes(search)
 
@@ -2461,9 +3209,13 @@ function renderOrders(){
             `;
 
 
-        pagination.innerHTML = "";
+        pagination.innerHTML =
+            "";
 
-        info.textContent = "";
+
+        info.textContent =
+            "";
+
 
         return;
 
@@ -2477,7 +3229,10 @@ function renderOrders(){
         );
 
 
-    if(currentOrderPage > totalPages){
+    if(
+        currentOrderPage >
+        totalPages
+    ){
 
         currentOrderPage =
             totalPages;
@@ -2486,12 +3241,16 @@ function renderOrders(){
 
 
     const start =
-        (currentOrderPage - 1) *
+        (
+            currentOrderPage - 1
+        )
+        *
         ordersPerPage;
 
 
     const end =
-        start + ordersPerPage;
+        start +
+        ordersPerPage;
 
 
     const pageOrders =
@@ -2523,7 +3282,8 @@ function renderOrders(){
             (order,index) => {
 
                 const realIndex =
-                    start + index;
+                    start +
+                    index;
 
 
                 const safeId =
@@ -2716,8 +3476,10 @@ function renderOrders(){
                                 ${
                                     (order.status || "new")
                                     === "new"
-                                    ? "selected"
-                                    : ""
+                                    ?
+                                    "selected"
+                                    :
+                                    ""
                                 }
                             >
                                 🟡 جدید
@@ -2728,8 +3490,10 @@ function renderOrders(){
                                 value="preparing"
                                 ${
                                     order.status === "preparing"
-                                    ? "selected"
-                                    : ""
+                                    ?
+                                    "selected"
+                                    :
+                                    ""
                                 }
                             >
                                 🔵 آماده‌سازی
@@ -2740,8 +3504,10 @@ function renderOrders(){
                                 value="shipped"
                                 ${
                                     order.status === "shipped"
-                                    ? "selected"
-                                    : ""
+                                    ?
+                                    "selected"
+                                    :
+                                    ""
                                 }
                             >
                                 🚚 ارسال شد
@@ -2752,8 +3518,10 @@ function renderOrders(){
                                 value="delivered"
                                 ${
                                     order.status === "delivered"
-                                    ? "selected"
-                                    : ""
+                                    ?
+                                    "selected"
+                                    :
+                                    ""
                                 }
                             >
                                 🟢 تحویل شد
@@ -2781,7 +3549,9 @@ function renderOrders(){
         .join("");
 
 
-    renderPagination(totalPages);
+    renderPagination(
+        totalPages
+    );
 
 }
 
@@ -2800,9 +3570,12 @@ async function deleteOrder(id){
 
 
     const customerName =
-        order && order.name
-            ? order.name
-            : "این سفارش";
+        order &&
+        order.name
+        ?
+        order.name
+        :
+        "این سفارش";
 
 
     const confirmed =
@@ -2814,7 +3587,9 @@ async function deleteOrder(id){
 
 
     if(!confirmed){
+
         return;
+
     }
 
 
@@ -2900,7 +3675,8 @@ function renderPagination(totalPages){
 
     if(totalPages <= 1){
 
-        box.innerHTML = "";
+        box.innerHTML =
+            "";
 
         return;
 
@@ -2920,8 +3696,10 @@ function renderPagination(totalPages){
                 "
                 ${
                     currentOrderPage === 1
-                        ? "disabled"
-                        : ""
+                    ?
+                    "disabled"
+                    :
+                    ""
                 }
             >
                 ◀️ قبلی
@@ -2930,7 +3708,8 @@ function renderPagination(totalPages){
     `;
 
 
-    const maxButtons = 7;
+    const maxButtons =
+        7;
 
 
     let startPage =
@@ -2943,19 +3722,26 @@ function renderPagination(totalPages){
     let endPage =
         Math.min(
             totalPages,
-            startPage + maxButtons - 1
+            startPage +
+            maxButtons -
+            1
         );
 
 
     if(
-        endPage - startPage + 1 <
+        endPage -
+        startPage +
+        1
+        <
         maxButtons
     ){
 
         startPage =
             Math.max(
                 1,
-                endPage - maxButtons + 1
+                endPage -
+                maxButtons +
+                1
             );
 
     }
@@ -2973,8 +3759,10 @@ function renderPagination(totalPages){
                 type="button"
                 class="${
                     page === currentOrderPage
-                        ? "active"
-                        : ""
+                    ?
+                    "active"
+                    :
+                    ""
                 }"
                 onclick="
                     changeOrderPage(${page})
@@ -2999,8 +3787,10 @@ function renderPagination(totalPages){
                 "
                 ${
                     currentOrderPage === totalPages
-                        ? "disabled"
-                        : ""
+                    ?
+                    "disabled"
+                    :
+                    ""
                 }
             >
                 بعدی ▶️
@@ -3026,7 +3816,8 @@ function renderPagination(totalPages){
     `;
 
 
-    box.innerHTML = html;
+    box.innerHTML =
+        html;
 
 }
 
@@ -3050,14 +3841,17 @@ function changeOrderPage(page){
     }
 
 
-    currentOrderPage = page;
+    currentOrderPage =
+        page;
 
 
     renderOrders();
 
 
     document
-        .getElementById("orders")
+        .getElementById(
+            "orders"
+        )
         .scrollIntoView({
             behavior:"smooth",
             block:"start"
@@ -3084,8 +3878,13 @@ async function saveTrackingCode(id){
         );
 
 
-    if(!input || !result){
+    if(
+        !input ||
+        !result
+    ){
+
         return;
+
     }
 
 
@@ -3377,7 +4176,9 @@ function renderProducts(products){
 function formatDate(value){
 
     if(!value){
+
         return "-";
+
     }
 
 
@@ -3392,7 +4193,11 @@ function formatDate(value){
 
         date =
             new Date(
-                Number(value.seconds) * 1000
+                Number(
+                    value.seconds
+                )
+                *
+                1000
             );
 
     }
@@ -3404,7 +4209,11 @@ function formatDate(value){
     }
 
 
-    if(isNaN(date.getTime())){
+    if(
+        isNaN(
+            date.getTime()
+        )
+    ){
 
         return "-";
 
@@ -3465,21 +4274,33 @@ function clearForm(){
         "imageFile"
     ).value = "";
 
-    document.getElementById("isBestSeller").checked = false;
-    document.getElementById("isWeeklyDiscount").checked = false;
+
+    document.getElementById(
+        "isBestSeller"
+    ).checked =
+        false;
+
+
+    document.getElementById(
+        "isWeeklyDiscount"
+    ).checked =
+        false;
 
 
     document.getElementById(
         "newVariantColor"
     ).value = "";
 
+
     document.getElementById(
         "newVariantSize"
     ).value = "";
 
+
     productVariants = [];
     productColors = [];
     productSizes = [];
+
 
     renderVariantManager();
 
@@ -3508,15 +4329,30 @@ function escapeHtml(value){
 
     return String(value)
 
-        .replace(/&/g,"&amp;")
+        .replace(
+            /&/g,
+            "&amp;"
+        )
 
-        .replace(/</g,"&lt;")
+        .replace(
+            /</g,
+            "&lt;"
+        )
 
-        .replace(/>/g,"&gt;")
+        .replace(
+            />/g,
+            "&gt;"
+        )
 
-        .replace(/"/g,"&quot;")
+        .replace(
+            /"/g,
+            "&quot;"
+        )
 
-        .replace(/'/g,"&#039;");
+        .replace(
+            /'/g,
+            "&#039;"
+        );
 
 }
 
@@ -3529,10 +4365,25 @@ function escapeJs(value){
 
     return String(value)
 
-        .replace(/\\/g,"\\\\")
-        .replace(/'/g,"\\'")
-        .replace(/\r/g,"\\r")
-        .replace(/\n/g,"\\n");
+        .replace(
+            /\\/g,
+            "\\\\"
+        )
+
+        .replace(
+            /'/g,
+            "\\'"
+        )
+
+        .replace(
+            /\r/g,
+            "\\r"
+        )
+
+        .replace(
+            /\n/g,
+            "\\n"
+        );
 
 }
 
