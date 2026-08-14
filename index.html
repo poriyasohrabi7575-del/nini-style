@@ -1099,7 +1099,7 @@ footer{
   <div class="products-wrap">
 
     <h2 class="section-title">
-      محصولات پرفروش
+      محصولات پرفروش 🔥
     </h2>
 
     <div
@@ -1650,13 +1650,7 @@ async function loadDiscountProducts(){
 
     const discounted =
       Array.isArray(data)
-        ? data.filter(p => {
-            const d = Number(
-              String(p.discount ?? '')
-                .replace(/[^0-9.]/g, '')
-            );
-            return d > 0 || p.oldPrice;
-          })
+        ? data.filter(p => p.isWeeklyDiscount === true)
         : [];
 
     if(!discounted.length){
@@ -1830,20 +1824,22 @@ async function loadProducts(){
     const data =
       await response.json();
 
-    if(
-      !Array.isArray(data) ||
-      !data.length
-    ){
+    const bestSellers =
+      Array.isArray(data)
+        ? data.filter(p => p.isBestSeller === true)
+        : [];
+
+    if(!bestSellers.length){
 
       grid.innerHTML =
-        '<div class="empty-products">هنوز محصولی ثبت نشده است.</div>';
+        '<div class="empty-products">هنوز محصولی به «پرفروش‌ها» اضافه نشده است.</div>';
 
       return;
 
     }
 
     grid.innerHTML =
-      data.map(p => {
+      bestSellers.map(p => {
 
         const discount =
           p.discount
