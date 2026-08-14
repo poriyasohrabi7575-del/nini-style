@@ -1509,8 +1509,33 @@ function updateMatrixStock(color,size,value){
     const variant = findVariant(color,size);
     if(!variant) return;
 
-    variant.stock = Math.max(0,Math.floor(Number(value || 0)));
+    const raw = String(value ?? "").trim();
+    const parsed = raw === "" ? 0 : Number(raw);
+    variant.stock = Number.isFinite(parsed) ? Math.max(0,Math.floor(parsed)) : 0;
     renderVariantSummary();
+}
+
+function collectVariantsFromMatrix(){
+
+    const matrix = document.getElementById("variantMatrix");
+    if(!matrix) return;
+
+    matrix.querySelectorAll("input.variant-stock-input").forEach(input => {
+
+        const color = input.dataset.color || "";
+        const size = input.dataset.size || "";
+        if(!color || !size) return;
+
+        let variant = findVariant(color,size);
+        if(!variant){
+            variant = {color,size,stock:0};
+            productVariants.push(variant);
+        }
+
+        const raw = String(input.value ?? "").trim();
+        const parsed = raw === "" ? 0 : Number(raw);
+        variant.stock = Number.isFinite(parsed) ? Math.max(0,Math.floor(parsed)) : 0;
+    });
 }
 
 function renderVariantManager(){
@@ -1575,8 +1600,10 @@ function renderVariantManager(){
                         min="0"
                         step="1"
                         value="${stock}"
+                        data-color="${escapeHtml(color)}"
+                        data-size="${escapeHtml(size)}"
                         aria-label="موجودی ${escapeHtml(color)} ${escapeHtml(size)}"
-                        onchange="updateMatrixStock(${JSON.stringify(color)},${JSON.stringify(size)},this.value)"
+                        oninput="updateMatrixStock(${JSON.stringify(color)},${JSON.stringify(size)},this.value)"
                     >
                 </td>
             `;
@@ -1751,6 +1778,7 @@ async function saveProduct(){
 
     /* ساخت واریانت‌ها از جدول رنگ × سایز */
 
+    collectVariantsFromMatrix();
     rebuildVariantsFromMatrix();
 
     const cleanedVariants =
