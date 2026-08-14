@@ -1342,15 +1342,12 @@ function updateVariantModal(){
     btn.onclick = () => { variantModalColor = btn.dataset.color; variantModalSize = ''; variantModalQuantity = 1; updateVariantModal(); };
   });
 
-  const availableSizes = sizes.map(size => {
-    const v = variants.find(x => x.color === variantModalColor && x.size === size);
-    return {size, available:!!v && v.stock > 0};
-  });
+  /* سایزها را همیشه مثل نمونه فروشگاهی نشان بده؛
+     انتخاب سایز مستقل از رنگ است و بعد موجودی ترکیب بررسی می‌شود. */
+  document.getElementById('variant-sizes').innerHTML = sizes.map(size => `
+    <button type="button" class="variant-option ${variantModalSize === size ? 'selected' : ''}" data-size="${escapeHtml(size)}">${escapeHtml(size)}</button>`).join('');
 
-  document.getElementById('variant-sizes').innerHTML = availableSizes.map(x => `
-    <button type="button" class="variant-option ${variantModalSize === x.size ? 'selected' : ''} ${x.available ? '' : 'disabled'}" data-size="${escapeHtml(x.size)}" ${x.available ? '' : 'disabled'}>${escapeHtml(x.size)}</button>`).join('');
-
-  document.getElementById('variant-sizes').querySelectorAll('.variant-option:not(:disabled)').forEach(btn => {
+  document.getElementById('variant-sizes').querySelectorAll('.variant-option').forEach(btn => {
     btn.onclick = () => { variantModalSize = btn.dataset.size; variantModalQuantity = 1; updateVariantModal(); };
   });
 
@@ -1359,15 +1356,21 @@ function updateVariantModal(){
   const addButton = document.getElementById('variant-add');
   document.getElementById('variant-quantity').textContent = variantModalQuantity.toLocaleString('fa-IR');
 
+  if(!variantModalColor && !variantModalSize){
+    stockBox.className = 'variant-stock';
+    stockBox.textContent = 'لطفاً رنگ و سایز را انتخاب کنید.';
+    addButton.disabled = true;
+    return;
+  }
   if(!variantModalColor){
     stockBox.className = 'variant-stock';
-    stockBox.textContent = 'لطفاً ابتدا رنگ را انتخاب کنید.';
+    stockBox.textContent = 'رنگ را انتخاب کنید.';
     addButton.disabled = true;
     return;
   }
   if(!variantModalSize){
     stockBox.className = 'variant-stock';
-    stockBox.textContent = 'لطفاً سایز را انتخاب کنید.';
+    stockBox.textContent = 'سایز را انتخاب کنید.';
     addButton.disabled = true;
     return;
   }
