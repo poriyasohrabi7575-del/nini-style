@@ -1,3 +1,6 @@
+# نسخه کامل `dokhtarane.html`
+
+```html
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 
@@ -145,8 +148,6 @@ header{
   margin:8px 0 14px;
 }
 
-/* انتخاب رنگ و سایز */
-
 .option-title{
   font-size:13px;
   font-weight:bold;
@@ -206,7 +207,29 @@ header{
   cursor:not-allowed;
 }
 
-/* CART */
+.loading{
+  grid-column:1/-1;
+  text-align:center;
+  padding:70px 20px;
+  color:#888;
+  font-size:16px;
+}
+
+.no-products{
+  grid-column:1/-1;
+  text-align:center;
+  padding:70px 20px;
+  color:#888;
+}
+
+.error-box{
+  grid-column:1/-1;
+  text-align:center;
+  padding:50px 20px;
+  color:#c55;
+  background:#fff5f5;
+  border-radius:18px;
+}
 
 #cart-panel{
   position:fixed;
@@ -419,7 +442,6 @@ header{
     onclick="openCart()"
     aria-label="سبد خرید"
   >
-
     🛒
 
     <span
@@ -441,300 +463,13 @@ header{
   جدیدترین لباس‌های دخترانه نی نی استایل
 </p>
 
-<div class="products">
-
-  <!-- محصول ۱ -->
-
-  <div class="card">
-
-    <img
-      src="https://placehold.co/500x600/f8bbd9/ffffff?text=لباس+دخترانه"
-      alt="ست دخترانه مجلسی"
-    >
-
-    <div class="discount">
-      ۳۰٪ تخفیف
-    </div>
-
-    <h2>
-      ست دخترانه مجلسی
-    </h2>
-
-    <p class="old">
-      ۲٬۰۰۰٬۰۰۰ تومان
-    </p>
-
-    <p class="price">
-      ۱٬۴۹۰٬۰۰۰ تومان
-    </p>
-
-    <div class="option-title">
-      🎨 انتخاب رنگ
-    </div>
-
-    <div class="options">
-
-      <button
-        class="option-btn"
-        onclick="selectOption(this,'color','صورتی')"
-      >
-        صورتی
-      </button>
-
-      <button
-        class="option-btn"
-        onclick="selectOption(this,'color','سفید')"
-      >
-        سفید
-      </button>
-
-      <button
-        class="option-btn"
-        onclick="selectOption(this,'color','بنفش')"
-      >
-        بنفش
-      </button>
-
-    </div>
-
-    <div class="option-title">
-      📏 انتخاب سایز
-    </div>
-
-    <div class="options">
-
-      <button
-        class="option-btn"
-        onclick="selectOption(this,'size','۱ تا ۲ سال')"
-      >
-        ۱ تا ۲ سال
-      </button>
-
-      <button
-        class="option-btn"
-        onclick="selectOption(this,'size','۲ تا ۳ سال')"
-      >
-        ۲ تا ۳ سال
-      </button>
-
-      <button
-        class="option-btn"
-        onclick="selectOption(this,'size','۳ تا ۴ سال')"
-      >
-        ۳ تا ۴ سال
-      </button>
-
-      <button
-        class="option-btn"
-        onclick="selectOption(this,'size','۴ تا ۵ سال')"
-      >
-        ۴ تا ۵ سال
-      </button>
-
-    </div>
-
-    <button
-      class="buy-btn disabled"
-      data-product="girl-1"
-      onclick="addProduct(1)"
-    >
-      🛒 انتخاب رنگ و سایز
-    </button>
-
-  </div>
-
-
-  <!-- محصول ۲ -->
-
-  <div class="card">
-
-    <img
-      src="https://placehold.co/500x600/ffe8f3/ffffff?text=پیراهن+دخترانه"
-      alt="پیراهن دخترانه شیک"
-    >
-
-    <div class="discount">
-      ۲۰٪ تخفیف
-    </div>
-
-    <h2>
-      پیراهن دخترانه شیک
-    </h2>
-
-    <p class="old">
-      ۱٬۵۰۰٬۰۰۰ تومان
-    </p>
-
-    <p class="price">
-      ۱٬۲۰۰٬۰۰۰ تومان
-    </p>
-
-    <div class="option-title">
-      🎨 انتخاب رنگ
-    </div>
-
-    <div class="options">
-
-      <button
-        class="option-btn"
-        onclick="selectOption(this,'color','صورتی')"
-      >
-        صورتی
-      </button>
-
-      <button
-        class="option-btn"
-        onclick="selectOption(this,'color','سفید')"
-      >
-        سفید
-      </button>
-
-      <button
-        class="option-btn"
-        onclick="selectOption(this,'color','قرمز')"
-      >
-        قرمز
-      </button>
-
-    </div>
-
-    <div class="option-title">
-      📏 انتخاب سایز
-    </div>
-
-    <div class="options">
-
-      <button
-        class="option-btn"
-        onclick="selectOption(this,'size','۱ تا ۲ سال')"
-      >
-        ۱ تا ۲ سال
-      </button>
-
-      <button
-        class="option-btn"
-        onclick="selectOption(this,'size','۲ تا ۳ سال')"
-      >
-        ۲ تا ۳ سال
-      </button>
-
-      <button
-        class="option-btn"
-        onclick="selectOption(this,'size','۳ تا ۴ سال')"
-      >
-        ۳ تا ۴ سال
-      </button>
-
-      <button
-        class="option-btn"
-        onclick="selectOption(this,'size','۴ تا ۵ سال')"
-      >
-        ۴ تا ۵ سال
-      </button>
-
-    </div>
-
-    <button
-      class="buy-btn disabled"
-      data-product="girl-2"
-      onclick="addProduct(2)"
-    >
-      🛒 انتخاب رنگ و سایز
-    </button>
-
-  </div>
-
-
-  <!-- محصول ۳ -->
-
-  <div class="card">
-
-    <img
-      src="https://placehold.co/400x400/ffe8f3/ffffff?text=پیراهن+کودک"
-      alt="پیراهن کودک"
-    >
-
-    <h2>
-      پیراهن کودک
-    </h2>
-
-    <div class="price">
-      ۹۹۰٬۰۰۰ تومان
-    </div>
-
-    <div class="option-title">
-      🎨 انتخاب رنگ
-    </div>
-
-    <div class="options">
-
-      <button
-        class="option-btn"
-        onclick="selectOption(this,'color','صورتی')"
-      >
-        صورتی
-      </button>
-
-      <button
-        class="option-btn"
-        onclick="selectOption(this,'color','سفید')"
-      >
-        سفید
-      </button>
-
-      <button
-        class="option-btn"
-        onclick="selectOption(this,'color','بنفش')"
-      >
-        بنفش
-      </button>
-
-    </div>
-
-    <div class="option-title">
-      📏 انتخاب سایز
-    </div>
-
-    <div class="options">
-
-      <button
-        class="option-btn"
-        onclick="selectOption(this,'size','۱ تا ۲ سال')"
-      >
-        ۱ تا ۲ سال
-      </button>
-
-      <button
-        class="option-btn"
-        onclick="selectOption(this,'size','۲ تا ۳ سال')"
-      >
-        ۲ تا ۳ سال
-      </button>
-
-      <button
-        class="option-btn"
-        onclick="selectOption(this,'size','۳ تا ۴ سال')"
-      >
-        ۳ تا ۴ سال
-      </button>
-
-      <button
-        class="option-btn"
-        onclick="selectOption(this,'size','۴ تا ۵ سال')"
-      >
-        ۴ تا ۵ سال
-      </button>
-
-    </div>
-
-    <button
-      class="buy-btn disabled"
-      data-product="girl-3"
-      onclick="addProduct(3)"
-    >
-      🛒 انتخاب رنگ و سایز
-    </button>
-
+<div
+  class="products"
+  id="products"
+>
+
+  <div class="loading">
+    در حال دریافت محصولات... 🎀
   </div>
 
 </div>
@@ -742,47 +477,623 @@ header{
 
 <script>
 
+/* =========================
+   سبد خرید
+========================= */
+
 let cartItems = JSON.parse(
   localStorage.getItem('niniCart') || '[]'
 );
 
 
-/* انتخاب‌های هر محصول */
+/* =========================
+   محصولات
+========================= */
 
-let selections = {
+let productsList = [];
 
-  1:{
-    color:null,
-    size:null
-  },
 
-  2:{
-    color:null,
-    size:null
-  },
+/* انتخاب‌های محصول */
 
-  3:{
-    color:null,
-    size:null
+const selections = {};
+
+
+/* =========================
+   دریافت محصولات از API
+========================= */
+
+async function loadProducts(){
+
+  const container =
+    document.getElementById('products');
+
+  container.innerHTML = `
+    <div class="loading">
+      در حال دریافت محصولات... 🎀
+    </div>
+  `;
+
+  try{
+
+    const response =
+      await fetch('/api/products', {
+        method:'GET',
+        cache:'no-store'
+      });
+
+
+    if(!response.ok){
+
+      throw new Error(
+        'خطا در دریافت محصولات: ' +
+        response.status
+      );
+
+    }
+
+
+    const data =
+      await response.json();
+
+
+    /*
+      API ممکن است مستقیماً آرایه
+      یا داخل products آرایه برگرداند.
+    */
+
+    if(Array.isArray(data)){
+
+      productsList = data;
+
+    }else if(Array.isArray(data.products)){
+
+      productsList = data.products;
+
+    }else if(Array.isArray(data.data)){
+
+      productsList = data.data;
+
+    }else{
+
+      productsList = [];
+
+    }
+
+
+    /*
+      فقط محصولات لباس دخترانه
+      نمایش داده شوند.
+    */
+
+    productsList =
+      productsList.filter(product => {
+
+        const category =
+          String(
+            product.category ||
+            product.categoryName ||
+            ''
+          ).trim();
+
+        return normalizeText(category)
+          === normalizeText('لباس دخترانه');
+
+      });
+
+
+    renderProducts();
+
+  }catch(error){
+
+    console.error(
+      'Products loading error:',
+      error
+    );
+
+    container.innerHTML = `
+      <div class="error-box">
+
+        <h3>
+          دریافت محصولات با مشکل مواجه شد
+        </h3>
+
+        <p>
+          لطفاً صفحه را دوباره باز کنید.
+        </p>
+
+      </div>
+    `;
+
   }
 
-};
+}
 
 
-/* انتخاب رنگ یا سایز */
+/* =========================
+   نرمال‌سازی متن فارسی
+========================= */
 
-function selectOption(button,type,value){
+function normalizeText(text){
+
+  return String(text || '')
+    .trim()
+    .replace(/ي/g,'ی')
+    .replace(/ى/g,'ی')
+    .replace(/ك/g,'ک')
+    .replace(/\u200c/g,' ')
+    .replace(/\s+/g,' ');
+
+}
+
+
+/* =========================
+   استخراج قیمت
+========================= */
+
+function getProductPrice(product){
+
+  return Number(
+    product.price ??
+    product.salePrice ??
+    product.finalPrice ??
+    0
+  ) || 0;
+
+}
+
+
+/* =========================
+   استخراج قیمت قبلی
+========================= */
+
+function getOldPrice(product){
+
+  return Number(
+    product.oldPrice ??
+    product.originalPrice ??
+    product.comparePrice ??
+    0
+  ) || 0;
+
+}
+
+
+/* =========================
+   استخراج تصویر
+========================= */
+
+function getProductImage(product){
+
+  if(product.image){
+    return product.image;
+  }
+
+  if(product.imageUrl){
+    return product.imageUrl;
+  }
+
+  if(Array.isArray(product.images) &&
+     product.images.length){
+
+    return product.images[0];
+
+  }
+
+  return 'https://placehold.co/500x600/f8bbd9/ffffff?text=لباس+دخترانه';
+
+}
+
+
+/* =========================
+   استخراج واریانت‌ها
+========================= */
+
+function normalizeVariants(product){
+
+  let variants =
+    product.variants;
+
+
+  if(!Array.isArray(variants)){
+    return [];
+  }
+
+
+  return variants.map((variant,index) => {
+
+    return {
+
+      id:
+        variant.id ||
+        `${product.id || index}-${index}`,
+
+      color:
+        variant.color ||
+        variant.colour ||
+        '',
+
+      size:
+        variant.size ||
+        '',
+
+      stock:
+        Number(
+          variant.stock ?? 0
+        ) || 0
+
+    };
+
+  });
+
+}
+
+
+/* =========================
+   رنگ‌ها
+========================= */
+
+function getColors(product){
+
+  const variants =
+    normalizeVariants(product);
+
+  return [
+    ...new Set(
+      variants
+        .map(v => v.color)
+        .filter(Boolean)
+    )
+  ];
+
+}
+
+
+/* =========================
+   سایزها
+========================= */
+
+function getSizes(product){
+
+  const variants =
+    normalizeVariants(product);
+
+  return [
+    ...new Set(
+      variants
+        .map(v => v.size)
+        .filter(Boolean)
+    )
+  ];
+
+}
+
+
+/* =========================
+   ساخت کارت محصول
+========================= */
+
+function renderProducts(){
+
+  const container =
+    document.getElementById('products');
+
+
+  if(!productsList.length){
+
+    container.innerHTML = `
+
+      <div class="no-products">
+
+        <div style="font-size:50px">
+          👗
+        </div>
+
+        <h3>
+          هنوز محصولی در این دسته ثبت نشده است
+        </h3>
+
+        <p>
+          محصولات لباس دخترانه که از پنل مدیریت ثبت می‌کنید،
+          اینجا نمایش داده می‌شوند.
+        </p>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  container.innerHTML =
+    productsList
+      .map(product =>
+        createProductCard(product)
+      )
+      .join('');
+
+}
+
+
+/* =========================
+   کارت هر محصول
+========================= */
+
+function createProductCard(product){
+
+  const id =
+    String(
+      product.id ??
+      product._id ??
+      Date.now()
+    );
+
+
+  if(!selections[id]){
+
+    selections[id] = {
+      color:null,
+      size:null
+    };
+
+  }
+
+
+  const name =
+    product.name ||
+    product.title ||
+    'محصول دخترانه';
+
+
+  const price =
+    getProductPrice(product);
+
+
+  const oldPrice =
+    getOldPrice(product);
+
+
+  const image =
+    getProductImage(product);
+
+
+  const variants =
+    normalizeVariants(product);
+
+
+  const colors =
+    getColors(product);
+
+
+  const sizes =
+    getSizes(product);
+
+
+  /*
+    اگر محصول واریانت ندارد،
+    دکمه مستقیم قابل خرید است.
+  */
+
+  const hasVariants =
+    variants.length > 0;
+
+
+  const hasColors =
+    colors.length > 0;
+
+
+  const hasSizes =
+    sizes.length > 0;
+
+
+  let colorHTML = '';
+
+
+  if(hasColors){
+
+    colorHTML = `
+
+      <div class="option-title">
+        🎨 انتخاب رنگ
+      </div>
+
+      <div
+        class="options"
+        data-group="color"
+      >
+
+        ${colors.map(color => `
+
+          <button
+            type="button"
+            class="option-btn"
+            onclick="selectOption(
+              this,
+              '${escapeAttribute(id)}',
+              'color',
+              '${escapeAttribute(color)}'
+            )"
+          >
+            ${escapeHTML(color)}
+          </button>
+
+        `).join('')}
+
+      </div>
+
+    `;
+
+  }
+
+
+  let sizeHTML = '';
+
+
+  if(hasSizes){
+
+    sizeHTML = `
+
+      <div class="option-title">
+        📏 انتخاب سایز
+      </div>
+
+      <div
+        class="options"
+        data-group="size"
+      >
+
+        ${sizes.map(size => `
+
+          <button
+            type="button"
+            class="option-btn"
+            onclick="selectOption(
+              this,
+              '${escapeAttribute(id)}',
+              'size',
+              '${escapeAttribute(size)}'
+            )"
+          >
+            ${escapeHTML(size)}
+          </button>
+
+        `).join('')}
+
+      </div>
+
+    `;
+
+  }
+
+
+  let discountHTML = '';
+
+
+  if(oldPrice > price && price > 0){
+
+    const percent =
+      Math.round(
+        ((oldPrice - price) / oldPrice) * 100
+      );
+
+
+    discountHTML = `
+
+      <div class="discount">
+        ${percent}٪ تخفیف
+      </div>
+
+    `;
+
+  }
+
+
+  let oldPriceHTML = '';
+
+
+  if(oldPrice > price && oldPrice > 0){
+
+    oldPriceHTML = `
+
+      <p class="old">
+        ${formatPrice(oldPrice)} تومان
+      </p>
+
+    `;
+
+  }
+
+
+  let buttonText =
+    '🛒 افزودن به سبد خرید';
+
+
+  let buttonClass =
+    'buy-btn';
+
+
+  if(hasVariants){
+
+    buttonText =
+      '🛒 انتخاب رنگ و سایز';
+
+    buttonClass +=
+      ' disabled';
+
+  }
+
+
+  return `
+
+    <div
+      class="card"
+      data-product-id="${escapeAttribute(id)}"
+    >
+
+      <img
+        src="${escapeAttribute(image)}"
+        alt="${escapeAttribute(name)}"
+        loading="lazy"
+      >
+
+
+      ${discountHTML}
+
+
+      <h2>
+        ${escapeHTML(name)}
+      </h2>
+
+
+      ${oldPriceHTML}
+
+
+      <p class="price">
+        ${formatPrice(price)} تومان
+      </p>
+
+
+      ${colorHTML}
+
+
+      ${sizeHTML}
+
+
+      <button
+        type="button"
+        class="${buttonClass}"
+        data-product="${escapeAttribute(id)}"
+        onclick="addProduct('${escapeAttribute(id)}')"
+      >
+        ${buttonText}
+      </button>
+
+    </div>
+
+  `;
+
+}
+
+
+/* =========================
+   انتخاب رنگ / سایز
+========================= */
+
+function selectOption(
+  button,
+  productId,
+  type,
+  value
+){
 
   const card =
     button.closest('.card');
 
-  const buttons =
-    card.querySelectorAll(
-      `.option-btn`
-    );
 
   const group =
     button.parentElement;
+
 
   group
     .querySelectorAll('.option-btn')
@@ -790,45 +1101,191 @@ function selectOption(button,type,value){
       btn.classList.remove('selected')
     );
 
+
   button.classList.add('selected');
 
 
-  const productButton =
-    card.querySelector('.buy-btn');
+  if(!selections[productId]){
 
-  const productId =
-    productButton.dataset.product;
+    selections[productId] = {
+      color:null,
+      size:null
+    };
+
+  }
 
 
-  const number =
-    productId.split('-')[1];
-
-
-  selections[number][type] =
+  selections[productId][type] =
     value;
 
 
-  updateBuyButton(number);
+  updateBuyButton(productId);
 
 }
 
 
-/* فعال کردن دکمه */
+/* =========================
+   بررسی واریانت
+========================= */
 
-function updateBuyButton(number){
+function findSelectedVariant(product){
+
+  const id =
+    String(
+      product.id ??
+      product._id ??
+      ''
+    );
+
 
   const selection =
-    selections[number];
+    selections[id] || {};
+
+
+  const variants =
+    normalizeVariants(product);
+
+
+  if(!variants.length){
+    return null;
+  }
+
+
+  return variants.find(variant => {
+
+    const colorOK =
+      !selection.color ||
+      !variant.color ||
+      variant.color === selection.color;
+
+
+    const sizeOK =
+      !selection.size ||
+      !variant.size ||
+      variant.size === selection.size;
+
+
+    return colorOK && sizeOK;
+
+  }) || null;
+
+}
+
+
+/* =========================
+   فعال کردن دکمه خرید
+========================= */
+
+function updateBuyButton(productId){
+
+  const product =
+    productsList.find(product =>
+      String(
+        product.id ??
+        product._id ??
+        ''
+      ) === String(productId)
+    );
+
+
+  if(!product){
+    return;
+  }
+
 
   const button =
     document.querySelector(
-      `[data-product="girl-${number}"]`
+      `[data-product="${cssEscape(productId)}"]`
     );
 
+
+  if(!button){
+    return;
+  }
+
+
+  const variants =
+    normalizeVariants(product);
+
+
+  /*
+    محصول بدون واریانت:
+    مستقیم قابل خرید است.
+  */
+
+  if(!variants.length){
+
+    button.classList.remove(
+      'disabled'
+    );
+
+    button.textContent =
+      '🛒 افزودن به سبد خرید';
+
+    return;
+
+  }
+
+
+  const selection =
+    selections[productId] || {};
+
+
+  const colors =
+    getColors(product);
+
+
+  const sizes =
+    getSizes(product);
+
+
+  const colorRequired =
+    colors.length > 0;
+
+
+  const sizeRequired =
+    sizes.length > 0;
+
+
+  const selectedVariant =
+    findSelectedVariant(product);
+
+
+  const validColor =
+    !colorRequired ||
+    Boolean(selection.color);
+
+
+  const validSize =
+    !sizeRequired ||
+    Boolean(selection.size);
+
+
   if(
-    selection.color &&
-    selection.size
+    validColor &&
+    validSize &&
+    selectedVariant
   ){
+
+    const stock =
+      Number(
+        selectedVariant.stock ?? 0
+      );
+
+
+    if(stock <= 0){
+
+      button.classList.add(
+        'disabled'
+      );
+
+      button.textContent =
+        'ناموجود';
+
+      return;
+
+    }
+
 
     button.classList.remove(
       'disabled'
@@ -851,20 +1308,26 @@ function updateBuyButton(number){
 }
 
 
-/* اضافه کردن محصول */
+/* =========================
+   افزودن به سبد خرید
+========================= */
 
-function addProduct(number){
+function addProduct(productId){
 
-  const selection =
-    selections[number];
+  const product =
+    productsList.find(product =>
+      String(
+        product.id ??
+        product._id ??
+        ''
+      ) === String(productId)
+    );
 
-  if(
-    !selection.color ||
-    !selection.size
-  ){
+
+  if(!product){
 
     alert(
-      'لطفاً رنگ و سایز را انتخاب کنید 🎀'
+      'محصول پیدا نشد.'
     );
 
     return;
@@ -872,68 +1335,146 @@ function addProduct(number){
   }
 
 
-  const products = {
-
-    1:{
-      id:'girl-1',
-      name:'ست دخترانه مجلسی',
-      price:1490000,
-      image:'https://placehold.co/500x600/f8bbd9/ffffff?text=لباس+دخترانه'
-    },
-
-    2:{
-      id:'girl-2',
-      name:'پیراهن دخترانه شیک',
-      price:1200000,
-      image:'https://placehold.co/500x600/ffe8f3/ffffff?text=پیراهن+دخترانه'
-    },
-
-    3:{
-      id:'girl-3',
-      name:'پیراهن کودک',
-      price:990000,
-      image:'https://placehold.co/400x400/ffe8f3/ffffff?text=پیراهن+کودک'
-    }
-
-  };
+  const id =
+    String(
+      product.id ??
+      product._id
+    );
 
 
-  const product =
-    products[number];
+  const variants =
+    normalizeVariants(product);
+
+
+  const selection =
+    selections[id] || {
+      color:null,
+      size:null
+    };
 
 
   /*
-   هر ترکیب رنگ و سایز
-   یک آیتم جدا در سبد محسوب می‌شود
+    اگر واریانت دارد،
+    رنگ و سایز باید انتخاب شوند.
   */
+
+  if(variants.length){
+
+    const colors =
+      getColors(product);
+
+    const sizes =
+      getSizes(product);
+
+
+    if(
+      colors.length &&
+      !selection.color
+    ){
+
+      alert(
+        'لطفاً رنگ محصول را انتخاب کنید 🎀'
+      );
+
+      return;
+
+    }
+
+
+    if(
+      sizes.length &&
+      !selection.size
+    ){
+
+      alert(
+        'لطفاً سایز محصول را انتخاب کنید 🎀'
+      );
+
+      return;
+
+    }
+
+
+    const variant =
+      findSelectedVariant(product);
+
+
+    if(!variant){
+
+      alert(
+        'ترکیب انتخاب‌شده برای این محصول موجود نیست.'
+      );
+
+      return;
+
+    }
+
+
+    if(
+      Number(variant.stock ?? 0) <= 0
+    ){
+
+      alert(
+        'این ترکیب فعلاً ناموجود است.'
+      );
+
+      return;
+
+    }
+
+  }
+
+
+  const name =
+    product.name ||
+    product.title ||
+    'محصول دخترانه';
+
+
+  const price =
+    getProductPrice(product);
+
+
+  const image =
+    getProductImage(product);
+
 
   const existing =
     cartItems.find(item =>
-      String(item.id) === String(product.id) &&
-      item.color === selection.color &&
-      item.size === selection.size
+
+      String(item.id) === String(id) &&
+
+      String(item.color || '') ===
+        String(selection.color || '') &&
+
+      String(item.size || '') ===
+        String(selection.size || '')
+
     );
 
 
   if(existing){
 
-    existing.quantity++;
+    existing.quantity =
+      Number(existing.quantity || 0) + 1;
 
   }else{
 
     cartItems.push({
 
-      id:product.id,
+      id:id,
 
-      name:product.name,
+      name:name,
 
-      price:Number(product.price) || 0,
+      price:price,
 
-      image:product.image,
+      image:image,
 
-      color:selection.color,
+      color:
+        selection.color || '',
 
-      size:selection.size,
+      size:
+        selection.size || '',
 
       quantity:1
 
@@ -945,32 +1486,41 @@ function addProduct(number){
   saveCart();
 
 
+  const optionText =
+    selection.color || selection.size
+      ? ` با رنگ ${selection.color || '-'} و سایز ${selection.size || '-'}`
+      : '';
+
+
   alert(
-    `محصول با رنگ ${selection.color} و سایز ${selection.size} به سبد خرید اضافه شد 🛒`
+    `محصول${optionText} به سبد خرید اضافه شد 🛒`
   );
 
 }
 
 
-/* تعداد سبد */
+/* =========================
+   سبد خرید
+========================= */
 
 function updateCartCount(){
 
   const count =
     cartItems.reduce(
       (total,item) =>
-        total + Number(item.quantity || 0),
+        total +
+        Number(item.quantity || 0),
       0
     );
 
+
   document.getElementById(
     'cart-count'
-  ).textContent = count;
+  ).textContent =
+    count;
 
 }
 
-
-/* ذخیره سبد */
 
 function saveCart(){
 
@@ -984,17 +1534,17 @@ function saveCart(){
 }
 
 
-/* قیمت */
-
 function formatPrice(value){
 
-  return Number(value)
+  return Number(value || 0)
     .toLocaleString('fa-IR');
 
 }
 
 
-/* باز کردن سبد */
+/* =========================
+   باز کردن سبد
+========================= */
 
 function openCart(){
 
@@ -1003,6 +1553,7 @@ function openCart(){
       'cart-panel'
     );
 
+
   if(old){
     old.remove();
   }
@@ -1010,6 +1561,7 @@ function openCart(){
 
   const panel =
     document.createElement('div');
+
 
   panel.id =
     'cart-panel';
@@ -1021,6 +1573,7 @@ function openCart(){
       class="cart-overlay"
       onclick="closeCart()"
     ></div>
+
 
     <div class="cart-box">
 
@@ -1039,10 +1592,12 @@ function openCart(){
 
       </div>
 
+
       <div
         id="cart-items"
         class="cart-items"
       ></div>
+
 
       <div class="cart-footer">
 
@@ -1060,6 +1615,7 @@ function openCart(){
 
         </div>
 
+
         <button
           class="checkout-btn"
           onclick="checkoutCart()"
@@ -1076,12 +1632,15 @@ function openCart(){
 
   document.body.appendChild(panel);
 
+
   renderCart();
 
 }
 
 
-/* بستن سبد */
+/* =========================
+   بستن سبد
+========================= */
 
 function closeCart(){
 
@@ -1090,6 +1649,7 @@ function closeCart(){
       'cart-panel'
     );
 
+
   if(panel){
     panel.remove();
   }
@@ -1097,7 +1657,9 @@ function closeCart(){
 }
 
 
-/* نمایش سبد */
+/* =========================
+   نمایش سبد
+========================= */
 
 function renderCart(){
 
@@ -1105,6 +1667,7 @@ function renderCart(){
     document.getElementById(
       'cart-items'
     );
+
 
   if(!container){
     return;
@@ -1139,6 +1702,7 @@ function renderCart(){
     ).textContent =
       '۰ تومان';
 
+
     return;
 
   }
@@ -1150,27 +1714,30 @@ function renderCart(){
       <div class="cart-item">
 
         <img
-          src="${item.image}"
-          alt="${item.name}"
+          src="${escapeAttribute(item.image || '')}"
+          alt="${escapeAttribute(item.name || '')}"
         >
+
 
         <div class="cart-item-info">
 
           <h3>
-            ${item.name}
+            ${escapeHTML(item.name || '')}
           </h3>
+
 
           <div class="cart-item-options">
 
             🎨 رنگ:
-            ${item.color || 'انتخاب نشده'}
+            ${escapeHTML(item.color || 'انتخاب نشده')}
 
             <br>
 
             📏 سایز:
-            ${item.size || 'انتخاب نشده'}
+            ${escapeHTML(item.size || 'انتخاب نشده')}
 
           </div>
+
 
           <div class="cart-item-price">
 
@@ -1179,20 +1746,31 @@ function renderCart(){
 
           </div>
 
+
           <div class="cart-controls">
 
             <button
-              onclick="increaseCartItem('${item.id}','${item.color}','${item.size}')"
+              onclick="increaseCartItem(
+                '${escapeAttribute(item.id)}',
+                '${escapeAttribute(item.color || '')}',
+                '${escapeAttribute(item.size || '')}'
+              )"
             >
               +
             </button>
 
+
             <span>
-              ${item.quantity}
+              ${Number(item.quantity || 0)}
             </span>
 
+
             <button
-              onclick="decreaseCartItem('${item.id}','${item.color}','${item.size}')"
+              onclick="decreaseCartItem(
+                '${escapeAttribute(item.id)}',
+                '${escapeAttribute(item.color || '')}',
+                '${escapeAttribute(item.size || '')}'
+              )"
             >
               −
             </button>
@@ -1201,9 +1779,14 @@ function renderCart(){
 
         </div>
 
+
         <button
           class="cart-remove"
-          onclick="removeCartItem('${item.id}','${item.color}','${item.size}')"
+          onclick="removeCartItem(
+            '${escapeAttribute(item.id)}',
+            '${escapeAttribute(item.color || '')}',
+            '${escapeAttribute(item.size || '')}'
+          )"
         >
           🗑️
         </button>
@@ -1232,7 +1815,9 @@ function renderCart(){
 }
 
 
-/* افزایش */
+/* =========================
+   افزایش
+========================= */
 
 function increaseCartItem(
   id,
@@ -1242,15 +1827,22 @@ function increaseCartItem(
 
   const item =
     cartItems.find(item =>
+
       String(item.id) === String(id) &&
-      item.color === color &&
-      item.size === size
+
+      String(item.color || '') ===
+        String(color || '') &&
+
+      String(item.size || '') ===
+        String(size || '')
+
     );
 
 
   if(item){
 
-    item.quantity++;
+    item.quantity =
+      Number(item.quantity || 0) + 1;
 
     saveCart();
 
@@ -1261,7 +1853,9 @@ function increaseCartItem(
 }
 
 
-/* کاهش */
+/* =========================
+   کاهش
+========================= */
 
 function decreaseCartItem(
   id,
@@ -1271,9 +1865,15 @@ function decreaseCartItem(
 
   const item =
     cartItems.find(item =>
+
       String(item.id) === String(id) &&
-      item.color === color &&
-      item.size === size
+
+      String(item.color || '') ===
+        String(color || '') &&
+
+      String(item.size || '') ===
+        String(size || '')
+
     );
 
 
@@ -1282,7 +1882,7 @@ function decreaseCartItem(
   }
 
 
-  if(item.quantity > 1){
+  if(Number(item.quantity || 0) > 1){
 
     item.quantity--;
 
@@ -1290,11 +1890,18 @@ function decreaseCartItem(
 
     cartItems =
       cartItems.filter(item =>
+
         !(
           String(item.id) === String(id) &&
-          item.color === color &&
-          item.size === size
+
+          String(item.color || '') ===
+            String(color || '') &&
+
+          String(item.size || '') ===
+            String(size || '')
+
         )
+
       );
 
   }
@@ -1307,7 +1914,9 @@ function decreaseCartItem(
 }
 
 
-/* حذف */
+/* =========================
+   حذف
+========================= */
 
 function removeCartItem(
   id,
@@ -1317,11 +1926,18 @@ function removeCartItem(
 
   cartItems =
     cartItems.filter(item =>
+
       !(
         String(item.id) === String(id) &&
-        item.color === color &&
-        item.size === size
+
+        String(item.color || '') ===
+          String(color || '') &&
+
+        String(item.size || '') ===
+          String(size || '')
+
       )
+
     );
 
 
@@ -1332,7 +1948,9 @@ function removeCartItem(
 }
 
 
-/* ثبت سفارش */
+/* =========================
+   ثبت سفارش
+========================= */
 
 function checkoutCart(){
 
@@ -1353,10 +1971,61 @@ function checkoutCart(){
 }
 
 
+/* =========================
+   توابع امنیتی نمایش
+========================= */
+
+function escapeHTML(value){
+
+  return String(value ?? '')
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#039;');
+
+}
+
+
+function escapeAttribute(value){
+
+  return escapeHTML(value);
+
+}
+
+
+function cssEscape(value){
+
+  if(
+    window.CSS &&
+    typeof window.CSS.escape === 'function'
+  ){
+
+    return window.CSS.escape(
+      String(value)
+    );
+
+  }
+
+
+  return String(value)
+    .replace(/\\/g,'\\\\')
+    .replace(/"/g,'\\"');
+
+}
+
+
+/* =========================
+   شروع صفحه
+========================= */
+
 updateCartCount();
+
+loadProducts();
 
 </script>
 
 </body>
 
 </html>
+```
