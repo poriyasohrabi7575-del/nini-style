@@ -391,7 +391,7 @@ button:hover{
 }
 
 /* =========================
-   رنگ سایز موجودی
+   مدیریت جداگانه رنگ + سایز + موجودی
    ========================= */
 
 .variants-box{
@@ -404,32 +404,107 @@ button:hover{
     border-radius:12px;
 }
 
-.variant-row{
+.variant-manager-grid{
     display:grid;
-    grid-template-columns:minmax(0,1fr) minmax(0,1fr) 120px 80px;
-    gap:8px;
-    align-items:center;
-    margin-top:10px;
-    padding:10px;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    margin-top:12px;
+}
+
+.variant-manager-card{
     background:#fff;
     border:1px solid #eee;
-    border-radius:10px;
+    border-radius:12px;
+    padding:12px;
 }
 
-.variant-row input{
+.variant-manager-card h4{
+    margin:0 0 8px;
+    color:#e88aaa;
+}
+
+.variant-add-row{
+    display:flex;
+    gap:8px;
+}
+
+.variant-add-row input{
     margin-top:0;
+    flex:1;
 }
 
-.variant-row button{
+.variant-add-row button{
+    width:auto;
+    margin-top:0;
+    padding:10px 14px;
+}
+
+.variant-chips{
+    display:flex;
+    flex-wrap:wrap;
+    gap:7px;
+    margin-top:10px;
+    min-height:32px;
+}
+
+.variant-chip{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    background:#ffe7f0;
+    border:1px solid #f3c6d8;
+    border-radius:20px;
+    padding:6px 10px;
+    font-size:13px;
+}
+
+.variant-chip button{
+    width:auto;
+    margin:0;
+    padding:1px 6px;
+    border-radius:50%;
+    background:#e74c3c;
+}
+
+.variant-matrix-wrap{
+    margin-top:14px;
+    overflow-x:auto;
+    background:#fff;
+    border:1px solid #eee;
+    border-radius:12px;
+}
+
+.variant-matrix{
     width:100%;
-    margin-top:0;
-    padding:10px;
+    min-width:520px;
+    border-collapse:collapse;
 }
 
-.variant-empty{
+.variant-matrix th,
+.variant-matrix td{
+    border:1px solid #eee;
+    padding:8px;
     text-align:center;
-    padding:15px;
-    color:#999;
+}
+
+.variant-matrix th{
+    background:#fff0f6;
+    color:#e88aaa;
+}
+
+.variant-matrix td:first-child{
+    font-weight:bold;
+    background:#fffafc;
+}
+
+.variant-stock-input{
+    width:90px !important;
+    margin:0 !important;
+    text-align:center;
+}
+
+.variant-zero{
+    opacity:.65;
 }
 
 .variant-summary{
@@ -440,6 +515,12 @@ button:hover{
     border:1px solid #eee;
     color:#777;
     text-align:center;
+}
+
+.variant-empty{
+    text-align:center;
+    padding:15px;
+    color:#999;
 }
 
 /* =========================
@@ -468,16 +549,20 @@ button:hover{
         min-width:100%;
     }
 
-    .variant-row{
-        grid-template-columns:1fr 1fr;
+    .variant-manager-grid{
+        grid-template-columns:1fr;
     }
 
-    .variant-row input[type="number"]{
-        grid-column:1;
+    .variant-add-row{
+        flex-direction:column;
     }
 
-    .variant-row button{
-        grid-column:2;
+    .variant-add-row button{
+        width:100%;
+    }
+
+    .variant-stock-input{
+        width:70px !important;
     }
 
     .product-actions{
@@ -654,78 +739,49 @@ button:hover{
 
 
         <!-- =========================
-             رنگ سایز موجودی
+             مدیریت جداگانه رنگ + سایز + موجودی
              ========================= -->
 
         <div class="variants-box">
 
-            <h3
-                style="
-                    color:#e88aaa;
-                    margin-top:0;
-                "
-            >
-                🎨 رنگ، سایز و موجودی
+            <h3 style="color:#e88aaa;margin-top:0;">
+                🎨 مدیریت رنگ، سایز و موجودی
             </h3>
 
-            <p
-                style="
-                    font-size:13px;
-                    color:#777;
-                "
-            >
-                برای هر ترکیب رنگ و سایز،
-                موجودی جداگانه تعیین کن.
+            <p style="font-size:13px;color:#777;line-height:1.9;">
+                رنگ‌ها و سایزها را جداگانه خودت ثبت کن. بعد برای هر ترکیب، موجودی همان ترکیب را در جدول وارد کن.
             </p>
 
-            <input
-                id="variantColor"
-                placeholder="🎨 رنگ — مثال: صورتی"
-            >
+            <div class="variant-manager-grid">
 
-            <input
-                id="variantSize"
-                placeholder="📏 سایز — مثال: ۲ سال"
-            >
+                <div class="variant-manager-card">
+                    <h4>🎨 رنگ‌ها</h4>
+                    <div class="variant-add-row">
+                        <input id="newVariantColor" placeholder="مثلاً صورتی">
+                        <button type="button" onclick="addVariantColor()">➕ افزودن رنگ</button>
+                    </div>
+                    <div id="variantColorChips" class="variant-chips"></div>
+                </div>
 
-            <input
-                id="variantStock"
-                type="number"
-                min="0"
-                step="1"
-                placeholder="📦 موجودی — مثال: 5"
-            >
+                <div class="variant-manager-card">
+                    <h4>📏 سایزها</h4>
+                    <div class="variant-add-row">
+                        <input id="newVariantSize" placeholder="مثلاً ۳ سال یا XL">
+                        <button type="button" onclick="addVariantSize()">➕ افزودن سایز</button>
+                    </div>
+                    <div id="variantSizeChips" class="variant-chips"></div>
+                </div>
 
-            <button
-                type="button"
-                onclick="addVariant()"
-            >
-                ➕ افزودن رنگ + سایز
-            </button>
-
-            <div id="variantsList"></div>
-
-            <div
-                id="variantSummary"
-                class="variant-summary"
-            >
-                هنوز ترکیبی اضافه نشده است.
             </div>
 
-            <div
-                style="
-                    margin-top:10px;
-                    padding:10px;
-                    background:#fff;
-                    border-radius:8px;
-                    color:#777;
-                    font-size:12px;
-                    line-height:1.9;
-                    text-align:center;
-                "
-            >
-                💡 هر ترکیب را جداگانه ثبت کن؛ مثلاً «صورتی + ۲ سال + ۵ عدد».
-                مشتری بعداً باید رنگ و سایز را انتخاب کند.
+            <div id="variantMatrix" class="variant-matrix-wrap"></div>
+
+            <div id="variantSummary" class="variant-summary">
+                هنوز رنگ یا سایزی اضافه نشده است.
+            </div>
+
+            <div style="margin-top:10px;padding:10px;background:#fff;border-radius:8px;color:#777;font-size:12px;line-height:1.9;text-align:center;">
+                💡 مثال: رنگ‌های «صورتی، سفید» و سایزهای «۱ سال، ۲ سال، ۳ سال» را اضافه کن؛ سپس موجودی هر خانه را جدا وارد کن.
             </div>
 
         </div>
@@ -902,6 +958,8 @@ button:hover{
    ===================================================== */
 
 let productVariants = [];
+let productColors = [];
+let productSizes = [];
 
 let allOrders = [];
 let filteredOrders = [];
@@ -1031,7 +1089,7 @@ function showAdminPanel(){
     loadProducts();
     loadOrders();
 
-    renderVariants();
+    renderVariantManager();
 
 }
 
@@ -1310,7 +1368,7 @@ async function loadProducts(){
 
 
 /* =====================================================
-   نرمال‌سازی واریانت‌ها
+   مدیریت رنگ‌ها و سایزها
    ===================================================== */
 
 function normalizeVariants(variants){
@@ -1319,382 +1377,248 @@ function normalizeVariants(variants){
         return [];
     }
 
-
     return variants
-        .map(
-            v => ({
-
-                color:
-                    String(
-                        v.color || ""
-                    ).trim(),
-
-                size:
-                    String(
-                        v.size || ""
-                    ).trim(),
-
-                stock:
-                    Math.max(
-                        0,
-                        Number(
-                            v.stock || 0
-                        )
-                    )
-
-            })
-        )
-        .filter(
-            v =>
-                v.color &&
-                v.size
-        );
-
+        .map(v => ({
+            color:String(v.color || "").trim(),
+            size:String(v.size || "").trim(),
+            stock:Math.max(0,Number(v.stock || 0))
+        }))
+        .filter(v => v.color && v.size);
 }
 
+function uniqueValues(values){
 
-/* =====================================================
-   افزودن رنگ + سایز
-   ===================================================== */
+    const seen = new Set();
+    const result = [];
 
-function addVariant(){
+    (Array.isArray(values) ? values : []).forEach(value => {
+        const clean = String(value || "").trim();
+        const key = clean.toLowerCase();
+        if(clean && !seen.has(key)){
+            seen.add(key);
+            result.push(clean);
+        }
+    });
 
-    const colorInput =
-        document.getElementById(
-            "variantColor"
+    return result;
+}
+
+function findVariant(color,size){
+
+    return productVariants.find(v =>
+        String(v.color).trim().toLowerCase() === String(color).trim().toLowerCase() &&
+        String(v.size).trim().toLowerCase() === String(size).trim().toLowerCase()
+    );
+}
+
+function rebuildVariantsFromMatrix(){
+
+    const existing = new Map();
+
+    productVariants.forEach(v => {
+        existing.set(
+            `${String(v.color).trim().toLowerCase()}|||${String(v.size).trim().toLowerCase()}`,
+            Math.max(0,Number(v.stock || 0))
         );
+    });
 
-    const sizeInput =
-        document.getElementById(
-            "variantSize"
-        );
+    const next = [];
 
-    const stockInput =
-        document.getElementById(
-            "variantStock"
-        );
+    productColors.forEach(color => {
+        productSizes.forEach(size => {
+            const key = `${color.trim().toLowerCase()}|||${size.trim().toLowerCase()}`;
+            next.push({
+                color,
+                size,
+                stock:existing.has(key) ? existing.get(key) : 0
+            });
+        });
+    });
 
+    productVariants = next;
+}
 
-    const color =
-        colorInput.value.trim();
+function addVariantColor(){
 
-    const size =
-        sizeInput.value.trim();
-
-    const stock =
-        Math.max(
-            0,
-            Number(
-                stockInput.value || 0
-            )
-        );
-
+    const input = document.getElementById("newVariantColor");
+    const color = input.value.trim();
 
     if(!color){
-
-        alert(
-            "⚠️ لطفاً رنگ را وارد کن."
-        );
-
-        colorInput.focus();
-
+        alert("⚠️ لطفاً نام رنگ را وارد کن.");
+        input.focus();
         return;
     }
 
+    if(productColors.some(c => c.toLowerCase() === color.toLowerCase())){
+        alert("⚠️ این رنگ قبلاً ثبت شده است.");
+        return;
+    }
+
+    productColors.push(color);
+    input.value = "";
+    rebuildVariantsFromMatrix();
+    renderVariantManager();
+}
+
+function addVariantSize(){
+
+    const input = document.getElementById("newVariantSize");
+    const size = input.value.trim();
 
     if(!size){
-
-        alert(
-            "⚠️ لطفاً سایز را وارد کن."
-        );
-
-        sizeInput.focus();
-
+        alert("⚠️ لطفاً سایز را وارد کن.");
+        input.focus();
         return;
     }
 
-
-    const existingIndex =
-        productVariants.findIndex(
-            variant =>
-                variant.color === color &&
-                variant.size === size
-        );
-
-
-    if(existingIndex !== -1){
-
-        productVariants[
-            existingIndex
-        ].stock = stock;
-
-    }
-    else{
-
-        productVariants.push({
-
-            color:color,
-
-            size:size,
-
-            stock:stock
-
-        });
-
+    if(productSizes.some(s => s.toLowerCase() === size.toLowerCase())){
+        alert("⚠️ این سایز قبلاً ثبت شده است.");
+        return;
     }
 
-
-    colorInput.value = "";
-    sizeInput.value = "";
-    stockInput.value = "";
-
-
-    renderVariants();
-
+    productSizes.push(size);
+    input.value = "";
+    rebuildVariantsFromMatrix();
+    renderVariantManager();
 }
 
+function removeVariantColor(index){
 
-/* =====================================================
-   نمایش واریانت‌ها
-   ===================================================== */
+    if(!productColors[index]) return;
 
-function renderVariants(){
+    if(!confirm(`رنگ «${productColors[index]}» حذف شود؟ موجودی ترکیب‌های این رنگ هم از جدول حذف می‌شود.`)) return;
 
-    const list =
-        document.getElementById(
-            "variantsList"
-        );
+    productColors.splice(index,1);
+    rebuildVariantsFromMatrix();
+    renderVariantManager();
+}
 
-    const summary =
-        document.getElementById(
-            "variantSummary"
-        );
+function removeVariantSize(index){
 
+    if(!productSizes[index]) return;
 
-    if(!list || !summary){
-        return;
-    }
+    if(!confirm(`سایز «${productSizes[index]}» حذف شود؟ موجودی ترکیب‌های این سایز هم از جدول حذف می‌شود.`)) return;
 
+    productSizes.splice(index,1);
+    rebuildVariantsFromMatrix();
+    renderVariantManager();
+}
 
-    if(!productVariants.length){
+function updateMatrixStock(color,size,value){
 
-        list.innerHTML =
-            `
+    const variant = findVariant(color,size);
+    if(!variant) return;
+
+    variant.stock = Math.max(0,Math.floor(Number(value || 0)));
+    renderVariantSummary();
+}
+
+function renderVariantManager(){
+
+    const colorChips = document.getElementById("variantColorChips");
+    const sizeChips = document.getElementById("variantSizeChips");
+    const matrix = document.getElementById("variantMatrix");
+
+    if(!colorChips || !sizeChips || !matrix) return;
+
+    colorChips.innerHTML = productColors.length
+        ? productColors.map((color,index) => `
+            <span class="variant-chip">
+                ${escapeHtml(color)}
+                <button type="button" onclick="removeVariantColor(${index})">×</button>
+            </span>
+        `).join("")
+        : `<div class="variant-empty">هنوز رنگی ثبت نشده است.</div>`;
+
+    sizeChips.innerHTML = productSizes.length
+        ? productSizes.map((size,index) => `
+            <span class="variant-chip">
+                ${escapeHtml(size)}
+                <button type="button" onclick="removeVariantSize(${index})">×</button>
+            </span>
+        `).join("")
+        : `<div class="variant-empty">هنوز سایزی ثبت نشده است.</div>`;
+
+    rebuildVariantsFromMatrix();
+
+    if(!productColors.length || !productSizes.length){
+        matrix.innerHTML = `
             <div class="variant-empty">
-                هنوز ترکیبی اضافه نشده است.
+                🎨 حداقل یک رنگ و 📏 حداقل یک سایز اضافه کن تا جدول موجودی ساخته شود.
             </div>
-            `;
-
-        summary.textContent =
-            "هنوز ترکیبی اضافه نشده است.";
-
+        `;
+        renderVariantSummary();
         return;
     }
 
-
-    list.innerHTML =
-        productVariants
-        .map(
-            (variant,index) => `
-
-            <div class="variant-row">
-
-                <input
-                    type="text"
-                    value="${escapeHtml(variant.color)}"
-                    placeholder="رنگ"
-                    onchange="
-                        updateVariant(
-                            ${index},
-                            'color',
-                            this.value
-                        )
-                    "
-                >
-
-                <input
-                    type="text"
-                    value="${escapeHtml(variant.size)}"
-                    placeholder="سایز"
-                    onchange="
-                        updateVariant(
-                            ${index},
-                            'size',
-                            this.value
-                        )
-                    "
-                >
-
-                <input
-                    type="number"
-                    min="0"
-                    value="${Number(
-                        variant.stock || 0
-                    )}"
-                    onchange="
-                        updateVariant(
-                            ${index},
-                            'stock',
-                            this.value
-                        )
-                    "
-                >
-
-                <button
-                    type="button"
-                    class="danger"
-                    onclick="
-                        removeVariant(
-                            ${index}
-                        )
-                    "
-                >
-                    🗑️ حذف
-                </button>
-
-            </div>
-
-            `
-        )
-        .join("");
-
-
-    const totalStock =
-        productVariants.reduce(
-            (sum,variant) =>
-                sum +
-                Math.max(
-                    0,
-                    Number(
-                        variant.stock || 0
-                    )
-                ),
-            0
-        );
-
-
-    const colors =
-        new Set(
-            productVariants.map(
-                variant =>
-                    variant.color
-            )
-        ).size;
-
-
-    const sizes =
-        new Set(
-            productVariants.map(
-                variant =>
-                    variant.size
-            )
-        ).size;
-
-
-    summary.innerHTML = `
-
-        🎨
-        ${colors.toLocaleString("fa-IR")}
-        رنگ
-
-        &nbsp; | &nbsp;
-
-        📏
-        ${sizes.toLocaleString("fa-IR")}
-        سایز
-
-        &nbsp; | &nbsp;
-
-        📦 موجودی کل:
-
-        <strong>
-            ${totalStock.toLocaleString("fa-IR")}
-        </strong>
-
+    let html = `
+        <table class="variant-matrix">
+            <thead>
+                <tr>
+                    <th>🎨 رنگ \ 📏 سایز</th>
+                    ${productSizes.map(size => `<th>${escapeHtml(size)}</th>`).join("")}
+                </tr>
+            </thead>
+            <tbody>
     `;
 
+    productColors.forEach(color => {
+        html += `<tr><td>${escapeHtml(color)}</td>`;
+        productSizes.forEach(size => {
+            const variant = findVariant(color,size);
+            const stock = variant ? Number(variant.stock || 0) : 0;
+            html += `
+                <td class="${stock === 0 ? 'variant-zero' : ''}">
+                    <input
+                        class="variant-stock-input"
+                        type="number"
+                        min="0"
+                        step="1"
+                        value="${stock}"
+                        aria-label="موجودی ${escapeHtml(color)} ${escapeHtml(size)}"
+                        onchange="updateMatrixStock(${JSON.stringify(color)},${JSON.stringify(size)},this.value)"
+                    >
+                </td>
+            `;
+        });
+        html += `</tr>`;
+    });
+
+    html += `</tbody></table>`;
+    matrix.innerHTML = html;
+    renderVariantSummary();
 }
 
+function renderVariantSummary(){
 
-/* =====================================================
-   ویرایش واریانت
-   ===================================================== */
+    const summary = document.getElementById("variantSummary");
+    if(!summary) return;
 
-function updateVariant(
-    index,
-    field,
-    value
-){
-
-    if(!productVariants[index]){
+    if(!productColors.length || !productSizes.length){
+        summary.textContent = "هنوز رنگ یا سایزی اضافه نشده است.";
         return;
     }
 
-
-    if(field === "stock"){
-
-        productVariants[index].stock =
-            Math.max(
-                0,
-                Number(value || 0)
-            );
-
-    }
-    else{
-
-        const nextValue =
-            String(value || "").trim();
-
-        if(!nextValue){
-            alert(field === "color" ? "⚠️ رنگ نمی‌تواند خالی باشد." : "⚠️ سایز نمی‌تواند خالی باشد.");
-            renderVariants();
-            return;
-        }
-
-        productVariants[index][field] = nextValue;
-
-    }
-
-
-    const duplicate = productVariants.some(
-        (variant, i) =>
-            i !== index &&
-            String(variant.color).trim().toLowerCase() === String(productVariants[index].color).trim().toLowerCase() &&
-            String(variant.size).trim().toLowerCase() === String(productVariants[index].size).trim().toLowerCase()
+    const totalStock = productVariants.reduce(
+        (sum,v) => sum + Math.max(0,Number(v.stock || 0)),
+        0
     );
 
-    if(duplicate){
-        alert("⚠️ این ترکیب رنگ و سایز قبلاً ثبت شده است.");
-        return;
-    }
+    const combinations = productColors.length * productSizes.length;
+    const available = productVariants.filter(v => Number(v.stock || 0) > 0).length;
 
-
-    renderVariants();
-
+    summary.innerHTML = `
+        🎨 ${productColors.length.toLocaleString("fa-IR")} رنگ
+        &nbsp; | &nbsp;
+        📏 ${productSizes.length.toLocaleString("fa-IR")} سایز
+        &nbsp; | &nbsp;
+        🔢 ${combinations.toLocaleString("fa-IR")} ترکیب
+        &nbsp; | &nbsp;
+        📦 موجودی کل: <strong>${totalStock.toLocaleString("fa-IR")}</strong>
+        &nbsp; | &nbsp;
+        ✅ ترکیب موجود: <strong>${available.toLocaleString("fa-IR")}</strong>
+    `;
 }
-
-
-/* =====================================================
-   حذف واریانت
-   ===================================================== */
-
-function removeVariant(index){
-
-    if(!productVariants[index]){
-        return;
-    }
-
-
-    productVariants.splice(
-        index,
-        1
-    );
-
-
-    renderVariants();
-
-}
-
 
 /* =====================================================
    ذخیره محصول
@@ -1825,7 +1749,9 @@ async function saveProduct(){
     }
 
 
-    /* بررسی واریانت‌های ناقص */
+    /* ساخت واریانت‌ها از جدول رنگ × سایز */
+
+    rebuildVariantsFromMatrix();
 
     const cleanedVariants =
         normalizeVariants(productVariants);
@@ -2032,8 +1958,15 @@ function editProduct(product){
             product.variants
         );
 
+    productColors = uniqueValues(
+        productVariants.map(v => v.color)
+    );
 
-    renderVariants();
+    productSizes = uniqueValues(
+        productVariants.map(v => v.size)
+    );
+
+    renderVariantManager();
 
 
     document.getElementById(
@@ -3482,24 +3415,18 @@ function clearForm(){
 
 
     document.getElementById(
-        "variantColor"
+        "newVariantColor"
     ).value = "";
-
 
     document.getElementById(
-        "variantSize"
+        "newVariantSize"
     ).value = "";
-
-
-    document.getElementById(
-        "variantStock"
-    ).value = "";
-
 
     productVariants = [];
+    productColors = [];
+    productSizes = [];
 
-
-    renderVariants();
+    renderVariantManager();
 
 
     const saveButton =
