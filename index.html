@@ -849,26 +849,34 @@ footer{
 }
 
 </style><style id="variant-shop-styles">
-.variant-modal{position:fixed;inset:0;z-index:99999;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(30,20,25,.45)}
+.variant-modal{position:fixed;inset:0;z-index:99999;display:none;align-items:center;justify-content:center;padding:12px;background:rgba(20,20,20,.42)}
 .variant-modal.show{display:flex}
-.variant-modal-box{width:min(460px,94vw);max-height:90vh;overflow:auto;background:#fff;border-radius:22px;padding:22px;box-shadow:0 20px 60px rgba(0,0,0,.2);direction:rtl}
-.variant-modal-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
-.variant-modal-head h3{margin:0;font-size:20px}
-.variant-close{border:0;background:#fff0f5;color:#d85f8a;width:36px;height:36px;border-radius:12px;font-size:22px;cursor:pointer}
-.variant-label{font-weight:800;margin:14px 0 9px;display:block}
-.variant-options{display:flex;flex-wrap:wrap;gap:8px}
-.variant-option{border:1px solid #eadfe4;background:#fff;border-radius:12px;padding:9px 14px;cursor:pointer;font-family:inherit;font-weight:700}
-.variant-option.selected{border-color:#ef76a1;background:#fff0f5;color:#d95f8a}
-.variant-option.disabled{opacity:.4;cursor:not-allowed;text-decoration:line-through}
-.variant-stock{margin-top:12px;padding:10px 12px;border-radius:12px;background:#f8f8f8;color:#555;font-size:13px}
+.variant-modal-box{width:min(520px,96vw);max-height:92vh;overflow:auto;background:#fff;border:1px solid #eee;border-radius:20px;padding:18px 18px 20px;box-shadow:0 18px 55px rgba(0,0,0,.18);direction:rtl;font-family:inherit}
+.variant-modal-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}
+.variant-modal-head h3{margin:0;font-size:21px;font-weight:900;color:#222}
+.variant-close{border:0;background:#fff0f5;color:#e35f8c;width:44px;height:44px;border-radius:15px;font-size:27px;cursor:pointer}
+.variant-help{margin:8px 0 16px;background:#111;color:#fff;border-radius:9px;padding:10px 12px;text-align:center;font-weight:800;font-size:14px}
+.variant-section{border:1px solid #e8e8e8;border-radius:16px;padding:14px 13px;margin-top:12px;background:#fff}
+.variant-label{font-weight:900;margin:0 0 11px;display:block;font-size:18px;color:#333}
+.variant-options{display:flex;flex-wrap:wrap;gap:9px}
+.variant-option{border:1px solid #e4e4e4;background:#fff;border-radius:12px;padding:10px 17px;cursor:pointer;font-family:inherit;font-weight:800;font-size:16px;color:#333;transition:.15s}
+.variant-option.selected{border-color:#ef6796;background:#fff1f6;color:#e05b88;box-shadow:0 0 0 1px #ef6796 inset}
+.variant-option.disabled{opacity:.38;cursor:not-allowed;text-decoration:none;background:#f7f7f7}
+.variant-stock{margin-top:12px;padding:10px 12px;border-radius:12px;background:#f7f7f7;color:#555;font-size:13px;text-align:center}
 .variant-stock.out{background:#fff0f0;color:#c33}
-.variant-qty{display:flex;align-items:center;gap:12px;margin:16px 0}
-.variant-qty button{width:38px;height:38px;border:0;border-radius:10px;background:#fff0f5;color:#d85f8a;font-size:22px;cursor:pointer}
-.variant-qty span{min-width:34px;text-align:center;font-weight:800;font-size:18px}
-.variant-add{width:100%;border:0;border-radius:13px;padding:13px;background:#f27ba4;color:#fff;font-family:inherit;font-weight:800;cursor:pointer}
+.variant-qty{display:flex;align-items:center;justify-content:flex-start;gap:18px;margin-top:2px}
+.variant-qty button{width:48px;height:48px;border:1px solid #eee;border-radius:14px;background:#fff;color:#e35f8c;font-size:28px;line-height:1;cursor:pointer}
+.variant-qty span{min-width:55px;text-align:center;font-weight:900;font-size:22px;color:#222}
+.variant-add{width:100%;border:0;border-radius:16px;padding:15px;background:#9bdd78;color:#fff;font-family:inherit;font-weight:900;font-size:16px;cursor:pointer;margin-top:16px}
 .variant-add:disabled{opacity:.45;cursor:not-allowed}
 .cart-variant{font-size:12px;color:#666;margin-top:4px;line-height:1.8}
 .cart-stock{font-size:11px;color:#888;margin-top:3px}
+@media(max-width:430px){
+  .variant-modal{padding:8px}
+  .variant-modal-box{width:96vw;padding:15px 13px 18px;border-radius:18px}
+  .variant-option{padding:9px 13px;font-size:15px}
+  .variant-label{font-size:17px}
+}
 </style>
 </head>
 
@@ -1270,20 +1278,31 @@ function openVariantModal(product){
       <div class="variant-modal-box" role="dialog" aria-modal="true">
         <div class="variant-modal-head">
           <h3 id="variant-product-name">انتخاب مشخصات محصول</h3>
-          <button type="button" class="variant-close" id="variant-close">×</button>
+          <button type="button" class="variant-close" id="variant-close" aria-label="بستن">×</button>
         </div>
-        <span class="variant-label">🎨 انتخاب رنگ</span>
-        <div class="variant-options" id="variant-colors"></div>
-        <span class="variant-label">📏 انتخاب سایز</span>
-        <div class="variant-options" id="variant-sizes"></div>
-        <div id="variant-stock" class="variant-stock">لطفاً رنگ و سایز را انتخاب کنید.</div>
-        <span class="variant-label">🔢 تعداد</span>
-        <div class="variant-qty">
-          <button type="button" id="variant-plus">+</button>
-          <span id="variant-quantity">1</span>
-          <button type="button" id="variant-minus">−</button>
+        <div class="variant-help">⬇️ لطفاً رنگ و سایز مورد نظر را انتخاب کنید ⬇️</div>
+
+        <div class="variant-section">
+          <span class="variant-label">رنگ</span>
+          <div class="variant-options" id="variant-colors"></div>
         </div>
-        <button type="button" class="variant-add" id="variant-add" disabled>🛒 افزودن به سبد</button>
+
+        <div class="variant-section">
+          <span class="variant-label">سایز</span>
+          <div class="variant-options" id="variant-sizes"></div>
+          <div id="variant-stock" class="variant-stock">لطفاً رنگ و سایز را انتخاب کنید.</div>
+        </div>
+
+        <div class="variant-section">
+          <span class="variant-label">تعداد</span>
+          <div class="variant-qty">
+            <button type="button" id="variant-minus" aria-label="کاهش تعداد">−</button>
+            <span id="variant-quantity">1</span>
+            <button type="button" id="variant-plus" aria-label="افزایش تعداد">+</button>
+          </div>
+        </div>
+
+        <button type="button" class="variant-add" id="variant-add" disabled>افزودن به سبد خرید 🛒</button>
       </div>`;
     document.body.appendChild(modal);
 
@@ -1736,6 +1755,7 @@ function searchProducts(){
 
   if(!searchText){
     loadProducts();
+loadDiscountProducts();
     return;
   }
 
@@ -1909,7 +1929,6 @@ async function loadProducts(){
 updateCartCount();
 
 loadProducts();
-loadDiscountProducts();
 
 </script>
 
