@@ -395,6 +395,8 @@ button:hover{
    ========================= */
 
 .variants-box{
+    display:block !important;
+    visibility:visible !important;
     margin-top:15px;
     padding:15px;
     background:#fff7fb;
@@ -404,7 +406,7 @@ button:hover{
 
 .variant-row{
     display:grid;
-    grid-template-columns:1fr 1fr 120px 80px;
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr) 120px 80px;
     gap:8px;
     align-items:center;
     margin-top:10px;
@@ -708,6 +710,22 @@ button:hover{
                 class="variant-summary"
             >
                 هنوز ترکیبی اضافه نشده است.
+            </div>
+
+            <div
+                style="
+                    margin-top:10px;
+                    padding:10px;
+                    background:#fff;
+                    border-radius:8px;
+                    color:#777;
+                    font-size:12px;
+                    line-height:1.9;
+                    text-align:center;
+                "
+            >
+                💡 هر ترکیب را جداگانه ثبت کن؛ مثلاً «صورتی + ۲ سال + ۵ عدد».
+                مشتری بعداً باید رنگ و سایز را انتخاب کند.
             </div>
 
         </div>
@@ -1624,11 +1642,30 @@ function updateVariant(
     }
     else{
 
-        productVariants[index][field] =
-            String(
-                value || ""
-            ).trim();
+        const nextValue =
+            String(value || "").trim();
 
+        if(!nextValue){
+            alert(field === "color" ? "⚠️ رنگ نمی‌تواند خالی باشد." : "⚠️ سایز نمی‌تواند خالی باشد.");
+            renderVariants();
+            return;
+        }
+
+        productVariants[index][field] = nextValue;
+
+    }
+
+
+    const duplicate = productVariants.some(
+        (variant, i) =>
+            i !== index &&
+            String(variant.color).trim().toLowerCase() === String(productVariants[index].color).trim().toLowerCase() &&
+            String(variant.size).trim().toLowerCase() === String(productVariants[index].size).trim().toLowerCase()
+    );
+
+    if(duplicate){
+        alert("⚠️ این ترکیب رنگ و سایز قبلاً ثبت شده است.");
+        return;
     }
 
 
@@ -1788,6 +1825,20 @@ async function saveProduct(){
     }
 
 
+    /* بررسی واریانت‌های ناقص */
+
+    const cleanedVariants =
+        normalizeVariants(productVariants);
+
+    if(cleanedVariants.length !== productVariants.length){
+
+        result.textContent =
+            "⚠️ یکی از ترکیب‌های رنگ/سایز ناقص است. لطفاً آن را کامل یا حذف کن.";
+
+        return;
+    }
+
+
     /* ساخت محصول */
 
     const product = {
@@ -1802,10 +1853,7 @@ async function saveProduct(){
 
         category:category,
 
-        variants:
-            normalizeVariants(
-                productVariants
-            )
+        variants:cleanedVariants
 
     };
 
