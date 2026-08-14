@@ -737,6 +737,21 @@ button:hover{
             placeholder="یا آدرس عکس"
         >
 
+        <div class="promotion-box" style="margin-top:12px;padding:14px;border:1px solid #f4d9e4;border-radius:12px;background:#fff8fb;">
+            <h3 style="color:#e88aaa;margin:0 0 10px;">⭐ نحوه نمایش محصول</h3>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                <label style="display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #eee;border-radius:10px;padding:11px;cursor:pointer;">
+                    <input id="isBestSeller" type="checkbox">
+                    <span>🔥 نمایش در محصولات پرفروش</span>
+                </label>
+                <label style="display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #eee;border-radius:10px;padding:11px;cursor:pointer;">
+                    <input id="isWeeklyDiscount" type="checkbox">
+                    <span>🎉 نمایش در تخفیف ویژه این هفته</span>
+                </label>
+            </div>
+            <div style="margin-top:8px;color:#777;font-size:12px;line-height:1.8;">دسته‌بندی «تخفیف خورده» فقط دسته‌بندی محصول است و جدا از این دو گزینه عمل می‌کند.</div>
+        </div>
+
 
         <!-- =========================
              مدیریت جداگانه رنگ + سایز + موجودی
@@ -1807,6 +1822,12 @@ async function saveProduct(){
 
         category:category,
 
+        isBestSeller:
+            document.getElementById("isBestSeller").checked,
+
+        isWeeklyDiscount:
+            document.getElementById("isWeeklyDiscount").checked,
+
         variants:cleanedVariants
 
     };
@@ -1979,6 +2000,9 @@ function editProduct(product){
     document.getElementById(
         "imageFile"
     ).value = "";
+
+    document.getElementById("isBestSeller").checked = !!product.isBestSeller;
+    document.getElementById("isWeeklyDiscount").checked = !!product.isWeeklyDiscount;
 
 
     productVariants =
@@ -3440,6 +3464,9 @@ function clearForm(){
     document.getElementById(
         "imageFile"
     ).value = "";
+
+    document.getElementById("isBestSeller").checked = false;
+    document.getElementById("isWeeklyDiscount").checked = false;
 
 
     document.getElementById(
