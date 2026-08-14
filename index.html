@@ -848,13 +848,36 @@ footer{
   .cart-box{width:94vw;}
 }
 
+</style><style id="variant-shop-styles">
+.variant-modal{position:fixed;inset:0;z-index:99999;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(30,20,25,.45)}
+.variant-modal.show{display:flex}
+.variant-modal-box{width:min(460px,94vw);max-height:90vh;overflow:auto;background:#fff;border-radius:22px;padding:22px;box-shadow:0 20px 60px rgba(0,0,0,.2);direction:rtl}
+.variant-modal-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
+.variant-modal-head h3{margin:0;font-size:20px}
+.variant-close{border:0;background:#fff0f5;color:#d85f8a;width:36px;height:36px;border-radius:12px;font-size:22px;cursor:pointer}
+.variant-label{font-weight:800;margin:14px 0 9px;display:block}
+.variant-options{display:flex;flex-wrap:wrap;gap:8px}
+.variant-option{border:1px solid #eadfe4;background:#fff;border-radius:12px;padding:9px 14px;cursor:pointer;font-family:inherit;font-weight:700}
+.variant-option.selected{border-color:#ef76a1;background:#fff0f5;color:#d95f8a}
+.variant-option.disabled{opacity:.4;cursor:not-allowed;text-decoration:line-through}
+.variant-stock{margin-top:12px;padding:10px 12px;border-radius:12px;background:#f8f8f8;color:#555;font-size:13px}
+.variant-stock.out{background:#fff0f0;color:#c33}
+.variant-qty{display:flex;align-items:center;gap:12px;margin:16px 0}
+.variant-qty button{width:38px;height:38px;border:0;border-radius:10px;background:#fff0f5;color:#d85f8a;font-size:22px;cursor:pointer}
+.variant-qty span{min-width:34px;text-align:center;font-weight:800;font-size:18px}
+.variant-add{width:100%;border:0;border-radius:13px;padding:13px;background:#f27ba4;color:#fff;font-family:inherit;font-weight:800;cursor:pointer}
+.variant-add:disabled{opacity:.45;cursor:not-allowed}
+.cart-variant{font-size:12px;color:#666;margin-top:4px;line-height:1.8}
+.cart-stock{font-size:11px;color:#888;margin-top:3px}
 </style>
 </head>
 
 <body>
 
 <div class="topbar">
-  💗 کیفیت و رضایت شما اولویت ماست
+🚚 ارسال رایگان برای خرید بالای ۲ میلیون تومان
+&nbsp; • &nbsp;
+💗 کیفیت و رضایت شما اولویت ماست
 </div>
 
 <header>
@@ -876,7 +899,12 @@ footer{
 
   <div class="header-actions">
 
-
+    <button class="icon-btn" aria-label="جستجو" onclick="searchProducts()">
+      <svg viewBox="0 0 24 24">
+        <circle cx="10.8" cy="10.8" r="6.7"></circle>
+        <path d="m16 16 5 5"></path>
+      </svg>
+    </button>
 
     <button class="icon-btn" aria-label="سبد خرید" onclick="openCart()">
       <svg viewBox="0 0 24 24">
@@ -1167,46 +1195,195 @@ function saveCart(){
 
 }
 
+function getProductId(product){
+  return product.id ?? product._id ?? product.name;
+}
+
+function normalizeProductVariants(product){
+  if(!Array.isArray(product?.variants)) return [];
+  return product.variants.map(v => ({
+    color:String(v?.color ?? '').trim(),
+    size:String(v?.size ?? '').trim(),
+    stock:Math.max(0,Number(v?.stock ?? 0))
+  })).filter(v => v.color && v.size);
+}
+
+let variantModalProduct = null;
+let variantModalColor = '';
+let variantModalSize = '';
+let variantModalQuantity = 1;
+
 function addTocart(product){
+  const variants = normalizeProductVariants(product);
 
-  const productId =
-    product.id ??
-    product._id ??
-    product.name;
+  if(variants.length){
+    openVariantModal(product);
+    return;
+  }
 
-  const existing =
-    cartItems.find(
-      item => String(item.id) === String(productId)
-    );
+  addCartItem(product, '', '', 1, 0);
+}
+
+function addCartItem(product,color,size,quantity,stock){
+  const productId = getProductId(product);
+  const key = `${String(productId)}__${String(color)}__${String(size)}`;
+  const existing = cartItems.find(item => String(item.cartKey) === key);
 
   if(existing){
-
-    existing.quantity++;
-
+    const max = Number(existing.stock || 0);
+    const next = Number(existing.quantity || 0) + Number(quantity || 0);
+    if(max > 0 && next > max){
+      alert(`⚠️ فقط ${max.toLocaleString('fa-IR')} عدد از این ترکیب موجود است.`);
+      return;
+    }
+    existing.quantity = next;
   }else{
-
     cartItems.push({
-
       id: productId,
-
+      cartKey:key,
       name: product.name || 'محصول',
-
-      price: Number(
-        String(product.price ?? 0).replace(/[^0-9.-]/g,'')
-      ) || 0,
-
+      price: Number(String(product.price ?? 0).replace(/[^0-9.-]/g,'')) || 0,
       image: product.image || 'dokhtarane.png',
-
-      quantity: 1
-
+      color: color || '',
+      size: size || '',
+      stock: Number(stock || 0),
+      quantity: Number(quantity || 1)
     });
-
   }
 
   saveCart();
-
   alert('محصول به سبد خرید اضافه شد 🛒');
+}
 
+function openVariantModal(product){
+  variantModalProduct = product;
+  variantModalColor = '';
+  variantModalSize = '';
+  variantModalQuantity = 1;
+
+  let modal = document.getElementById('variant-modal');
+  if(!modal){
+    modal = document.createElement('div');
+    modal.id = 'variant-modal';
+    modal.className = 'variant-modal';
+    modal.innerHTML = `
+      <div class="variant-modal-box" role="dialog" aria-modal="true">
+        <div class="variant-modal-head">
+          <h3 id="variant-product-name">انتخاب مشخصات محصول</h3>
+          <button type="button" class="variant-close" id="variant-close">×</button>
+        </div>
+        <span class="variant-label">🎨 انتخاب رنگ</span>
+        <div class="variant-options" id="variant-colors"></div>
+        <span class="variant-label">📏 انتخاب سایز</span>
+        <div class="variant-options" id="variant-sizes"></div>
+        <div id="variant-stock" class="variant-stock">لطفاً رنگ و سایز را انتخاب کنید.</div>
+        <span class="variant-label">🔢 تعداد</span>
+        <div class="variant-qty">
+          <button type="button" id="variant-plus">+</button>
+          <span id="variant-quantity">1</span>
+          <button type="button" id="variant-minus">−</button>
+        </div>
+        <button type="button" class="variant-add" id="variant-add" disabled>🛒 افزودن به سبد</button>
+      </div>`;
+    document.body.appendChild(modal);
+
+    document.getElementById('variant-close').onclick = closeVariantModal;
+    modal.addEventListener('click', e => { if(e.target === modal) closeVariantModal(); });
+    document.getElementById('variant-plus').onclick = () => {
+      const v = getSelectedVariant();
+      if(v && variantModalQuantity < v.stock){ variantModalQuantity++; updateVariantModal(); }
+    };
+    document.getElementById('variant-minus').onclick = () => {
+      if(variantModalQuantity > 1){ variantModalQuantity--; updateVariantModal(); }
+    };
+    document.getElementById('variant-add').onclick = confirmVariantAdd;
+  }
+
+  updateVariantModal();
+  modal.classList.add('show');
+}
+
+function getSelectedVariant(){
+  const variants = normalizeProductVariants(variantModalProduct);
+  return variants.find(v => v.color === variantModalColor && v.size === variantModalSize) || null;
+}
+
+function updateVariantModal(){
+  if(!variantModalProduct) return;
+  const variants = normalizeProductVariants(variantModalProduct);
+  document.getElementById('variant-product-name').textContent = variantModalProduct.name || 'انتخاب مشخصات محصول';
+
+  const colors = [...new Set(variants.map(v => v.color))];
+  const sizes = [...new Set(variants.map(v => v.size))];
+
+  document.getElementById('variant-colors').innerHTML = colors.map(color => `
+    <button type="button" class="variant-option ${variantModalColor === color ? 'selected' : ''}" data-color="${escapeHtml(color)}">${escapeHtml(color)}</button>`).join('');
+
+  document.getElementById('variant-colors').querySelectorAll('.variant-option').forEach(btn => {
+    btn.onclick = () => { variantModalColor = btn.dataset.color; variantModalSize = ''; variantModalQuantity = 1; updateVariantModal(); };
+  });
+
+  const availableSizes = sizes.map(size => {
+    const v = variants.find(x => x.color === variantModalColor && x.size === size);
+    return {size, available:!!v && v.stock > 0};
+  });
+
+  document.getElementById('variant-sizes').innerHTML = availableSizes.map(x => `
+    <button type="button" class="variant-option ${variantModalSize === x.size ? 'selected' : ''} ${x.available ? '' : 'disabled'}" data-size="${escapeHtml(x.size)}" ${x.available ? '' : 'disabled'}>${escapeHtml(x.size)}</button>`).join('');
+
+  document.getElementById('variant-sizes').querySelectorAll('.variant-option:not(:disabled)').forEach(btn => {
+    btn.onclick = () => { variantModalSize = btn.dataset.size; variantModalQuantity = 1; updateVariantModal(); };
+  });
+
+  const selected = getSelectedVariant();
+  const stockBox = document.getElementById('variant-stock');
+  const addButton = document.getElementById('variant-add');
+  document.getElementById('variant-quantity').textContent = variantModalQuantity.toLocaleString('fa-IR');
+
+  if(!variantModalColor){
+    stockBox.className = 'variant-stock';
+    stockBox.textContent = 'لطفاً ابتدا رنگ را انتخاب کنید.';
+    addButton.disabled = true;
+    return;
+  }
+  if(!variantModalSize){
+    stockBox.className = 'variant-stock';
+    stockBox.textContent = 'لطفاً سایز را انتخاب کنید.';
+    addButton.disabled = true;
+    return;
+  }
+  if(!selected || selected.stock <= 0){
+    stockBox.className = 'variant-stock out';
+    stockBox.textContent = '❌ این ترکیب ناموجود است.';
+    addButton.disabled = true;
+    return;
+  }
+
+  if(variantModalQuantity > selected.stock) variantModalQuantity = selected.stock;
+  document.getElementById('variant-quantity').textContent = variantModalQuantity.toLocaleString('fa-IR');
+  stockBox.className = 'variant-stock';
+  stockBox.textContent = `✅ موجودی این ترکیب: ${selected.stock.toLocaleString('fa-IR')} عدد`;
+  addButton.disabled = false;
+}
+
+function confirmVariantAdd(){
+  const selected = getSelectedVariant();
+  if(!selected){
+    alert('⚠️ لطفاً رنگ و سایز را انتخاب کنید.');
+    return;
+  }
+  if(variantModalQuantity < 1 || variantModalQuantity > selected.stock){
+    alert('⚠️ تعداد انتخابی بیشتر از موجودی است.');
+    return;
+  }
+  addCartItem(variantModalProduct, variantModalColor, variantModalSize, variantModalQuantity, selected.stock);
+  closeVariantModal();
+}
+
+function closeVariantModal(){
+  const modal = document.getElementById('variant-modal');
+  if(modal) modal.classList.remove('show');
+  variantModalProduct = null;
 }
 
 function openCart(){
@@ -1263,11 +1440,9 @@ function openCart(){
 
         </div>
 
-     <button
-  class="checkout-btn"
+      <button class="checkout-btn"
   type="button"
-  onclick="window.location.href='/checkout.html';"
->
+  onclick="window.location.href='checkout.html';">
   ادامه ثبت سفارش
 </button>
 
@@ -1295,177 +1470,69 @@ function closeCart(){
 }
 
 function renderCart(){
-
-  const container =
-    document.getElementById('cart-items');
-
-  if(!container){
-    return;
-  }
+  const container = document.getElementById('cart-items');
+  if(!container) return;
 
   if(cartItems.length === 0){
-
     container.innerHTML = `
-
       <div class="empty-cart">
-
-        <div style="font-size:42px;margin-bottom:12px;">
-          🛒
-        </div>
-
+        <div style="font-size:42px;margin-bottom:12px;">🛒</div>
         <h3>سبد خرید خالی است</h3>
-
-        <p>
-          هنوز محصولی به سبد اضافه نکرده‌اید.
-        </p>
-
-      </div>
-
-    `;
-
-    document.getElementById(
-      'cart-total-price'
-    ).textContent = '۰ تومان';
-
+        <p>هنوز محصولی به سبد اضافه نکرده‌اید.</p>
+      </div>`;
+    document.getElementById('cart-total-price').textContent = '۰ تومان';
     return;
-
   }
 
-  container.innerHTML = cartItems.map(item => `
-
+  container.innerHTML = cartItems.map((item,index) => `
     <div class="cart-item">
-
-      <img
-        src="${safeImage(item.image)}"
-        alt="${escapeHtml(item.name)}"
-        onerror="this.src='dokhtarane.png'"
-      >
-
+      <img src="${safeImage(item.image)}" alt="${escapeHtml(item.name)}" onerror="this.src='dokhtarane.png'">
       <div class="cart-item-info">
-
-        <h3>
-          ${escapeHtml(item.name)}
-        </h3>
-
-        <div class="cart-item-price">
-          ${formatPrice(item.price)} تومان
-        </div>
-
+        <h3>${escapeHtml(item.name)}</h3>
+        ${item.color || item.size ? `<div class="cart-variant">🎨 ${escapeHtml(item.color || '-')} &nbsp; | &nbsp; 📏 ${escapeHtml(item.size || '-')}</div>` : ''}
+        ${item.stock ? `<div class="cart-stock">موجودی این ترکیب: ${Number(item.stock).toLocaleString('fa-IR')}</div>` : ''}
+        <div class="cart-item-price">${formatPrice(item.price)} تومان</div>
         <div class="cart-controls">
-
-          <button
-            onclick="increaseCartItem('${escapeHtml(String(item.id))}')"
-            aria-label="افزایش تعداد"
-          >
-            +
-          </button>
-
-          <span>
-            ${item.quantity}
-          </span>
-
-          <button
-            onclick="decreaseCartItem('${escapeHtml(String(item.id))}')"
-            aria-label="کاهش تعداد"
-          >
-            −
-          </button>
-
+          <button onclick="changeCartQuantity(${index},1)" aria-label="افزایش تعداد">+</button>
+          <span>${Number(item.quantity).toLocaleString('fa-IR')}</span>
+          <button onclick="changeCartQuantity(${index},-1)" aria-label="کاهش تعداد">−</button>
         </div>
-
       </div>
+      <button class="cart-remove" onclick="removeCartItem(${index})" aria-label="حذف محصول">🗑️</button>
+    </div>`).join('');
 
-      <button
-        class="cart-remove"
-        onclick="removeCartItem('${escapeHtml(String(item.id))}')"
-        aria-label="حذف محصول"
-      >
-        🗑️
-      </button>
-
-    </div>
-
-  `).join('');
-
-  const total =
-    cartItems.reduce(
-      (sum, item) =>
-        sum + (Number(item.price) * Number(item.quantity)),
-      0
-    );
-
-  document.getElementById(
-    'cart-total-price'
-  ).textContent =
-    formatPrice(total) + ' تومان';
-
+  const total = cartItems.reduce((sum,item) => sum + (Number(item.price) * Number(item.quantity)),0);
+  document.getElementById('cart-total-price').textContent = formatPrice(total) + ' تومان';
 }
 
-function increaseCartItem(id){
-
-  const item =
-    cartItems.find(
-      item => String(item.id) === String(id)
-    );
-
-  if(item){
-
-    item.quantity++;
-
-    saveCart();
-
-    renderCart();
-
-  }
-
-}
-
-function decreaseCartItem(id){
-
-  const item =
-    cartItems.find(
-      item => String(item.id) === String(id)
-    );
-
-  if(!item){
+function changeCartQuantity(index,delta){
+  const item = cartItems[index];
+  if(!item) return;
+  const next = Number(item.quantity || 1) + Number(delta);
+  if(next < 1){ removeCartItem(index); return; }
+  if(item.stock && next > Number(item.stock)){
+    alert(`⚠️ فقط ${Number(item.stock).toLocaleString('fa-IR')} عدد از این ترکیب موجود است.`);
     return;
   }
-
-  if(item.quantity > 1){
-
-    item.quantity--;
-
-  }else{
-
-    cartItems =
-      cartItems.filter(
-        item => String(item.id) !== String(id)
-      );
-
-  }
-
+  item.quantity = next;
   saveCart();
-
   renderCart();
-
 }
 
-function removeCartItem(id){
+function increaseCartItem(index){ changeCartQuantity(index,1); }
+function decreaseCartItem(index){ changeCartQuantity(index,-1); }
 
-  cartItems =
-    cartItems.filter(
-      item => String(item.id) !== String(id)
-    );
-
+function removeCartItem(index){
+  if(typeof index === 'number'){
+    cartItems.splice(index,1);
+  }
   saveCart();
-
   renderCart();
-
 }
 
 function checkoutCart(){
 
-  if(!cart || cart.length === 0){
+  if(cartItems.length === 0){
 
     alert('سبد خرید شما خالی است.');
 
@@ -1473,9 +1540,15 @@ function checkoutCart(){
 
   }
 
-  window.location.href = "checkout.html";
+ if (!cart.length) {
+  alert('سبد خرید خالی است!');
+  return;
+}
+
+window.location.href = "checkout.html";
 
 }
+
 function safeImage(src){
 
   if(!src || !String(src).trim()){
@@ -1644,7 +1717,73 @@ async function loadDiscountProducts(){
 
 }
 
-  
+function searchProducts(){
+
+  const keyword = prompt('نام محصول را وارد کنید:');
+
+  const grid = document.getElementById('product-grid');
+
+  if(!grid){
+    return;
+  }
+
+  // خالی گذاشتن جستجو = نمایش دوباره همه محصولات
+  if(keyword === null){
+    return;
+  }
+
+  const searchText = keyword.trim().toLowerCase();
+
+  if(!searchText){
+    loadProducts();
+    return;
+  }
+
+  const cards = Array.from(
+    grid.querySelectorAll('.product-card')
+  );
+
+  let found = 0;
+
+  cards.forEach(card => {
+
+    const name =
+      card.querySelector('.product-info h3')?.textContent
+      .trim()
+      .toLowerCase() || '';
+
+    const match = name.includes(searchText);
+
+    card.style.display = match ? '' : 'none';
+
+    if(match){
+      found++;
+    }
+
+  });
+
+  let oldMessage =
+    document.getElementById('search-empty-message');
+
+  if(oldMessage){
+    oldMessage.remove();
+  }
+
+  if(found === 0){
+
+    const message = document.createElement('div');
+
+    message.id = 'search-empty-message';
+    message.className = 'empty-products';
+    message.textContent =
+      'محصولی با این نام پیدا نشد.';
+
+    grid.appendChild(message);
+
+  }
+
+}
+
 async function loadProducts(){
 
   const grid =
