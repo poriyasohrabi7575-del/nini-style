@@ -32,6 +32,17 @@ export default async function handler(req, res) {
           }))
         : [];
 
+      // پشتیبانی از هر دو نام قدیمی و جدید
+      const isBestSeller =
+        data.isBestSeller !== undefined
+          ? Boolean(data.isBestSeller)
+          : Boolean(data.bestSeller);
+
+      const weeklyOffer =
+        data.weeklyOffer !== undefined
+          ? Boolean(data.weeklyOffer)
+          : Boolean(data.isWeeklyOffer);
+
       const product = {
         name: data.name || "",
         price: Number(data.price || 0),
@@ -39,13 +50,22 @@ export default async function handler(req, res) {
         image: data.image || "",
         category: data.category || "عمومی",
 
-        // ✅ پرفروش
-        bestSeller: Boolean(data.bestSeller),
+        // =========================
+        // پرفروش
+        // =========================
+        isBestSeller: isBestSeller,
 
-        // ✅ تخفیف ویژه این هفته
-        weeklyOffer: Boolean(data.weeklyOffer),
+        // برای سازگاری با محصولات قدیمی
+        bestSeller: isBestSeller,
 
-        // ✅ رنگ + سایز + موجودی
+        // =========================
+        // تخفیف ویژه این هفته
+        // =========================
+        weeklyOffer: weeklyOffer,
+
+        // =========================
+        // رنگ + سایز + موجودی
+        // =========================
         variants,
 
         createdAt: new Date(),
@@ -80,6 +100,17 @@ export default async function handler(req, res) {
           }))
         : [];
 
+      // پشتیبانی از هر دو نام قدیمی و جدید
+      const isBestSeller =
+        data.isBestSeller !== undefined
+          ? Boolean(data.isBestSeller)
+          : Boolean(data.bestSeller);
+
+      const weeklyOffer =
+        data.weeklyOffer !== undefined
+          ? Boolean(data.weeklyOffer)
+          : Boolean(data.isWeeklyOffer);
+
       await collection.doc(id).update({
         name: data.name || "",
         price: Number(data.price || 0),
@@ -87,13 +118,22 @@ export default async function handler(req, res) {
         image: data.image || "",
         category: data.category || "عمومی",
 
-        // ✅ پرفروش
-        bestSeller: Boolean(data.bestSeller),
+        // =========================
+        // پرفروش
+        // =========================
+        isBestSeller: isBestSeller,
 
-        // ✅ تخفیف ویژه این هفته
-        weeklyOffer: Boolean(data.weeklyOffer),
+        // برای سازگاری با محصولات قدیمی
+        bestSeller: isBestSeller,
 
-        // ✅ رنگ + سایز + موجودی
+        // =========================
+        // تخفیف ویژه این هفته
+        // =========================
+        weeklyOffer: weeklyOffer,
+
+        // =========================
+        // رنگ + سایز + موجودی
+        // =========================
         variants,
 
         updatedAt: new Date(),
