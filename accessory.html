@@ -145,6 +145,42 @@ header{
   margin:8px 0 14px;
 }
 
+.option-title{
+  font-size:13px;
+  font-weight:bold;
+  margin:14px 0 8px;
+  color:#555;
+}
+
+.options{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+
+.option-btn{
+  border:1px solid #ead8ef;
+  background:#fff;
+  color:#555;
+  padding:8px 12px;
+  border-radius:9px;
+  cursor:pointer;
+  font-family:inherit;
+  font-size:12px;
+  transition:.2s;
+}
+
+.option-btn:hover{
+  border-color:#b58ac2;
+}
+
+.option-btn.selected{
+  background:#f5eaf7;
+  border-color:#b58ac2;
+  color:#9b6baa;
+  font-weight:bold;
+}
+
 .buy-btn{
   width:100%;
   border:0;
@@ -156,10 +192,40 @@ header{
   font-family:inherit;
   font-weight:bold;
   font-size:14px;
+  margin-top:16px;
 }
 
 .buy-btn:hover{
   background:#a476b2;
+}
+
+.buy-btn.disabled{
+  background:#ccc;
+  cursor:not-allowed;
+}
+
+.loading{
+  grid-column:1/-1;
+  text-align:center;
+  padding:70px 20px;
+  color:#888;
+  font-size:16px;
+}
+
+.empty{
+  grid-column:1/-1;
+  text-align:center;
+  padding:70px 20px;
+  color:#888;
+}
+
+.error-box{
+  grid-column:1/-1;
+  text-align:center;
+  padding:50px 20px;
+  color:#b44;
+  background:#fff5f5;
+  border-radius:18px;
 }
 
 /* CART */
@@ -262,6 +328,13 @@ header{
   color:#aa7bb8;
   font-size:13px;
   font-weight:800;
+}
+
+.cart-item-options{
+  color:#777;
+  font-size:12px;
+  margin-top:5px;
+  line-height:1.8;
 }
 
 .cart-controls{
@@ -391,111 +464,13 @@ header{
   اکسسوری‌های زیبا و دوست‌داشتنی برای کوچولوها
 </p>
 
-<div class="products">
+<div
+  class="products"
+  id="products"
+>
 
-  <div class="card">
-
-    <img
-      src="https://placehold.co/500x600/f3e1f7/ffffff?text=تل+دخترانه"
-      alt="تل دخترانه"
-    >
-
-    <div class="discount">
-      ۳۰٪ تخفیف
-    </div>
-
-    <h2>
-      تل دخترانه فانتزی
-    </h2>
-
-    <p class="old">
-      ۵۰۰٬۰۰۰ تومان
-    </p>
-
-    <p class="price">
-      ۳۵۰٬۰۰۰ تومان
-    </p>
-
-    <button
-      class="buy-btn"
-      onclick="addTocart({
-        id:'accessory-1',
-        name:'تل دخترانه فانتزی',
-        price:350000,
-        image:'https://placehold.co/500x600/f3e1f7/ffffff?text=تل+دخترانه'
-      })"
-    >
-      🛒 افزودن به سبد خرید
-    </button>
-
-  </div>
-
-
-  <div class="card">
-
-    <img
-      src="https://placehold.co/500x600/ffe5ef/ffffff?text=گیره+مو"
-      alt="گیره مو"
-    >
-
-    <div class="discount">
-      ۲۰٪ تخفیف
-    </div>
-
-    <h2>
-      گیره مو کودک
-    </h2>
-
-    <p class="old">
-      ۳۵۰٬۰۰۰ تومان
-    </p>
-
-    <p class="price">
-      ۲۸۰٬۰۰۰ تومان
-    </p>
-
-    <button
-      class="buy-btn"
-      onclick="addTocart({
-        id:'accessory-2',
-        name:'گیره مو کودک',
-        price:280000,
-        image:'https://placehold.co/500x600/ffe5ef/ffffff?text=گیره+مو'
-      })"
-    >
-      🛒 افزودن به سبد خرید
-    </button>
-
-  </div>
-
-
-  <div class="card">
-
-    <img
-      src="https://placehold.co/400x400/e9def2/ffffff?text=اکسسوری+کودک"
-      alt="اکسسوری کودک"
-    >
-
-    <h2>
-      اکسسوری کودک
-    </h2>
-
-    <div class="price">
-      ۲۵۰٬۰۰۰ تومان
-    </div>
-
-    <button
-      class="buy-btn"
-      onclick="addTocart({
-        id:'accessory-3',
-        name:'اکسسوری کودک',
-        price:250000,
-        image:'https://placehold.co/400x400/e9def2/ffffff?text=اکسسوری+کودک'
-      })"
-    >
-      🛒 افزودن به سبد خرید
-    </button>
-
+  <div class="loading">
+    ⏳ در حال دریافت محصولات...
   </div>
 
 </div>
@@ -508,14 +483,741 @@ let cartItems = JSON.parse(
 );
 
 
+/* =========================
+   محصولات
+========================= */
+
+let productsData = [];
+
+let selections = {};
+
+
+/* =========================
+   نرمال‌سازی variants
+========================= */
+
+function normalizeVariants(product){
+
+  if(!Array.isArray(product.variants)){
+    return [];
+  }
+
+  return product.variants
+    .map(item => ({
+
+      color:String(item.color || '').trim(),
+
+      size:String(item.size || '').trim(),
+
+      stock:Math.max(
+        0,
+        Number(item.stock || 0)
+      )
+
+    }))
+    .filter(item =>
+      item.color ||
+      item.size
+    );
+
+}
+
+
+/* =========================
+   دریافت محصولات از API
+========================= */
+
+async function loadProducts(){
+
+  const container =
+    document.getElementById('products');
+
+  try{
+
+    const response =
+      await fetch(
+        '/api/products',
+        {
+          method:'GET',
+          cache:'no-store'
+        }
+      );
+
+    if(!response.ok){
+
+      throw new Error(
+        'خطا در دریافت محصولات'
+      );
+
+    }
+
+    const products =
+      await response.json();
+
+
+    /*
+      فقط اکسسوری‌هایی که
+      پرفروش نیستند نمایش داده شوند
+    */
+
+    productsData =
+      Array.isArray(products)
+        ? products.filter(product => {
+
+            const category =
+              String(
+                product.category || ''
+              ).trim();
+
+            const isBestSeller =
+              Boolean(
+                product.bestSeller
+              );
+
+            return (
+              category === 'اکسسوری' &&
+              !isBestSeller
+            );
+
+          })
+        : [];
+
+
+    renderProducts();
+
+
+  }catch(error){
+
+    console.error(
+      'ACCESSORIES ERROR:',
+      error
+    );
+
+    container.innerHTML = `
+
+      <div class="error-box">
+
+        ❌ دریافت محصولات با مشکل مواجه شد.
+
+        <br><br>
+
+        لطفاً صفحه را دوباره باز کنید.
+
+      </div>
+
+    `;
+
+  }
+
+}
+
+
+/* =========================
+   نمایش محصولات
+========================= */
+
+function renderProducts(){
+
+  const container =
+    document.getElementById('products');
+
+
+  if(productsData.length === 0){
+
+    container.innerHTML = `
+
+      <div class="empty">
+
+        <div style="font-size:48px">
+          🎀
+        </div>
+
+        <h3>
+          هنوز محصولی در اکسسوری ثبت نشده است
+        </h3>
+
+        <p>
+          محصولات اکسسوری از پنل مدیریت اینجا نمایش داده می‌شوند.
+        </p>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  productsData.forEach(product => {
+
+    selections[product.id] = {
+
+      color:null,
+
+      size:null
+
+    };
+
+  });
+
+
+  container.innerHTML =
+    productsData
+      .map(product =>
+        createProductCard(product)
+      )
+      .join('');
+
+}
+
+
+/* =========================
+   ساخت کارت محصول
+========================= */
+
+function createProductCard(product){
+
+  const variants =
+    normalizeVariants(product);
+
+
+  const colors =
+    [...new Set(
+      variants
+        .map(v => v.color)
+        .filter(Boolean)
+    )];
+
+
+  const sizes =
+    [...new Set(
+      variants
+        .map(v => v.size)
+        .filter(Boolean)
+    )];
+
+
+  const price =
+    Number(product.price || 0);
+
+
+  const oldPrice =
+    Number(product.oldPrice || 0);
+
+
+  const hasDiscount =
+    oldPrice > price &&
+    price > 0;
+
+
+  const discountPercent =
+    hasDiscount
+      ? Math.round(
+          ((oldPrice - price) / oldPrice) * 100
+        )
+      : 0;
+
+
+  let optionsHTML = '';
+
+
+  if(colors.length > 0){
+
+    optionsHTML += `
+
+      <div class="option-title">
+        🎨 انتخاب رنگ
+      </div>
+
+      <div class="options">
+
+        ${colors.map(color => `
+
+          <button
+            class="option-btn"
+            type="button"
+            data-product="${escapeHtml(String(product.id))}"
+            data-type="color"
+            data-value="${escapeHtml(color)}"
+            onclick="selectOption(this)"
+          >
+            ${escapeHtml(color)}
+          </button>
+
+        `).join('')}
+
+      </div>
+
+    `;
+
+  }
+
+
+  if(sizes.length > 0){
+
+    optionsHTML += `
+
+      <div class="option-title">
+        📏 انتخاب سایز
+      </div>
+
+      <div class="options">
+
+        ${sizes.map(size => `
+
+          <button
+            class="option-btn"
+            type="button"
+            data-product="${escapeHtml(String(product.id))}"
+            data-type="size"
+            data-value="${escapeHtml(size)}"
+            onclick="selectOption(this)"
+          >
+            ${escapeHtml(size)}
+          </button>
+
+        `).join('')}
+
+      </div>
+
+    `;
+
+  }
+
+
+  const requiresVariant =
+    colors.length > 0 ||
+    sizes.length > 0;
+
+
+  let buttonText =
+    requiresVariant
+      ? '🛒 انتخاب رنگ و سایز'
+      : '🛒 افزودن به سبد خرید';
+
+
+  return `
+
+    <div
+      class="card"
+      data-card-id="${escapeHtml(String(product.id))}"
+    >
+
+      <img
+        src="${escapeHtml(product.image || 'https://placehold.co/500x600/f3e1f7/ffffff?text=اکسسوری')}"
+        alt="${escapeHtml(product.name || 'محصول اکسسوری')}"
+      >
+
+
+      ${
+        hasDiscount
+          ? `
+            <div class="discount">
+              ${discountPercent}٪ تخفیف
+            </div>
+          `
+          : ''
+      }
+
+
+      <h2>
+        ${escapeHtml(product.name || 'محصول بدون نام')}
+      </h2>
+
+
+      ${
+        hasDiscount
+          ? `
+            <p class="old">
+              ${formatPrice(oldPrice)} تومان
+            </p>
+          `
+          : ''
+      }
+
+
+      <p class="price">
+        ${formatPrice(price)} تومان
+      </p>
+
+
+      ${optionsHTML}
+
+
+      <button
+        class="buy-btn ${requiresVariant ? 'disabled' : ''}"
+        id="buy-${escapeHtml(String(product.id))}"
+        type="button"
+        onclick="addProduct('${escapeHtml(String(product.id))}')"
+      >
+        ${buttonText}
+      </button>
+
+    </div>
+
+  `;
+
+}
+
+
+/* =========================
+   انتخاب رنگ / سایز
+========================= */
+
+function selectOption(button){
+
+  const productId =
+    button.dataset.product;
+
+  const type =
+    button.dataset.type;
+
+  const value =
+    button.dataset.value;
+
+
+  const card =
+    button.closest('.card');
+
+
+  const group =
+    button.parentElement;
+
+
+  group
+    .querySelectorAll('.option-btn')
+    .forEach(btn =>
+      btn.classList.remove('selected')
+    );
+
+
+  button.classList.add('selected');
+
+
+  if(!selections[productId]){
+
+    selections[productId] = {
+
+      color:null,
+
+      size:null
+
+    };
+
+  }
+
+
+  selections[productId][type] =
+    value;
+
+
+  updateBuyButton(productId);
+
+}
+
+
+/* =========================
+   وضعیت دکمه خرید
+========================= */
+
+function updateBuyButton(productId){
+
+  const product =
+    productsData.find(
+      item =>
+        String(item.id) ===
+        String(productId)
+    );
+
+
+  if(!product){
+    return;
+  }
+
+
+  const variants =
+    normalizeVariants(product);
+
+
+  const colors =
+    [...new Set(
+      variants
+        .map(v => v.color)
+        .filter(Boolean)
+    )];
+
+
+  const sizes =
+    [...new Set(
+      variants
+        .map(v => v.size)
+        .filter(Boolean)
+    )];
+
+
+  const selection =
+    selections[productId] || {
+
+      color:null,
+
+      size:null
+
+    };
+
+
+  const needsColor =
+    colors.length > 0;
+
+
+  const needsSize =
+    sizes.length > 0;
+
+
+  const colorOK =
+    !needsColor ||
+    Boolean(selection.color);
+
+
+  const sizeOK =
+    !needsSize ||
+    Boolean(selection.size);
+
+
+  const button =
+    document.getElementById(
+      `buy-${productId}`
+    );
+
+
+  if(!button){
+    return;
+  }
+
+
+  if(colorOK && sizeOK){
+
+    button.classList.remove(
+      'disabled'
+    );
+
+    button.textContent =
+      '🛒 افزودن به سبد خرید';
+
+  }else{
+
+    button.classList.add(
+      'disabled'
+    );
+
+    button.textContent =
+      '🛒 انتخاب رنگ و سایز';
+
+  }
+
+}
+
+
+/* =========================
+   افزودن محصول
+========================= */
+
+function addProduct(productId){
+
+  const product =
+    productsData.find(
+      item =>
+        String(item.id) ===
+        String(productId)
+    );
+
+
+  if(!product){
+    return;
+  }
+
+
+  const variants =
+    normalizeVariants(product);
+
+
+  const colors =
+    [...new Set(
+      variants
+        .map(v => v.color)
+        .filter(Boolean)
+    )];
+
+
+  const sizes =
+    [...new Set(
+      variants
+        .map(v => v.size)
+        .filter(Boolean)
+    )];
+
+
+  const selection =
+    selections[productId] || {
+
+      color:null,
+
+      size:null
+
+    };
+
+
+  if(
+    (colors.length > 0 && !selection.color) ||
+    (sizes.length > 0 && !selection.size)
+  ){
+
+    alert(
+      'لطفاً رنگ و سایز محصول را انتخاب کنید 🎀'
+    );
+
+    return;
+
+  }
+
+
+  /*
+    اگر variants وجود داشته باشد،
+    ترکیب انتخاب‌شده را بررسی می‌کنیم.
+  */
+
+  if(variants.length > 0){
+
+    const matchingVariant =
+      variants.find(variant => {
+
+        const colorMatch =
+          !selection.color ||
+          variant.color ===
+          selection.color;
+
+        const sizeMatch =
+          !selection.size ||
+          variant.size ===
+          selection.size;
+
+        return colorMatch &&
+               sizeMatch;
+
+      });
+
+
+    if(
+      matchingVariant &&
+      Number(matchingVariant.stock) <= 0
+    ){
+
+      alert(
+        'این ترکیب رنگ و سایز فعلاً موجود نیست.'
+      );
+
+      return;
+
+    }
+
+  }
+
+
+  const existing =
+    cartItems.find(item =>
+
+      String(item.id) ===
+      String(product.id) &&
+
+      String(item.color || '') ===
+      String(selection.color || '') &&
+
+      String(item.size || '') ===
+      String(selection.size || '')
+
+    );
+
+
+  if(existing){
+
+    existing.quantity =
+      Number(existing.quantity || 0) + 1;
+
+  }else{
+
+    cartItems.push({
+
+      id:product.id,
+
+      name:product.name || '',
+
+      price:Number(product.price || 0),
+
+      image:product.image || '',
+
+      color:selection.color || '',
+
+      size:selection.size || '',
+
+      quantity:1
+
+    });
+
+  }
+
+
+  saveCart();
+
+
+  alert(
+    'محصول با موفقیت به سبد خرید اضافه شد 🛒'
+  );
+
+}
+
+
+/* =========================
+   فرمت قیمت
+========================= */
+
+function formatPrice(value){
+
+  return Number(value || 0)
+    .toLocaleString('fa-IR');
+
+}
+
+
+/* =========================
+   امنیت متن
+========================= */
+
+function escapeHtml(value){
+
+  return String(value ?? '')
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#039;');
+
+}
+
+
+/* =========================
+   سبد خرید
+========================= */
+
 function updateCartCount(){
 
   const count =
     cartItems.reduce(
       (total,item) =>
-        total + item.quantity,
+        total +
+        Number(item.quantity || 0),
       0
     );
+
 
   document.getElementById(
     'cart-count'
@@ -536,54 +1238,6 @@ function saveCart(){
 }
 
 
-function addTocart(product){
-
-  const existing =
-    cartItems.find(
-      item =>
-        String(item.id) ===
-        String(product.id)
-    );
-
-  if(existing){
-
-    existing.quantity++;
-
-  }else{
-
-    cartItems.push({
-
-      id:product.id,
-
-      name:product.name,
-
-      price:Number(product.price) || 0,
-
-      image:product.image,
-
-      quantity:1
-
-    });
-
-  }
-
-  saveCart();
-
-  alert(
-    'محصول به سبد خرید اضافه شد 🛒'
-  );
-
-}
-
-
-function formatPrice(value){
-
-  return Number(value)
-    .toLocaleString('fa-IR');
-
-}
-
-
 function openCart(){
 
   const old =
@@ -591,15 +1245,19 @@ function openCart(){
       'cart-panel'
     );
 
+
   if(old){
     old.remove();
   }
 
+
   const panel =
     document.createElement('div');
 
+
   panel.id =
     'cart-panel';
+
 
   panel.innerHTML = `
 
@@ -608,6 +1266,7 @@ function openCart(){
       onclick="closeCart()"
     ></div>
 
+
     <div class="cart-box">
 
       <div class="cart-header">
@@ -615,6 +1274,7 @@ function openCart(){
         <h2>
           🛒 سبد خرید
         </h2>
+
 
         <button
           class="cart-close"
@@ -625,10 +1285,12 @@ function openCart(){
 
       </div>
 
+
       <div
         id="cart-items"
         class="cart-items"
       ></div>
+
 
       <div class="cart-footer">
 
@@ -646,6 +1308,7 @@ function openCart(){
 
         </div>
 
+
         <button
           class="checkout-btn"
           onclick="checkoutCart()"
@@ -658,6 +1321,7 @@ function openCart(){
     </div>
 
   `;
+
 
   document.body.appendChild(panel);
 
@@ -673,6 +1337,7 @@ function closeCart(){
       'cart-panel'
     );
 
+
   if(panel){
     panel.remove();
   }
@@ -687,9 +1352,11 @@ function renderCart(){
       'cart-items'
     );
 
+
   if(!container){
     return;
   }
+
 
   if(cartItems.length === 0){
 
@@ -713,10 +1380,12 @@ function renderCart(){
 
     `;
 
+
     document.getElementById(
       'cart-total-price'
     ).textContent =
       '۰ تومان';
+
 
     return;
 
@@ -724,70 +1393,102 @@ function renderCart(){
 
 
   container.innerHTML =
-    cartItems.map(item => `
+    cartItems
+      .map(item => `
 
-      <div class="cart-item">
+        <div class="cart-item">
 
-        <img
-          src="${item.image}"
-          alt="${item.name}"
-        >
+          <img
+            src="${escapeHtml(item.image || '')}"
+            alt="${escapeHtml(item.name || '')}"
+          >
 
-        <div class="cart-item-info">
 
-          <h3>
-            ${item.name}
-          </h3>
+          <div class="cart-item-info">
 
-          <div class="cart-item-price">
+            <h3>
+              ${escapeHtml(item.name || '')}
+            </h3>
 
-            ${formatPrice(item.price)}
-            تومان
+
+            ${
+              item.color || item.size
+                ? `
+                  <div class="cart-item-options">
+
+                    ${
+                      item.color
+                        ? `🎨 رنگ: ${escapeHtml(item.color)}<br>`
+                        : ''
+                    }
+
+                    ${
+                      item.size
+                        ? `📏 سایز: ${escapeHtml(item.size)}`
+                        : ''
+                    }
+
+                  </div>
+                `
+                : ''
+            }
+
+
+            <div class="cart-item-price">
+
+              ${formatPrice(item.price)}
+              تومان
+
+            </div>
+
+
+            <div class="cart-controls">
+
+              <button
+                onclick="increaseCartItem('${escapeHtml(String(item.id))}','${escapeHtml(item.color || '')}','${escapeHtml(item.size || '')}')"
+              >
+                +
+              </button>
+
+
+              <span>
+                ${Number(item.quantity || 0)}
+              </span>
+
+
+              <button
+                onclick="decreaseCartItem('${escapeHtml(String(item.id))}','${escapeHtml(item.color || '')}','${escapeHtml(item.size || '')}')"
+              >
+                −
+              </button>
+
+            </div>
 
           </div>
 
-          <div class="cart-controls">
 
-            <button
-              onclick="increaseCartItem('${item.id}')"
-            >
-              +
-            </button>
-
-            <span>
-              ${item.quantity}
-            </span>
-
-            <button
-              onclick="decreaseCartItem('${item.id}')"
-            >
-              −
-            </button>
-
-          </div>
+          <button
+            class="cart-remove"
+            onclick="removeCartItem('${escapeHtml(String(item.id))}','${escapeHtml(item.color || '')}','${escapeHtml(item.size || '')}')"
+          >
+            🗑️
+          </button>
 
         </div>
 
-        <button
-          class="cart-remove"
-          onclick="removeCartItem('${item.id}')"
-        >
-          🗑️
-        </button>
-
-      </div>
-
-    `).join('');
+      `)
+      .join('');
 
 
   const total =
     cartItems.reduce(
       (sum,item) =>
         sum +
-        item.price *
-        item.quantity,
+        Number(item.price || 0) *
+        Number(item.quantity || 0),
       0
     );
+
 
   document.getElementById(
     'cart-total-price'
@@ -798,18 +1499,31 @@ function renderCart(){
 }
 
 
-function increaseCartItem(id){
+function increaseCartItem(
+  id,
+  color,
+  size
+){
 
   const item =
-    cartItems.find(
-      item =>
-        String(item.id) ===
-        String(id)
+    cartItems.find(item =>
+
+      String(item.id) ===
+      String(id) &&
+
+      String(item.color || '') ===
+      String(color || '') &&
+
+      String(item.size || '') ===
+      String(size || '')
+
     );
+
 
   if(item){
 
-    item.quantity++;
+    item.quantity =
+      Number(item.quantity || 0) + 1;
 
     saveCart();
 
@@ -820,34 +1534,58 @@ function increaseCartItem(id){
 }
 
 
-function decreaseCartItem(id){
+function decreaseCartItem(
+  id,
+  color,
+  size
+){
 
   const item =
-    cartItems.find(
-      item =>
-        String(item.id) ===
-        String(id)
+    cartItems.find(item =>
+
+      String(item.id) ===
+      String(id) &&
+
+      String(item.color || '') ===
+      String(color || '') &&
+
+      String(item.size || '') ===
+      String(size || '')
+
     );
+
 
   if(!item){
     return;
   }
 
-  if(item.quantity > 1){
+
+  if(Number(item.quantity || 0) > 1){
 
     item.quantity--;
 
   }else{
 
     cartItems =
-      cartItems.filter(
-        item =>
-          String(item.id) !==
-          String(id)
+      cartItems.filter(item =>
+
+        !(
+          String(item.id) ===
+          String(id) &&
+
+          String(item.color || '') ===
+          String(color || '') &&
+
+          String(item.size || '') ===
+          String(size || '')
+
+        )
+
       );
 
   }
 
+
   saveCart();
 
   renderCart();
@@ -855,14 +1593,29 @@ function decreaseCartItem(id){
 }
 
 
-function removeCartItem(id){
+function removeCartItem(
+  id,
+  color,
+  size
+){
 
   cartItems =
-    cartItems.filter(
-      item =>
-        String(item.id) !==
-        String(id)
+    cartItems.filter(item =>
+
+      !(
+        String(item.id) ===
+        String(id) &&
+
+        String(item.color || '') ===
+        String(color || '') &&
+
+        String(item.size || '') ===
+        String(size || '')
+
+      )
+
     );
+
 
   saveCart();
 
@@ -870,6 +1623,10 @@ function removeCartItem(id){
 
 }
 
+
+/* =========================
+   ادامه سفارش
+========================= */
 
 function checkoutCart(){
 
@@ -883,12 +1640,20 @@ function checkoutCart(){
 
   }
 
-  window.location.href = "checkout.html";
+
+  window.location.href =
+    'checkout.html';
 
 }
 
 
+/* =========================
+   شروع
+========================= */
+
 updateCartCount();
+
+loadProducts();
 
 </script>
 
