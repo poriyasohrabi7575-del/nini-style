@@ -733,11 +733,22 @@ function getAccessoryProducts() {
         اگر محصول پرفروش باشد،
         از صفحه اکسسوری حذف می‌شود.
       */
-
       if (isTrue(product.bestSeller)) {
         return false;
       }
 
+      /*
+        اگر محصول تخفیف ویژه باشد،
+        از صفحه اکسسوری حذف می‌شود.
+      */
+      if (isTrue(product.isWeeklyDiscount)) {
+        return false;
+      }
+
+      /*
+        اگر هیچ‌کدام از تیک‌ها فعال نباشد،
+        محصول در دسته اصلی خودش نمایش داده می‌شود.
+      */
       return isAccessoryCategory(
         product.category
       );
@@ -746,7 +757,6 @@ function getAccessoryProducts() {
   );
 
 }
-
 
 /* =========================================================
    نرمال‌سازی تنوع‌ها
