@@ -145,6 +145,44 @@ header{
   margin:8px 0 14px;
 }
 
+/* انتخاب رنگ و سایز */
+
+.option-title{
+  font-size:13px;
+  font-weight:bold;
+  margin:14px 0 8px;
+  color:#555;
+}
+
+.options{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+
+.option-btn{
+  border:1px solid #d8e9f0;
+  background:#fff;
+  color:#555;
+  padding:8px 12px;
+  border-radius:9px;
+  cursor:pointer;
+  font-family:inherit;
+  font-size:12px;
+  transition:.2s;
+}
+
+.option-btn:hover{
+  border-color:#6fa9c9;
+}
+
+.option-btn.selected{
+  background:#eaf6fc;
+  border-color:#6fa9c9;
+  color:#4f91b7;
+  font-weight:bold;
+}
+
 .buy-btn{
   width:100%;
   border:0;
@@ -156,10 +194,38 @@ header{
   font-family:inherit;
   font-weight:bold;
   font-size:14px;
+  margin-top:16px;
 }
 
 .buy-btn:hover{
   background:#5b98ba;
+}
+
+.buy-btn.disabled{
+  background:#ccc;
+  cursor:not-allowed;
+}
+
+.loading{
+  grid-column:1/-1;
+  text-align:center;
+  padding:70px 20px;
+  color:#777;
+  font-size:17px;
+}
+
+.no-products{
+  grid-column:1/-1;
+  text-align:center;
+  padding:70px 20px;
+  color:#888;
+}
+
+.error-box{
+  grid-column:1/-1;
+  text-align:center;
+  padding:50px 20px;
+  color:#b55;
 }
 
 /* CART */
@@ -262,6 +328,12 @@ header{
   color:#5c9bc0;
   font-size:13px;
   font-weight:800;
+}
+
+.cart-item-options{
+  color:#777;
+  font-size:12px;
+  margin-top:5px;
 }
 
 .cart-controls{
@@ -383,6 +455,7 @@ header{
 
 </header>
 
+
 <h1 class="page-title">
   👕 لباس پسرانه
 </h1>
@@ -391,111 +464,14 @@ header{
   جدیدترین لباس‌های پسرانه نی نی استایل
 </p>
 
-<div class="products">
 
-  <div class="card">
+<div
+  class="products"
+  id="products"
+>
 
-    <img
-      src="https://placehold.co/500x600/d8edf7/ffffff?text=لباس+پسرانه"
-      alt="ست پسرانه شیک"
-    >
-
-    <div class="discount">
-      ۳۰٪ تخفیف
-    </div>
-
-    <h2>
-      ست پسرانه شیک
-    </h2>
-
-    <p class="old">
-      ۲٬۰۰۰٬۰۰۰ تومان
-    </p>
-
-    <p class="price">
-      ۱٬۴۹۰٬۰۰۰ تومان
-    </p>
-
-    <button
-      class="buy-btn"
-      onclick="addTocart({
-        id:'boy-1',
-        name:'ست پسرانه شیک',
-        price:1490000,
-        image:'https://placehold.co/500x600/d8edf7/ffffff?text=لباس+پسرانه'
-      })"
-    >
-      🛒 افزودن به سبد خرید
-    </button>
-
-  </div>
-
-
-  <div class="card">
-
-    <img
-      src="https://placehold.co/500x600/e5f4fa/ffffff?text=پیراهن+پسرانه"
-      alt="پیراهن پسرانه"
-    >
-
-    <div class="discount">
-      ۲۰٪ تخفیف
-    </div>
-
-    <h2>
-      پیراهن پسرانه شیک
-    </h2>
-
-    <p class="old">
-      ۱٬۵۰۰٬۰۰۰ تومان
-    </p>
-
-    <p class="price">
-      ۱٬۲۰۰٬۰۰۰ تومان
-    </p>
-
-    <button
-      class="buy-btn"
-      onclick="addTocart({
-        id:'boy-2',
-        name:'پیراهن پسرانه شیک',
-        price:1200000,
-        image:'https://placehold.co/500x600/e5f4fa/ffffff?text=پیراهن+پسرانه'
-      })"
-    >
-      🛒 افزودن به سبد خرید
-    </button>
-
-  </div>
-
-
-  <div class="card">
-
-    <img
-      src="https://placehold.co/400x400/dceff8/ffffff?text=لباس+کودک"
-      alt="لباس کودک پسرانه"
-    >
-
-    <h2>
-      لباس کودک پسرانه
-    </h2>
-
-    <div class="price">
-      ۹۹۰٬۰۰۰ تومان
-    </div>
-
-    <button
-      class="buy-btn"
-      onclick="addTocart({
-        id:'boy-3',
-        name:'لباس کودک پسرانه',
-        price:990000,
-        image:'https://placehold.co/400x400/dceff8/ffffff?text=لباس+کودک'
-      })"
-    >
-      🛒 افزودن به سبد خرید
-    </button>
-
+  <div class="loading">
+    ⏳ در حال دریافت محصولات...
   </div>
 
 </div>
@@ -503,19 +479,825 @@ header{
 
 <script>
 
+/* =========================
+   سبد خرید
+========================= */
+
 let cartItems = JSON.parse(
   localStorage.getItem('niniCart') || '[]'
 );
 
+
+/* =========================
+   محصولات صفحه
+========================= */
+
+let pageProducts = [];
+
+let selections = {};
+
+
+/* =========================
+   تشخیص دسته پسرانه
+========================= */
+
+function isBoyCategory(category){
+
+  const value =
+    String(category || '')
+      .trim()
+      .toLowerCase();
+
+  return (
+    value === 'پسرانه' ||
+    value === 'لباس پسرانه' ||
+    value.includes('پسرانه')
+  );
+
+}
+
+
+/* =========================
+   تشخیص پرفروش بودن
+========================= */
+
+function isBestSeller(product){
+
+  return (
+    product.bestSeller === true ||
+    product.isBestSeller === true
+  );
+
+}
+
+
+/* =========================
+   دریافت محصولات از API
+========================= */
+
+async function loadProducts(){
+
+  const container =
+    document.getElementById('products');
+
+  try{
+
+    const response =
+      await fetch(
+        '/api/products',
+        {
+          method:'GET',
+          cache:'no-store'
+        }
+      );
+
+    if(!response.ok){
+
+      throw new Error(
+        'خطا در دریافت محصولات'
+      );
+
+    }
+
+
+    const products =
+      await response.json();
+
+
+    /*
+      فقط محصولات پسرانه
+      و فقط محصولاتی که پرفروش نیستند
+    */
+
+    pageProducts =
+      Array.isArray(products)
+        ? products.filter(product =>
+            isBoyCategory(product.category) &&
+            !isBestSeller(product)
+          )
+        : [];
+
+
+    renderProducts();
+
+
+  }catch(error){
+
+    console.error(
+      'BOY PRODUCTS ERROR:',
+      error
+    );
+
+    container.innerHTML = `
+
+      <div class="error-box">
+
+        ❌ دریافت محصولات با مشکل مواجه شد.
+
+        <br><br>
+
+        لطفاً صفحه را دوباره باز کنید.
+
+      </div>
+
+    `;
+
+  }
+
+}
+
+
+/* =========================
+   نمایش محصولات
+========================= */
+
+function renderProducts(){
+
+  const container =
+    document.getElementById('products');
+
+
+  if(pageProducts.length === 0){
+
+    container.innerHTML = `
+
+      <div class="no-products">
+
+        <div style="font-size:45px">
+          👕
+        </div>
+
+        <h3>
+          فعلاً محصول پسرانه‌ای موجود نیست
+        </h3>
+
+        <p>
+          محصولات پسرانه جدید به‌زودی اضافه می‌شوند.
+        </p>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  container.innerHTML =
+    pageProducts.map(
+      (product,index) =>
+        createProductCard(
+          product,
+          index
+        )
+    ).join('');
+
+
+  pageProducts.forEach(
+    (product,index) => {
+
+      selections[index] = {
+        color:null,
+        size:null
+      };
+
+    }
+  );
+
+}
+
+
+/* =========================
+   ساخت کارت محصول
+========================= */
+
+function createProductCard(
+  product,
+  index
+){
+
+  const id =
+    String(
+      product.id ||
+      `boy-${index}`
+    );
+
+
+  const name =
+    escapeHtml(
+      product.name ||
+      'محصول پسرانه'
+    );
+
+
+  const image =
+    product.image ||
+    'https://placehold.co/500x600/d8edf7/ffffff?text=لباس+پسرانه';
+
+
+  const price =
+    Number(product.price || 0);
+
+
+  const oldPrice =
+    Number(product.oldPrice || 0);
+
+
+  const variants =
+    Array.isArray(product.variants)
+      ? product.variants
+      : [];
+
+
+  const colors =
+    [...new Set(
+      variants
+        .map(v =>
+          String(v.color || '').trim()
+        )
+        .filter(Boolean)
+    )];
+
+
+  const sizes =
+    [...new Set(
+      variants
+        .map(v =>
+          String(v.size || '').trim()
+        )
+        .filter(Boolean)
+    )];
+
+
+  let html = `
+
+    <div class="card">
+
+      <img
+        src="${escapeAttribute(image)}"
+        alt="${escapeAttribute(name)}"
+      >
+  `;
+
+
+  if(
+    oldPrice > price &&
+    price > 0
+  ){
+
+    const percent =
+      Math.round(
+        (
+          (oldPrice - price) /
+          oldPrice
+        ) * 100
+      );
+
+
+    html += `
+
+      <div class="discount">
+
+        ${percent}٪ تخفیف
+
+      </div>
+
+    `;
+
+  }
+
+
+  html += `
+
+      <h2>
+        ${name}
+      </h2>
+  `;
+
+
+  if(
+    oldPrice > price &&
+    oldPrice > 0
+  ){
+
+    html += `
+
+      <p class="old">
+
+        ${formatPrice(oldPrice)}
+        تومان
+
+      </p>
+
+    `;
+
+  }
+
+
+  html += `
+
+      <p class="price">
+
+        ${formatPrice(price)}
+        تومان
+
+      </p>
+
+  `;
+
+
+  /* رنگ */
+
+  if(colors.length > 0){
+
+    html += `
+
+      <div class="option-title">
+        🎨 انتخاب رنگ
+      </div>
+
+      <div class="options">
+
+    `;
+
+
+    colors.forEach(color => {
+
+      html += `
+
+        <button
+          class="option-btn"
+          onclick="selectOption(
+            this,
+            ${index},
+            'color',
+            '${escapeJs(color)}'
+          )"
+        >
+
+          ${escapeHtml(color)}
+
+        </button>
+
+      `;
+
+    });
+
+
+    html += `
+
+      </div>
+
+    `;
+
+  }
+
+
+  /* سایز */
+
+  if(sizes.length > 0){
+
+    html += `
+
+      <div class="option-title">
+        📏 انتخاب سایز
+      </div>
+
+      <div class="options">
+
+    `;
+
+
+    sizes.forEach(size => {
+
+      html += `
+
+        <button
+          class="option-btn"
+          onclick="selectOption(
+            this,
+            ${index},
+            'size',
+            '${escapeJs(size)}'
+          )"
+        >
+
+          ${escapeHtml(size)}
+
+        </button>
+
+      `;
+
+    });
+
+
+    html += `
+
+      </div>
+
+    `;
+
+  }
+
+
+  const needsOptions =
+    colors.length > 0 ||
+    sizes.length > 0;
+
+
+  html += `
+
+      <button
+        class="buy-btn ${
+          needsOptions ? 'disabled' : ''
+        }"
+        id="buy-${index}"
+        onclick="addProduct(${index})"
+      >
+
+        ${
+          needsOptions
+            ? '🛒 انتخاب رنگ و سایز'
+            : '🛒 افزودن به سبد خرید'
+        }
+
+      </button>
+
+    </div>
+
+  `;
+
+
+  return html;
+
+}
+
+
+/* =========================
+   انتخاب رنگ / سایز
+========================= */
+
+function selectOption(
+  button,
+  index,
+  type,
+  value
+){
+
+  const group =
+    button.parentElement;
+
+
+  group
+    .querySelectorAll(
+      '.option-btn'
+    )
+    .forEach(
+      btn =>
+        btn.classList.remove(
+          'selected'
+        )
+    );
+
+
+  button.classList.add(
+    'selected'
+  );
+
+
+  if(!selections[index]){
+
+    selections[index] = {
+      color:null,
+      size:null
+    };
+
+  }
+
+
+  selections[index][type] =
+    value;
+
+
+  updateBuyButton(index);
+
+}
+
+
+/* =========================
+   بررسی انتخاب‌ها
+========================= */
+
+function updateBuyButton(index){
+
+  const product =
+    pageProducts[index];
+
+
+  if(!product){
+    return;
+  }
+
+
+  const variants =
+    Array.isArray(product.variants)
+      ? product.variants
+      : [];
+
+
+  const colors =
+    [...new Set(
+      variants
+        .map(v =>
+          String(v.color || '').trim()
+        )
+        .filter(Boolean)
+    )];
+
+
+  const sizes =
+    [...new Set(
+      variants
+        .map(v =>
+          String(v.size || '').trim()
+        )
+        .filter(Boolean)
+    )];
+
+
+  const button =
+    document.getElementById(
+      `buy-${index}`
+    );
+
+
+  if(!button){
+    return;
+  }
+
+
+  const colorOk =
+    colors.length === 0 ||
+    (
+      selections[index] &&
+      selections[index].color
+    );
+
+
+  const sizeOk =
+    sizes.length === 0 ||
+    (
+      selections[index] &&
+      selections[index].size
+    );
+
+
+  if(
+    colorOk &&
+    sizeOk
+  ){
+
+    button.classList.remove(
+      'disabled'
+    );
+
+    button.textContent =
+      '🛒 افزودن به سبد خرید';
+
+  }else{
+
+    button.classList.add(
+      'disabled'
+    );
+
+    button.textContent =
+      '🛒 انتخاب رنگ و سایز';
+
+  }
+
+}
+
+
+/* =========================
+   افزودن محصول
+========================= */
+
+function addProduct(index){
+
+  const product =
+    pageProducts[index];
+
+
+  if(!product){
+    return;
+  }
+
+
+  const variants =
+    Array.isArray(product.variants)
+      ? product.variants
+      : [];
+
+
+  const colors =
+    [...new Set(
+      variants
+        .map(v =>
+          String(v.color || '').trim()
+        )
+        .filter(Boolean)
+    )];
+
+
+  const sizes =
+    [...new Set(
+      variants
+        .map(v =>
+          String(v.size || '').trim()
+        )
+        .filter(Boolean)
+    )];
+
+
+  const selection =
+    selections[index] || {
+      color:null,
+      size:null
+    };
+
+
+  if(
+    colors.length > 0 &&
+    !selection.color
+  ){
+
+    alert(
+      'لطفاً رنگ محصول را انتخاب کنید 🎨'
+    );
+
+    return;
+
+  }
+
+
+  if(
+    sizes.length > 0 &&
+    !selection.size
+  ){
+
+    alert(
+      'لطفاً سایز محصول را انتخاب کنید 📏'
+    );
+
+    return;
+
+  }
+
+
+  /* بررسی موجودی */
+
+  if(variants.length > 0){
+
+    const matchingVariant =
+      variants.find(variant => {
+
+        const colorMatch =
+          !selection.color ||
+          String(variant.color || '').trim() ===
+          String(selection.color).trim();
+
+
+        const sizeMatch =
+          !selection.size ||
+          String(variant.size || '').trim() ===
+          String(selection.size).trim();
+
+
+        return (
+          colorMatch &&
+          sizeMatch
+        );
+
+      });
+
+
+    if(
+      matchingVariant &&
+      Number(matchingVariant.stock || 0) <= 0
+    ){
+
+      alert(
+        'متأسفانه این ترکیب رنگ و سایز موجود نیست ❌'
+      );
+
+      return;
+
+    }
+
+  }
+
+
+  const productId =
+    String(
+      product.id ||
+      `boy-${index}`
+    );
+
+
+  const existing =
+    cartItems.find(item =>
+
+      String(item.id) ===
+      productId &&
+
+      String(item.color || '') ===
+      String(selection.color || '') &&
+
+      String(item.size || '') ===
+      String(selection.size || '')
+
+    );
+
+
+  if(existing){
+
+    existing.quantity =
+      Number(existing.quantity || 0) + 1;
+
+  }else{
+
+    cartItems.push({
+
+      id:productId,
+
+      name:product.name || 'محصول پسرانه',
+
+      price:Number(product.price || 0),
+
+      image:product.image || '',
+
+      color:selection.color || null,
+
+      size:selection.size || null,
+
+      quantity:1
+
+    });
+
+  }
+
+
+  saveCart();
+
+
+  let message =
+    'محصول به سبد خرید اضافه شد 🛒';
+
+
+  if(
+    selection.color ||
+    selection.size
+  ){
+
+    message =
+      `محصول با ${
+        selection.color
+          ? 'رنگ ' + selection.color
+          : ''
+      }${
+        selection.color &&
+        selection.size
+          ? ' و '
+          : ''
+      }${
+        selection.size
+          ? 'سایز ' + selection.size
+          : ''
+      } به سبد خرید اضافه شد 🛒`;
+
+  }
+
+
+  alert(message);
+
+}
+
+
+/* =========================
+   تعداد سبد
+========================= */
 
 function updateCartCount(){
 
   const count =
     cartItems.reduce(
       (total,item) =>
-        total + item.quantity,
+        total +
+        Number(item.quantity || 0),
       0
     );
+
 
   document.getElementById(
     'cart-count'
@@ -524,6 +1306,10 @@ function updateCartCount(){
 }
 
 
+/* =========================
+   ذخیره سبد
+========================= */
+
 function saveCart(){
 
   localStorage.setItem(
@@ -531,58 +1317,27 @@ function saveCart(){
     JSON.stringify(cartItems)
   );
 
+
   updateCartCount();
 
 }
 
 
-function addTocart(product){
-
-  const existing =
-    cartItems.find(
-      item =>
-        String(item.id) ===
-        String(product.id)
-    );
-
-  if(existing){
-
-    existing.quantity++;
-
-  }else{
-
-    cartItems.push({
-
-      id:product.id,
-
-      name:product.name,
-
-      price:Number(product.price) || 0,
-
-      image:product.image,
-
-      quantity:1
-
-    });
-
-  }
-
-  saveCart();
-
-  alert(
-    'محصول به سبد خرید اضافه شد 🛒'
-  );
-
-}
-
+/* =========================
+   قیمت
+========================= */
 
 function formatPrice(value){
 
-  return Number(value)
+  return Number(value || 0)
     .toLocaleString('fa-IR');
 
 }
 
+
+/* =========================
+   باز کردن سبد
+========================= */
 
 function openCart(){
 
@@ -591,15 +1346,19 @@ function openCart(){
       'cart-panel'
     );
 
+
   if(old){
     old.remove();
   }
 
+
   const panel =
     document.createElement('div');
 
+
   panel.id =
     'cart-panel';
+
 
   panel.innerHTML = `
 
@@ -659,12 +1418,20 @@ function openCart(){
 
   `;
 
-  document.body.appendChild(panel);
+
+  document.body.appendChild(
+    panel
+  );
+
 
   renderCart();
 
 }
 
+
+/* =========================
+   بستن سبد
+========================= */
 
 function closeCart(){
 
@@ -673,12 +1440,17 @@ function closeCart(){
       'cart-panel'
     );
 
+
   if(panel){
     panel.remove();
   }
 
 }
 
+
+/* =========================
+   نمایش سبد
+========================= */
 
 function renderCart(){
 
@@ -687,9 +1459,11 @@ function renderCart(){
       'cart-items'
     );
 
+
   if(!container){
     return;
   }
+
 
   if(cartItems.length === 0){
 
@@ -713,10 +1487,12 @@ function renderCart(){
 
     `;
 
+
     document.getElementById(
       'cart-total-price'
     ).textContent =
       '۰ تومان';
+
 
     return;
 
@@ -724,20 +1500,53 @@ function renderCart(){
 
 
   container.innerHTML =
-    cartItems.map(item => `
+    cartItems.map(
+      (item,index) => `
 
       <div class="cart-item">
 
         <img
-          src="${item.image}"
-          alt="${item.name}"
+          src="${escapeAttribute(item.image || '')}"
+          alt="${escapeAttribute(item.name || '')}"
         >
 
         <div class="cart-item-info">
 
           <h3>
-            ${item.name}
+            ${escapeHtml(item.name || '')}
           </h3>
+
+          ${
+            item.color ||
+            item.size
+              ? `
+
+              <div class="cart-item-options">
+
+                ${
+                  item.color
+                    ? `🎨 رنگ: ${escapeHtml(item.color)}`
+                    : ''
+                }
+
+                ${
+                  item.color &&
+                  item.size
+                    ? '<br>'
+                    : ''
+                }
+
+                ${
+                  item.size
+                    ? `📏 سایز: ${escapeHtml(item.size)}`
+                    : ''
+                }
+
+              </div>
+
+            `
+              : ''
+          }
 
           <div class="cart-item-price">
 
@@ -749,7 +1558,11 @@ function renderCart(){
           <div class="cart-controls">
 
             <button
-              onclick="increaseCartItem('${item.id}')"
+              onclick="increaseCartItem(
+                '${escapeJs(String(item.id))}',
+                '${escapeJs(String(item.color || ''))}',
+                '${escapeJs(String(item.size || ''))}'
+              )"
             >
               +
             </button>
@@ -759,7 +1572,11 @@ function renderCart(){
             </span>
 
             <button
-              onclick="decreaseCartItem('${item.id}')"
+              onclick="decreaseCartItem(
+                '${escapeJs(String(item.id))}',
+                '${escapeJs(String(item.color || ''))}',
+                '${escapeJs(String(item.size || ''))}'
+              )"
             >
               −
             </button>
@@ -770,24 +1587,30 @@ function renderCart(){
 
         <button
           class="cart-remove"
-          onclick="removeCartItem('${item.id}')"
+          onclick="removeCartItem(
+            '${escapeJs(String(item.id))}',
+            '${escapeJs(String(item.color || ''))}',
+            '${escapeJs(String(item.size || ''))}'
+          )"
         >
           🗑️
         </button>
 
       </div>
 
-    `).join('');
+    `
+    ).join('');
 
 
   const total =
     cartItems.reduce(
       (sum,item) =>
         sum +
-        item.price *
-        item.quantity,
+        Number(item.price || 0) *
+        Number(item.quantity || 0),
       0
     );
+
 
   document.getElementById(
     'cart-total-price'
@@ -798,18 +1621,35 @@ function renderCart(){
 }
 
 
-function increaseCartItem(id){
+/* =========================
+   افزایش
+========================= */
+
+function increaseCartItem(
+  id,
+  color,
+  size
+){
 
   const item =
-    cartItems.find(
-      item =>
-        String(item.id) ===
-        String(id)
+    cartItems.find(item =>
+
+      String(item.id) ===
+      String(id) &&
+
+      String(item.color || '') ===
+      String(color || '') &&
+
+      String(item.size || '') ===
+      String(size || '')
+
     );
+
 
   if(item){
 
-    item.quantity++;
+    item.quantity =
+      Number(item.quantity || 0) + 1;
 
     saveCart();
 
@@ -820,34 +1660,63 @@ function increaseCartItem(id){
 }
 
 
-function decreaseCartItem(id){
+/* =========================
+   کاهش
+========================= */
+
+function decreaseCartItem(
+  id,
+  color,
+  size
+){
 
   const item =
-    cartItems.find(
-      item =>
-        String(item.id) ===
-        String(id)
+    cartItems.find(item =>
+
+      String(item.id) ===
+      String(id) &&
+
+      String(item.color || '') ===
+      String(color || '') &&
+
+      String(item.size || '') ===
+      String(size || '')
+
     );
+
 
   if(!item){
     return;
   }
 
-  if(item.quantity > 1){
+
+  if(
+    Number(item.quantity || 0) > 1
+  ){
 
     item.quantity--;
 
   }else{
 
     cartItems =
-      cartItems.filter(
-        item =>
-          String(item.id) !==
-          String(id)
+      cartItems.filter(item =>
+
+        !(
+          String(item.id) ===
+          String(id) &&
+
+          String(item.color || '') ===
+          String(color || '') &&
+
+          String(item.size || '') ===
+          String(size || '')
+        )
+
       );
 
   }
 
+
   saveCart();
 
   renderCart();
@@ -855,20 +1724,43 @@ function decreaseCartItem(id){
 }
 
 
-function removeCartItem(id){
+/* =========================
+   حذف
+========================= */
+
+function removeCartItem(
+  id,
+  color,
+  size
+){
 
   cartItems =
-    cartItems.filter(
-      item =>
-        String(item.id) !==
-        String(id)
+    cartItems.filter(item =>
+
+      !(
+        String(item.id) ===
+        String(id) &&
+
+        String(item.color || '') ===
+        String(color || '') &&
+
+        String(item.size || '') ===
+        String(size || '')
+      )
+
     );
+
 
   saveCart();
 
   renderCart();
 
 }
+
+
+/* =========================
+   ادامه ثبت سفارش
+========================= */
 
 function checkoutCart(){
 
@@ -882,13 +1774,54 @@ function checkoutCart(){
 
   }
 
-  window.location.href = "checkout.html";
+
+  window.location.href =
+    'checkout.html';
 
 }
 
 
+/* =========================
+   امنیت نمایش متن
+========================= */
+
+function escapeHtml(value){
+
+  return String(value ?? '')
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#039;');
+
+}
+
+
+function escapeAttribute(value){
+
+  return escapeHtml(value);
+
+}
+
+
+function escapeJs(value){
+
+  return String(value ?? '')
+    .replace(/\\/g,'\\\\')
+    .replace(/'/g,"\\'")
+    .replace(/\r/g,'')
+    .replace(/\n/g,'\\n');
+
+}
+
+
+/* =========================
+   شروع
+========================= */
 
 updateCartCount();
+
+loadProducts();
 
 </script>
 
