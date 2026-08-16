@@ -38,10 +38,12 @@ export default async function handler(req, res) {
           ? Boolean(data.isBestSeller)
           : Boolean(data.bestSeller);
 
-      const weeklyOffer =
-        data.weeklyOffer !== undefined
-          ? Boolean(data.weeklyOffer)
-          : Boolean(data.isWeeklyOffer);
+    const weeklyOffer =
+  data.isWeeklyDiscount !== undefined
+    ? Boolean(data.isWeeklyDiscount)
+    : data.weeklyOffer !== undefined
+      ? Boolean(data.weeklyOffer)
+      : Boolean(data.isWeeklyOffer);
 
       const product = {
         name: data.name || "",
@@ -61,7 +63,8 @@ export default async function handler(req, res) {
         // =========================
         // تخفیف ویژه این هفته
         // =========================
-        weeklyOffer: weeklyOffer,
+      weeklyOffer: weeklyOffer,
+isWeeklyDiscount: weeklyOffer,
 
         // =========================
         // رنگ + سایز + موجودی
@@ -129,8 +132,8 @@ export default async function handler(req, res) {
         // =========================
         // تخفیف ویژه این هفته
         // =========================
-        weeklyOffer: weeklyOffer,
-
+      weeklyOffer: weeklyOffer,
+isWeeklyDiscount: weeklyOffer,
         // =========================
         // رنگ + سایز + موجودی
         // =========================
