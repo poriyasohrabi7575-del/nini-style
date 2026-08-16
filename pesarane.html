@@ -569,14 +569,15 @@ async function loadProducts(){
       و فقط محصولاتی که پرفروش نیستند
     */
 
-    pageProducts =
-      Array.isArray(products)
-        ? products.filter(product =>
-            isBoyCategory(product.category) &&
-            !isBestSeller(product)
-          )
-        : [];
-
+   
+pageProducts =
+  Array.isArray(products)
+    ? products.filter(product =>
+        isBoyCategory(product.category) &&
+        !isBestSeller(product) &&
+        product.isWeeklyDiscount !== true
+      )
+    : [];
 
     renderProducts();
 
