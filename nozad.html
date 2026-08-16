@@ -535,7 +535,8 @@ async function loadProducts(){
 
     /*
       فقط محصولات دسته‌بندی نوزاد
-      و فقط محصولاتی که پرفروش نیستند
+      محصول پرفروش نمایش داده نشود
+      محصول تخفیف ویژه این هفته نمایش داده نشود
     */
 
     productsData =
@@ -544,33 +545,48 @@ async function loadProducts(){
         const category =
           String(
             product.category || ''
-          ).trim();
-
-       const isBestSeller =
-  product.bestSeller === true ||
-  product.isBestSeller === true;
+          )
+          .trim()
+          .toLowerCase();
 
 
-const isBestSeller =
-  product.bestSeller === true ||
-  product.isBestSeller === true;
+        /* =========================
+           پرفروش
+        ========================= */
 
-const isWeeklyOffer =
-  product.weeklyOffer === true ||
-  product.isWeeklyDiscount === true ||
-  product.isWeeklyOffer === true;
+        const isBestSeller =
+          product.bestSeller === true ||
+          product.isBestSeller === true;
 
-const isBaby =
-  category === 'لباس نوزاد' ||
-  category === 'نوزاد' ||
-  category === 'لباس نوزادی' ||
-  category.includes('نوزاد');
 
-return (
-  isBaby &&
-  !isBestSeller &&
-  !isWeeklyOffer
-);
+        /* =========================
+           تخفیف ویژه این هفته
+        ========================= */
+
+        const isWeeklyOffer =
+          product.weeklyOffer === true ||
+          product.isWeeklyDiscount === true ||
+          product.isWeeklyOffer === true;
+
+
+        /* =========================
+           دسته نوزاد
+        ========================= */
+
+        const isBaby =
+          category === 'لباس نوزاد' ||
+          category === 'نوزاد' ||
+          category === 'لباس نوزادی' ||
+          category.includes('نوزاد');
+
+
+        return (
+          isBaby &&
+          !isBestSeller &&
+          !isWeeklyOffer
+        );
+
+      });
 
 
     renderProducts();
@@ -792,9 +808,7 @@ function createProductCard(product){
   `;
 
 
-  /*
-    اگر محصول رنگ دارد
-  */
+  /* رنگ */
 
   if(colors.length > 0){
 
@@ -839,9 +853,7 @@ function createProductCard(product){
   }
 
 
-  /*
-    اگر محصول سایز دارد
-  */
+  /* سایز */
 
   if(sizes.length > 0){
 
@@ -1172,9 +1184,7 @@ function addProduct(productId){
   }
 
 
-  /*
-    بررسی موجودی ترکیب انتخاب‌شده
-  */
+  /* بررسی موجودی ترکیب انتخاب‌شده */
 
   if(variants.length > 0){
 
