@@ -999,14 +999,12 @@ async function addProduct(productId){
   }
 
 
-  const hasColor =
-    card.querySelector(
-      '.option-title'
-    );
+  const hasOptions =
+    cardHasOptions(productId);
 
 
   if(
-    hasColor &&
+    hasOptions &&
     (
       !selection.color ||
       !selection.size
@@ -1056,6 +1054,99 @@ async function addProduct(productId){
 
     }
 
+
+    /* =================================================
+       بررسی موجودی
+       اگر محصول واریانت ندارد، stock خود محصول بررسی می‌شود.
+       اگر واریانت دارد، موجودی همان رنگ و سایز بررسی می‌شود.
+    ================================================= */
+
+    const variants =
+      normalizeVariants(product);
+
+
+    if(variants.length > 0){
+
+      const selectedVariant =
+        variants.find(item => {
+
+          const colorMatch =
+            !item.color ||
+            item.color ===
+            String(
+              selection.color || ''
+            ).trim();
+
+
+          const sizeMatch =
+            !item.size ||
+            item.size ===
+            String(
+              selection.size || ''
+            ).trim();
+
+
+          return (
+            colorMatch &&
+            sizeMatch
+          );
+
+        });
+
+
+      if(!selectedVariant){
+
+        alert(
+          'این ترکیب رنگ و سایز موجود نیست ❌'
+        );
+
+        return;
+
+      }
+
+
+      const stock =
+        Number(
+          selectedVariant.stock || 0
+        );
+
+
+      if(stock <= 0){
+
+        alert(
+          'این محصول در این رنگ و سایز ناموجود است ❌'
+        );
+
+        return;
+
+      }
+
+    }else{
+
+      /* محصول بدون واریانت */
+
+      const stock =
+        Number(
+          product.stock || 0
+        );
+
+
+      if(stock <= 0){
+
+        alert(
+          'این محصول در حال حاضر ناموجود است ❌'
+        );
+
+        return;
+
+      }
+
+    }
+
+
+    /* =================================================
+       افزودن به سبد
+    ================================================= */
 
     const existing =
       cartItems.find(item =>
