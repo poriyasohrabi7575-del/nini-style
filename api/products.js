@@ -13,17 +13,22 @@ export default async function handler(req, res) {
       const products = snapshot.docs.map((doc) => {
         const data = doc.data();
 
-        // پشتیبانی از نام‌های مختلف قبلی
+        // =========================
+        // پشتیبانی از نام‌های مختلف پرفروش
+        // =========================
         const isBestSeller =
           data.isBestSeller !== undefined
             ? Boolean(data.isBestSeller)
             : Boolean(data.bestSeller);
 
+        // =========================
+        // پشتیبانی از نام‌های مختلف تخفیف ویژه
+        // =========================
         const weeklyOffer =
-          data.weeklyOffer !== undefined
-            ? Boolean(data.weeklyOffer)
-            : data.isWeeklyDiscount !== undefined
+          data.isWeeklyDiscount !== undefined
             ? Boolean(data.isWeeklyDiscount)
+            : data.weeklyOffer !== undefined
+            ? Boolean(data.weeklyOffer)
             : Boolean(data.isWeeklyOffer);
 
         return {
@@ -69,10 +74,10 @@ export default async function handler(req, res) {
       // پشتیبانی از تخفیف ویژه
       // =========================
       const weeklyOffer =
-        data.weeklyOffer !== undefined
-          ? Boolean(data.weeklyOffer)
-          : data.isWeeklyDiscount !== undefined
+        data.isWeeklyDiscount !== undefined
           ? Boolean(data.isWeeklyDiscount)
+          : data.weeklyOffer !== undefined
+          ? Boolean(data.weeklyOffer)
           : Boolean(data.isWeeklyOffer);
 
       const product = {
@@ -147,10 +152,10 @@ export default async function handler(req, res) {
       // پشتیبانی از تخفیف ویژه
       // =========================
       const weeklyOffer =
-        data.weeklyOffer !== undefined
-          ? Boolean(data.weeklyOffer)
-          : data.isWeeklyDiscount !== undefined
+        data.isWeeklyDiscount !== undefined
           ? Boolean(data.isWeeklyDiscount)
+          : data.weeklyOffer !== undefined
+          ? Boolean(data.weeklyOffer)
           : Boolean(data.isWeeklyOffer);
 
       await collection.doc(id).update({
