@@ -898,31 +898,7 @@ function createProductCard(product){
   }
 
 
-  const totalStock =
-    variants.reduce(
-      (sum,item) =>
-        sum +
-        Math.max(
-          0,
-          Number(item.stock || 0)
-        ),
-      0
-    );
-
-
-  if(variants.length > 0){
-
-    html += `
-
-      <div class="stock-info">
-        موجودی:
-        ${formatNumber(totalStock)}
-        عدد
-      </div>
-
-    `;
-
-  }
+ 
 
 
   const needsOptions =
