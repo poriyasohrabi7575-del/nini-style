@@ -10,10 +10,35 @@ export default async function handler(req, res) {
     if (req.method === "GET") {
       const snapshot = await collection.get();
 
-      const products = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
+      const products = snapshot.docs.map((doc) => {
+        const data = doc.data();
+
+        // پشتیبانی از نام‌های مختلف قبلی
+        const isBestSeller =
+          data.isBestSeller !== undefined
+            ? Boolean(data.isBestSeller)
+            : Boolean(data.bestSeller);
+
+        const weeklyOffer =
+          data.weeklyOffer !== undefined
+            ? Boolean(data.weeklyOffer)
+            : data.isWeeklyDiscount !== undefined
+            ? Boolean(data.isWeeklyDiscount)
+            : Boolean(data.isWeeklyOffer);
+
+        return {
+          id: doc.id,
+          ...data,
+
+          // پرفروش
+          isBestSeller: isBestSeller,
+          bestSeller: isBestSeller,
+
+          // تخفیف ویژه این هفته
+          weeklyOffer: weeklyOffer,
+          isWeeklyDiscount: weeklyOffer,
+        };
+      });
 
       return res.status(200).json(products);
     }
@@ -32,18 +57,23 @@ export default async function handler(req, res) {
           }))
         : [];
 
-      // پشتیبانی از هر دو نام قدیمی و جدید
+      // =========================
+      // پشتیبانی از پرفروش
+      // =========================
       const isBestSeller =
         data.isBestSeller !== undefined
           ? Boolean(data.isBestSeller)
           : Boolean(data.bestSeller);
 
-    const weeklyOffer =
-  data.isWeeklyDiscount !== undefined
-    ? Boolean(data.isWeeklyDiscount)
-    : data.weeklyOffer !== undefined
-      ? Boolean(data.weeklyOffer)
-      : Boolean(data.isWeeklyOffer);
+      // =========================
+      // پشتیبانی از تخفیف ویژه
+      // =========================
+      const weeklyOffer =
+        data.weeklyOffer !== undefined
+          ? Boolean(data.weeklyOffer)
+          : data.isWeeklyDiscount !== undefined
+          ? Boolean(data.isWeeklyDiscount)
+          : Boolean(data.isWeeklyOffer);
 
       const product = {
         name: data.name || "",
@@ -63,8 +93,10 @@ export default async function handler(req, res) {
         // =========================
         // تخفیف ویژه این هفته
         // =========================
-      weeklyOffer: weeklyOffer,
-isWeeklyDiscount: weeklyOffer,
+        weeklyOffer: weeklyOffer,
+
+        // نام مورد استفاده صفحات دسته‌بندی
+        isWeeklyDiscount: weeklyOffer,
 
         // =========================
         // رنگ + سایز + موجودی
@@ -103,15 +135,22 @@ isWeeklyDiscount: weeklyOffer,
           }))
         : [];
 
-      // پشتیبانی از هر دو نام قدیمی و جدید
+      // =========================
+      // پشتیبانی از پرفروش
+      // =========================
       const isBestSeller =
         data.isBestSeller !== undefined
           ? Boolean(data.isBestSeller)
           : Boolean(data.bestSeller);
 
+      // =========================
+      // پشتیبانی از تخفیف ویژه
+      // =========================
       const weeklyOffer =
         data.weeklyOffer !== undefined
           ? Boolean(data.weeklyOffer)
+          : data.isWeeklyDiscount !== undefined
+          ? Boolean(data.isWeeklyDiscount)
           : Boolean(data.isWeeklyOffer);
 
       await collection.doc(id).update({
@@ -132,8 +171,11 @@ isWeeklyDiscount: weeklyOffer,
         // =========================
         // تخفیف ویژه این هفته
         // =========================
-      weeklyOffer: weeklyOffer,
-isWeeklyDiscount: weeklyOffer,
+        weeklyOffer: weeklyOffer,
+
+        // نام مورد استفاده صفحات دسته‌بندی
+        isWeeklyDiscount: weeklyOffer,
+
         // =========================
         // رنگ + سایز + موجودی
         // =========================
