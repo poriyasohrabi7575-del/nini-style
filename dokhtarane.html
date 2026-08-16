@@ -554,25 +554,26 @@ async function loadProducts(){
       و فقط محصولاتی که پرفروش نیستند
     */
 
-    const filtered =
-      products.filter(product => {
+  const filtered =
+  products.filter(product => {
 
-        const category =
-          String(
-            product.category || ''
-          ).trim();
+    const category =
+      String(
+        product.category || ''
+      ).trim();
 
-        const isBestSeller =
-          product.isBestSeller === true;
+    const isBestSeller =
+      product.isBestSeller === true;
 
-     
-return (
-  category === 'لباس دخترانه' &&
-  !isBestSeller &&
-  product.isWeeklyDiscount !== true
-);
+    return (
+      category === 'لباس دخترانه' &&
+      !isBestSeller &&
+      product.isWeeklyDiscount !== true
+    );
 
-    renderProducts(filtered);
+  });
+
+renderProducts(filtered);
 
   }catch(error){
 
