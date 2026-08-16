@@ -741,9 +741,14 @@ function getAccessoryProducts() {
         اگر محصول تخفیف ویژه باشد،
         از صفحه اکسسوری حذف می‌شود.
       */
-      if (isTrue(product.isWeeklyDiscount)) {
-        return false;
-      }
+    const isWeeklyOffer =
+  isTrue(product.weeklyOffer) ||
+  isTrue(product.isWeeklyDiscount) ||
+  isTrue(product.isWeeklyOffer);
+
+if (isWeeklyOffer) {
+  return false;
+}
 
       /*
         اگر هیچ‌کدام از تیک‌ها فعال نباشد،
