@@ -565,12 +565,11 @@ async function loadProducts(){
         const isBestSeller =
           product.isBestSeller === true;
 
-       
-return (
-  category === 'لباس دخترانه' &&
-  !isBestSeller &&
-  product.isWeeklyDiscount !== true
+       return (
+    category === 'لباس دخترانه' &&
+    product.isWeeklyDiscount !== true
 );
+
 
     renderProducts(filtered);
 
