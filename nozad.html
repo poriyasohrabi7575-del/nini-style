@@ -551,19 +551,26 @@ async function loadProducts(){
   product.isBestSeller === true;
 
 
+const isBestSeller =
+  product.bestSeller === true ||
+  product.isBestSeller === true;
+
+const isWeeklyOffer =
+  product.weeklyOffer === true ||
+  product.isWeeklyDiscount === true ||
+  product.isWeeklyOffer === true;
+
 const isBaby =
   category === 'لباس نوزاد' ||
   category === 'نوزاد' ||
   category === 'لباس نوزادی' ||
   category.includes('نوزاد');
 
-
-        return (
-          isBaby &&
-          !isBestSeller
-        );
-
-      });
+return (
+  isBaby &&
+  !isBestSeller &&
+  !isWeeklyOffer
+);
 
 
     renderProducts();
