@@ -1239,7 +1239,7 @@ function updateVariantStock(id) {
 
   if (!color && !size) {
 
-    stockElement.textContent =
+    stockelement.textContent =
       "مشخصات محصول را انتخاب کنید";
 
     stockElement.className =
@@ -1260,7 +1260,7 @@ function updateVariantStock(id) {
 
   if (!variant) {
 
-    stockElement.textContent =
+    stockelement.textContent =
       "این ترکیب موجود نیست";
 
     stockElement.className =
@@ -1273,7 +1273,7 @@ function updateVariantStock(id) {
 
   if (variant.stock <= 0) {
 
-    stockElement.textContent =
+    stockelement.textContent =
       "ناموجود";
 
     stockElement.className =
@@ -1281,7 +1281,7 @@ function updateVariantStock(id) {
 
   } else {
 
-    stockElement.textContent =
+    stockelement.textContent =
       "موجودی: " +
       Number(
         variant.stock
@@ -1604,9 +1604,8 @@ function updateCartCount() {
 
   if (element) {
 
-    element.textContent =
-      count.toLocaleString("fa-IR");
-
+  element.textContent =
+  count;
   }
 
 }
@@ -1797,7 +1796,7 @@ function renderCart() {
 
     if (totalElement) {
 
-      totalElement.textContent =
+      totalelement.textContent =
         "۰ تومان";
 
     }
@@ -1935,7 +1934,7 @@ function renderCart() {
 
   if (totalElement) {
 
-    totalElement.textContent =
+    totalelement.textContent =
       formatPrice(total) +
       " تومان";
 
