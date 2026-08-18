@@ -1,51 +1,71 @@
-import admin from "firebase-admin";
+const db = require("../lib/firebaseAdmin");
 
-if (!admin.apps.length) {
-  admin.initializeApp({
-    credential: admin.credential.cert({
-      projectId: process.env.FIREBASE_PROJECT_ID,
-      clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-      privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n")
-    })
-  });
-}
-
-const db = admin.firestore();
+// =====================================================
+// وضعیت‌های مجاز سفارش
+// =====================================================
 
 const allowedStatuses = [
   "new",
+  "pending_payment",
+  "paid",
+  "payment_failed",
   "preparing",
   "shipped",
-  "delivered"
+  "delivered",
 ];
 
+
+// =====================================================
+// تبدیل Timestamp فایربیس به ISO
+// =====================================================
+
+function timestampToISOString(value) {
+  if (!value) {
+    return null;
+  }
+
+  if (typeof value.toDate === "function") {
+    return value.toDate().toISOString();
+  }
+
+  if (value instanceof Date) {
+    return value.toISOString();
+  }
+
+  return null;
+}
+
+
+// =====================================================
+// GET
+// دریافت سفارش
+// =====================================================
+
 export default async function handler(req, res) {
+  try {
+    const collection = db.collection("orders");
 
-  // ==========================================
-  // GET
-  // ==========================================
 
-  if (req.method === "GET") {
+    // ===================================================
+    // GET
+    // ===================================================
 
-    try {
-
+    if (req.method === "GET") {
       const id = req.query?.id;
 
-      // دریافت یک سفارش
-      if (id) {
 
-        const doc = await db
-          .collection("orders")
-          .doc(id)
-          .get();
+      // -------------------------------------------------
+      // دریافت یک سفارش
+      // -------------------------------------------------
+
+      if (id) {
+        const doc = await collection.doc(id).get();
 
         if (!doc.exists) {
-
           return res.status(404).json({
             success: false,
-            error: "سفارش پیدا نشد"
+            error: "سفارش پیدا نشد",
           });
-
         }
 
         const data = doc.data();
@@ -57,42 +77,7 @@ export default async function handler(req, res) {
             id: doc.id,
             ...data,
 
-            createdAt:
-              data.createdAt
-                ? data.createdAt.toDate().toISOString()
-                : null,
-
-            customerReceivedAt:
-              data.customerReceivedAt
-                ? data.customerReceivedAt.toDate().toISOString()
-                : null
-          }
-
-        });
-
-      }
-
-
-      // دریافت همه سفارش‌ها
-      const snapshot = await db
-        .collection("orders")
-        .orderBy("createdAt", "desc")
-        .get();
-
-
-      const orders =
-        snapshot.docs.map(doc => {
-
-          const data = doc.data();
-
-          return {
-
-            id: doc.id,
-
-            ...data,
-
-            status:
-              data.status || "new",
+            status: data.status || "new",
 
             trackingCode:
               data.trackingCode || "",
@@ -101,76 +86,135 @@ export default async function handler(req, res) {
               data.customerReceived || false,
 
             customerReceivedAt:
-              data.customerReceivedAt
-                ? data.customerReceivedAt
-                    .toDate()
-                    .toISOString()
-                : null,
+              timestampToISOString(
+                data.customerReceivedAt
+              ),
 
             createdAt:
-              data.createdAt
-                ? data.createdAt
-                    .toDate()
-                    .toISOString()
-                : null
+              timestampToISOString(
+                data.createdAt
+              ),
 
-          };
+            updatedAt:
+              timestampToISOString(
+                data.updatedAt
+              ),
 
+            paidAt:
+              timestampToISOString(
+                data.paidAt
+              ),
+
+            // -------------------------------------------
+            // اطلاعات پرداخت
+            // -------------------------------------------
+
+            paymentStatus:
+              data.paymentStatus ||
+              "unpaid",
+
+            paymentAuthority:
+              data.paymentAuthority ||
+              "",
+
+            paymentRefId:
+              data.paymentRefId ||
+              "",
+          },
         });
+      }
 
+
+      // -------------------------------------------------
+      // دریافت همه سفارش‌ها
+      // -------------------------------------------------
+
+      const snapshot = await collection
+        .orderBy("createdAt", "desc")
+        .get();
+
+      const orders = snapshot.docs.map((doc) => {
+        const data = doc.data();
+
+        return {
+          id: doc.id,
+
+          ...data,
+
+          status:
+            data.status || "new",
+
+          trackingCode:
+            data.trackingCode || "",
+
+          customerReceived:
+            data.customerReceived || false,
+
+          customerReceivedAt:
+            timestampToISOString(
+              data.customerReceivedAt
+            ),
+
+          createdAt:
+            timestampToISOString(
+              data.createdAt
+            ),
+
+          updatedAt:
+            timestampToISOString(
+              data.updatedAt
+            ),
+
+          // -------------------------------------------
+          // اطلاعات پرداخت
+          // -------------------------------------------
+
+          paymentStatus:
+            data.paymentStatus ||
+            "unpaid",
+
+          paymentAuthority:
+            data.paymentAuthority ||
+            "",
+
+          paymentRefId:
+            data.paymentRefId ||
+            "",
+
+          paidAt:
+            timestampToISOString(
+              data.paidAt
+            ),
+        };
+      });
 
       return res.status(200).json({
-
         success: true,
-
-        orders
-
+        orders,
       });
-
-
-    } catch (error) {
-
-      console.error(
-        "GET ORDERS ERROR:",
-        error
-      );
-
-      return res.status(500).json({
-
-        success: false,
-
-        error:
-          error.message
-
-      });
-
     }
 
-  }
 
+    // ===================================================
+    // POST
+    // ثبت سفارش جدید
+    // ===================================================
 
-
-  // ==========================================
-  // POST
-  // ثبت سفارش جدید
-  // ==========================================
-
-  if (req.method === "POST") {
-
-    try {
-
+    if (req.method === "POST") {
       const {
-
         name,
         mobile,
         postalCode,
         address,
         products,
         quantity,
-        totalAmount
+        totalAmount,
+      } = req.body || {};
 
-      } = req.body;
 
+      // -------------------------------------------------
+      // اعتبارسنجی اولیه
+      // -------------------------------------------------
 
       if (
         !name ||
@@ -181,296 +225,320 @@ export default async function handler(req, res) {
         quantity === undefined ||
         totalAmount === undefined
       ) {
-
         return res.status(400).json({
-
           success: false,
-
-          error:
-            "اطلاعات سفارش کامل نیست"
-
+          error: "اطلاعات سفارش کامل نیست",
         });
-
       }
 
 
-      const docRef =
-        await db
-          .collection("orders")
-          .add({
+      // -------------------------------------------------
+      // ایجاد سفارش
+      // -------------------------------------------------
 
-            name,
+      const docRef = await collection.add({
+        name,
+        mobile,
+        postalCode,
+        address,
 
-            mobile,
+        products,
 
-            postalCode,
+        quantity,
 
-            address,
+        // فعلاً مبلغ فعلی را حفظ می‌کنیم.
+        // اعتبارسنجی نهایی مبلغ در API پرداخت انجام می‌شود.
+        totalAmount,
 
-            products,
+        // -----------------------------------------------
+        // وضعیت فعلی سفارش
+        // -----------------------------------------------
 
-            quantity,
+        status: "new",
 
-            totalAmount,
+        // -----------------------------------------------
+        // اطلاعات پرداخت
+        // -----------------------------------------------
 
-            status:
-              "new",
+        paymentStatus: "unpaid",
 
-            trackingCode:
-              "",
+        paymentAuthority: "",
 
-            customerReceived:
-              false,
+        paymentRefId: "",
 
-            customerReceivedAt:
-              null,
+        paidAt: null,
 
-            createdAt:
-              admin.firestore
-                .FieldValue
-                .serverTimestamp(),
+        // -----------------------------------------------
+        // اطلاعات ارسال
+        // -----------------------------------------------
 
-            updatedAt:
-              admin.firestore
-                .FieldValue
-                .serverTimestamp()
+        trackingCode: "",
 
-          });
+        customerReceived: false,
+
+        customerReceivedAt: null,
+
+        // -----------------------------------------------
+        // زمان‌ها
+        // -----------------------------------------------
+
+        createdAt:
+          new Date(),
+
+        updatedAt:
+          new Date(),
+      });
 
 
       return res.status(200).json({
-
         success: true,
 
         orderId:
           docRef.id,
 
         status:
-          "new"
+          "new",
 
+        paymentStatus:
+          "unpaid",
       });
-
-
-    } catch (error) {
-
-      console.error(
-        "ORDER ERROR:",
-        error
-      );
-
-      return res.status(500).json({
-
-        success: false,
-
-        error:
-          "خطا در ثبت سفارش",
-
-        details:
-          error.message
-
-      });
-
     }
 
-  }
 
+    // ===================================================
+    // PATCH
+    // تغییر وضعیت / پرداخت / رهگیری / دریافت مشتری
+    // ===================================================
 
-
-  // ==========================================
-  // PATCH
-  // تغییر وضعیت / کد رهگیری / دریافت مشتری
-  // ==========================================
-
-  if (req.method === "PATCH") {
-
-    try {
-
+    if (req.method === "PATCH") {
       const {
-
         id,
         status,
         trackingCode,
-        customerReceived
+        customerReceived,
 
-      } = req.body;
+        // اطلاعات پرداخت
+        paymentStatus,
+        paymentAuthority,
+        paymentRefId,
+        paidAt,
+      } = req.body || {};
 
+
+      // -------------------------------------------------
+      // بررسی شناسه
+      // -------------------------------------------------
 
       if (!id) {
-
         return res.status(400).json({
-
           success: false,
-
           error:
-            "شناسه سفارش ارسال نشده است"
-
+            "شناسه سفارش ارسال نشده است",
         });
-
       }
 
 
+      // -------------------------------------------------
+      // بررسی وجود سفارش
+      // -------------------------------------------------
+
+      const orderRef =
+        collection.doc(id);
+
+      const orderDoc =
+        await orderRef.get();
+
+      if (!orderDoc.exists) {
+        return res.status(404).json({
+          success: false,
+          error:
+            "سفارش پیدا نشد",
+        });
+      }
+
+
+      // -------------------------------------------------
+      // اطلاعات قابل بروزرسانی
+      // -------------------------------------------------
+
       const updateData = {
-
         updatedAt:
-          admin.firestore
-            .FieldValue
-            .serverTimestamp()
-
+          new Date(),
       };
 
 
-      // ==============================
+      // =================================================
       // وضعیت سفارش
-      // ==============================
+      // =================================================
 
       if (status !== undefined) {
-
         if (
           !allowedStatuses.includes(
             status
           )
         ) {
-
           return res.status(400).json({
-
             success: false,
-
             error:
-              "وضعیت سفارش نامعتبر است"
-
+              "وضعیت سفارش نامعتبر است",
           });
-
         }
-
 
         updateData.status =
           status;
-
       }
 
 
+      // =================================================
+      // وضعیت پرداخت
+      // =================================================
 
-      // ==============================
+      if (
+        paymentStatus !== undefined
+      ) {
+        const allowedPaymentStatuses = [
+          "unpaid",
+          "pending",
+          "paid",
+          "failed",
+        ];
+
+        if (
+          !allowedPaymentStatuses.includes(
+            paymentStatus
+          )
+        ) {
+          return res.status(400).json({
+            success: false,
+            error:
+              "وضعیت پرداخت نامعتبر است",
+          });
+        }
+
+        updateData.paymentStatus =
+          paymentStatus;
+      }
+
+
+      // =================================================
+      // Authority زرین‌پال
+      // =================================================
+
+      if (
+        paymentAuthority !== undefined
+      ) {
+        updateData.paymentAuthority =
+          String(
+            paymentAuthority
+          ).trim();
+      }
+
+
+      // =================================================
+      // Ref ID زرین‌پال
+      // =================================================
+
+      if (
+        paymentRefId !== undefined
+      ) {
+        updateData.paymentRefId =
+          String(
+            paymentRefId
+          ).trim();
+      }
+
+
+      // =================================================
+      // زمان پرداخت
+      // =================================================
+
+      if (
+        paidAt !== undefined
+      ) {
+        updateData.paidAt =
+          paidAt
+            ? new Date(paidAt)
+            : null;
+      }
+
+
+      // =================================================
       // کد رهگیری
-      // ==============================
+      // =================================================
 
       if (
         trackingCode !== undefined
       ) {
-
         updateData.trackingCode =
           String(
             trackingCode
           ).trim();
-
       }
 
 
-
-      // ==============================
+      // =================================================
       // اعلام دریافت مشتری
-      // ==============================
+      // =================================================
 
       if (
         customerReceived === true
       ) {
-
         updateData.customerReceived =
           true;
 
         updateData.customerReceivedAt =
-          admin.firestore
-            .FieldValue
-            .serverTimestamp();
-
+          new Date();
       }
 
 
+      // =================================================
+      // بروزرسانی
+      // =================================================
 
-      await db
-        .collection("orders")
-        .doc(id)
-        .update(updateData);
+      await orderRef.update(
+        updateData
+      );
 
 
       return res.status(200).json({
-
-        success: true
-
+        success: true,
       });
-
-
-    } catch (error) {
-
-      console.error(
-        "UPDATE ORDER ERROR:",
-        error
-      );
-
-      return res.status(500).json({
-
-        success: false,
-
-        error:
-          error.message
-
-      });
-
     }
 
-  }
 
+    // ===================================================
+    // DELETE
+    // حذف کامل سفارش
+    // ===================================================
 
-
-  // ==========================================
-  // DELETE
-  // حذف کامل سفارش
-  // ==========================================
-
-  if (req.method === "DELETE") {
-
-    try {
-
+    if (req.method === "DELETE") {
       const id =
         req.body?.id ||
         req.query?.id;
 
 
       if (!id) {
-
         return res.status(400).json({
-
           success: false,
-
           error:
-            "شناسه سفارش ارسال نشده است"
-
+            "شناسه سفارش ارسال نشده است",
         });
-
       }
 
 
       const orderRef =
-        db
-          .collection("orders")
-          .doc(id);
-
+        collection.doc(id);
 
       const orderDoc =
         await orderRef.get();
 
 
       if (!orderDoc.exists) {
-
         return res.status(404).json({
-
           success: false,
-
           error:
-            "سفارش پیدا نشد"
-
+            "سفارش پیدا نشد",
         });
-
       }
 
 
@@ -484,54 +552,42 @@ export default async function handler(req, res) {
 
 
       return res.status(200).json({
-
         success: true,
 
         message:
           "سفارش با موفقیت حذف شد",
 
         orderId:
-          id
-
+          id,
       });
-
-
-    } catch (error) {
-
-      console.error(
-        "DELETE ORDER ERROR:",
-        error
-      );
-
-      return res.status(500).json({
-
-        success: false,
-
-        error:
-          "خطا در حذف سفارش",
-
-        details:
-          error.message
-
-      });
-
     }
 
+
+    // ===================================================
+    // متد غیرمجاز
+    // ===================================================
+
+    return res.status(405).json({
+      success: false,
+      error:
+        "Method not allowed",
+    });
+
+  } catch (error) {
+
+    console.error(
+      "ORDER API ERROR:",
+      error
+    );
+
+    return res.status(500).json({
+      success: false,
+
+      error:
+        "خطا در پردازش سفارش",
+
+      details:
+        error.message,
+    });
   }
-
-
-
-  // ==========================================
-  // متد نامعتبر
-  // ==========================================
-
-  return res.status(405).json({
-
-    success: false,
-
-    error:
-      "Method not allowed"
-
-  });
-
 }
