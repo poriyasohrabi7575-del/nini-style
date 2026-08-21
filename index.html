@@ -855,7 +855,24 @@ footer{
 @media(max-width:430px){
   .cart-box{width:94vw;}
 }
+.logo-text{
+  display:flex;
+  flex-direction:column;
+  line-height:1.3;
+}
 
+.logo-text strong{
+  font-size:20px;
+  color:#e76f9b;
+  font-weight:900;
+}
+
+.logo-text small{
+  font-size:10px;
+  color:#777;
+  font-weight:500;
+  margin-top:2px;
+}
 </style><style id="variant-shop-styles">
 .variant-modal{position:fixed;inset:0;z-index:99999;display:none;align-items:center;justify-content:center;padding:12px;background:rgba(20,20,20,.42)}
 .variant-modal.show{display:flex}
@@ -896,10 +913,14 @@ footer{
 
 <header>
 
-  <div class="logo">
-    <span>🧸</span>
-    نی نی استایل
+ <div class="logo">
+  <span>🧸</span>
+
+  <div class="logo-text">
+    <strong>نی نی استایل</strong>
+    <small>فروشگاه لباس کودک و نوزاد</small>
   </div>
+</div>
 
   <nav>
     <a href="index.html">خانه</a>
@@ -937,8 +958,7 @@ footer{
 
   <div class="hero-overlay">
 <div class="hero-copy">
-  <h1>نی نی استایل؛ فروشگاه لباس کودک و نوزاد</h1>
-  <p>لباس دخترانه، پسرانه، نوزاد و اکسسوری کودک</p>
+ 
 </div>
 
 </section>
